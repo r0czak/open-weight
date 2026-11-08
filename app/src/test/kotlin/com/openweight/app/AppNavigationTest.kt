@@ -3,6 +3,7 @@ package com.openweight.app
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
+import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -33,6 +34,9 @@ class AppNavigationTest {
   @Test
   fun startsOnWorkoutTab_withToday() {
     composeRule.onNodeWithTag("tab_WORKOUT").assertIsSelected()
+    composeRule.waitUntil(5_000) {
+      composeRule.onAllNodesWithTag("today_card").fetchSemanticsNodes().isNotEmpty()
+    }
     composeRule.onNodeWithText("Today").assertIsDisplayed()
     composeRule.onNodeWithText("Training blocks").assertIsDisplayed()
   }

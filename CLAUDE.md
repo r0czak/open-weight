@@ -14,6 +14,7 @@ Offline-first Android app for planning workouts (training blocks, workouts, exer
 ## Layout (`app/src/main/kotlin/com/openweight/app/`)
 - `core/` — `database/` (Room entities, converters, `OpenWeightDatabase`), `di/`, `model/`, `ui/` (theme, shared composables)
 - `workout/`, `diet/`, `settings/` (later: `transfer/`, `progress/`) — one package per feature: screens, ViewModels, domain rules, repositories
+- `workout/blocks/` — training blocks; `Schedule.kt` holds the schedule rule (date → block → weekday's workout; overlapping blocks: the later start wins)
 - `AppNavigation.kt` — bottom tabs, each with its own Navigation 3 back stack
 - `transfer/` — Open Weight file format (`TransferFormat.kt`) and `ImportService`
 - `app/schemas/` — exported Room schemas, committed; a version bump needs a migration + test (`MigrationTest`)
@@ -21,6 +22,7 @@ Offline-first Android app for planning workouts (training blocks, workouts, exer
 
 ## Rules
 - The app must stay fully offline: no `INTERNET` permission (`OfflineGuardTest` enforces it).
+- "Today" comes from `TimeAndIds.today()` (injectable), never `LocalDate.now()` directly.
 - Every record has a UUID text `id` plus `createdAt`/`updatedAt` (import/export relies on them).
 - User-visible text goes in `res/values/strings.xml`.
 - Editing rules (limits, in-use checks, ordering) live in repositories, not in the UI; screens call them.

@@ -30,6 +30,8 @@ import androidx.navigation3.ui.NavDisplay
 import com.openweight.app.diet.DietHomeScreen
 import com.openweight.app.settings.SettingsRoute
 import com.openweight.app.workout.WorkoutHomeScreen
+import com.openweight.app.workout.blocks.BlockEditRoute
+import com.openweight.app.workout.blocks.BlockListRoute
 import com.openweight.app.workout.exercise.ExerciseEditRoute
 import com.openweight.app.workout.exercise.ExerciseListRoute
 import com.openweight.app.workout.workouts.ExercisePickerRoute
@@ -45,6 +47,10 @@ import kotlinx.serialization.Serializable
 @Serializable data object SettingsHome : NavKey
 
 // Workout tab
+@Serializable data object BlockList : NavKey
+
+@Serializable data class BlockEdit(val blockId: String) : NavKey
+
 @Serializable data object WorkoutList : NavKey
 
 @Serializable data class WorkoutEdit(val workoutId: String) : NavKey
@@ -125,9 +131,15 @@ fun OpenWeightAppUi(modifier: Modifier = Modifier) {
           entryProvider {
             entry<WorkoutHome> {
             WorkoutHomeScreen(
+              onOpenWorkout = { backStack.add(WorkoutEdit(it)) },
+              onOpenBlocks = { backStack.add(BlockList) },
               onOpenWorkouts = { backStack.add(WorkoutList) },
               onOpenExercises = { backStack.add(ExerciseList) },
             )
+          }
+          entry<BlockList> { BlockListRoute(onBack = back, onOpen = { backStack.add(BlockEdit(it)) }) }
+          entry<BlockEdit> { key ->
+            BlockEditRoute(blockId = key.blockId, onBack = back, onOpenWorkout = { backStack.add(WorkoutEdit(it)) })
           }
           entry<WorkoutList> {
             WorkoutListRoute(onBack = back, onOpen = { backStack.add(WorkoutEdit(it)) })
