@@ -105,7 +105,7 @@ class OpenWeightDatabaseTest {
         "VALUES ('we1', 'w1', 'e1', 0, '', 0, 0)"
     )
     sql.execSQL(
-      "INSERT INTO set_plan (id, workoutExerciseId, position, reps, weightKg, restSeconds, createdAt, updatedAt) " +
+      "INSERT INTO set_plan (id, workoutExerciseId, position, repsMin, weightKg, restSeconds, createdAt, updatedAt) " +
         "VALUES ('s1', 'we1', 0, 8, 60.0, 90, 0, 0)"
     )
   }

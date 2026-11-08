@@ -37,4 +37,134 @@
     <string name="settings_about">About</string>
     <string name="settings_version">Version %1$s</string>
     <string name="settings_offline">Works fully offline. Your data stays on this phone unless you export it.</string>
+    <!-- Common actions -->
+    <string name="action_back">Back</string>
+    <string name="action_save">Save</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_add">Add</string>
+    <string name="action_ok">OK</string>
+    <string name="action_more">More options</string>
+    <string name="action_duplicate">Duplicate</string>
+    <string name="action_move_up">Move up</string>
+    <string name="action_move_down">Move down</string>
+    <string name="search_no_results">Nothing matches \"%1$s\".</string>
+
+    <!-- Fields -->
+    <string name="field_name">Name</string>
+    <string name="field_type">Type</string>
+    <string name="field_notes">Notes</string>
+    <string name="field_muscle_group">Muscle group</string>
+    <string name="field_muscle_group_hint">e.g. Chest</string>
+    <string name="field_equipment">Equipment</string>
+    <string name="field_equipment_hint">e.g. Barbell</string>
+    <string name="error_name_empty">Give it a name</string>
+
+    <!-- Exercise library -->
+    <string name="exercise_new">New exercise</string>
+    <string name="exercise_edit">Edit exercise</string>
+    <string name="exercise_search">Search exercises</string>
+    <string name="exercise_empty">No exercises yet.</string>
+    <string name="exercise_empty_hint">Add one with the + button, or import a plan in Settings.</string>
+    <string name="exercise_create_named">Create \"%1$s\"</string>
+    <string name="error_exercise_exists">An exercise with this name already exists</string>
+    <string name="exercise_delete_title">Delete exercise?</string>
+    <string name="exercise_delete_text">\"%1$s\" will be removed from your library.</string>
+    <string name="exercise_in_use_title">Exercise in use</string>
+    <string name="picker_empty_hint">Type a name above to create one.</string>
+    <plurals name="exercise_in_use_text">
+        <item quantity="one">It is used in %d workout. Remove it from that workout first.</item>
+        <item quantity="other">It is used in %d workouts. Remove it from those workouts first.</item>
+    </plurals>
+    <plurals name="used_in_workouts">
+        <item quantity="one">%d workout</item>
+        <item quantity="other">%d workouts</item>
+    </plurals>
+    <plurals name="exercise_count">
+        <item quantity="one">%d exercise</item>
+        <item quantity="other">%d exercises</item>
+    </plurals>
+
+    <!-- Workouts -->
+    <string name="workout_new">New workout</string>
+    <string name="workout_name_hint">e.g. Push A</string>
+    <string name="workout_type_hint">e.g. Push</string>
+    <string name="workout_empty">No workouts yet.</string>
+    <string name="workout_empty_hint">Create one with the + button, or import a plan in Settings.</string>
+    <string name="workout_edit_details">Edit name and notes</string>
+    <string name="workout_add_exercise">Add exercise</string>
+    <string name="workout_no_exercises">No exercises in this workout yet.</string>
+    <string name="workout_no_exercises_hint">Tap Add exercise to pick one from your library.</string>
+    <string name="workout_used_in_blocks">Used in: %1$s. Changes apply everywhere it is used.</string>
+    <string name="workout_delete_title">Delete workout?</string>
+    <string name="workout_delete_text">\"%1$s\" and all its exercises and sets will be deleted.</string>
+    <string name="entry_edit_notes">Notes</string>
+    <string name="entry_remove">Remove from workout</string>
+    <string name="entry_notes_hint">e.g. per leg, or a swap option</string>
+    <plurals name="workout_count">
+        <item quantity="one">%d workout</item>
+        <item quantity="other">%d workouts</item>
+    </plurals>
+    <plurals name="set_count">
+        <item quantity="one">%d set</item>
+        <item quantity="other">%d sets</item>
+    </plurals>
+    <plurals name="workout_in_use">
+        <item quantity="one">This workout is part of %d training block. Remove it from the block first.</item>
+        <item quantity="other">This workout is part of %d training blocks. Remove it from those blocks first.</item>
+    </plurals>
+    <plurals name="blocks_saved">
+        <item quantity="one">%d block saved · the block editor comes in the next update</item>
+        <item quantity="other">%d blocks saved · the block editor comes in the next update</item>
+    </plurals>
+
+    <!-- Sets -->
+    <string name="set_col_set">Set</string>
+    <string name="set_col_reps">Reps</string>
+    <string name="set_col_weight">Weight</string>
+    <string name="set_col_rest">Rest</string>
+    <string name="set_add">Add set</string>
+    <string name="set_delete">Delete set</string>
+    <string name="set_edit_title">Set %1$d</string>
+    <string name="set_count">Sets</string>
+    <string name="set_reps_from">Reps</string>
+    <string name="set_reps_to">Up to (optional)</string>
+    <string name="set_weight">Weight (%1$s)</string>
+    <string name="set_weight_empty">Empty = not set yet</string>
+    <string name="set_rest_seconds">Rest (seconds)</string>
+    <string name="set_apply_all">Apply to all sets of this exercise</string>
+    <string name="error_reps">Reps must be a whole number from 1 to 999.</string>
+    <string name="error_reps_max">The top of the range must be at least the first number.</string>
+    <string name="error_weight">Weight must be a number, 0 or more.</string>
+    <string name="error_rest">Rest must be between 0 and 3600 seconds.</string>
+    <string name="error_sets">Sets must be between 1 and 20.</string>
+
+    <!-- Import -->
+    <string name="settings_import_hint">Add workouts and training blocks from an Open Weight file</string>
+    <string name="import_running">Importing…</string>
+    <string name="import_failed_title">Couldn\'t import this file</string>
+    <string name="import_failed_read">The file couldn\'t be read.</string>
+    <string name="import_nothing_changed">Nothing was changed.</string>
+    <string name="import_done_title">Import finished</string>
+    <string name="import_nothing_new_title">Already up to date</string>
+    <plurals name="import_blocks_added">
+        <item quantity="one">%d training block added</item>
+        <item quantity="other">%d training blocks added</item>
+    </plurals>
+    <plurals name="import_workouts_added">
+        <item quantity="one">%d workout added</item>
+        <item quantity="other">%d workouts added</item>
+    </plurals>
+    <plurals name="import_exercises_added">
+        <item quantity="one">%d exercise added</item>
+        <item quantity="other">%d exercises added</item>
+    </plurals>
+    <plurals name="import_exercises_matched">
+        <item quantity="one">%d exercise was already in your library</item>
+        <item quantity="other">%d exercises were already in your library</item>
+    </plurals>
+    <plurals name="import_skipped">
+        <item quantity="one">%d item you already have was left as it is</item>
+        <item quantity="other">%d items you already have were left as they are</item>
+    </plurals>
 </resources>

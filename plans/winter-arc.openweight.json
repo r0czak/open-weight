@@ -1,0 +1,3313 @@
+{
+  "format": "open-weight",
+  "formatVersion": 1,
+  "appVersion": "0.1.0",
+  "exportedAt": "2026-11-08T12:00:00Z",
+  "scope": {
+    "kind": "items",
+    "description": "Winter Arc: Push/Pull Plan (3 Nov 2026 – 23 Aug 2027)"
+  },
+  "data": {
+    "exercises": [
+      {
+        "id": "dafdb6c5-9a8e-552b-a08c-338ad0967987",
+        "name": "45° back extension",
+        "muscleGroup": "Glutes",
+        "equipment": "Bench"
+      },
+      {
+        "id": "aa15623d-6c4e-5852-906d-7a3e59be9cb0",
+        "name": "Ab wheel",
+        "muscleGroup": "Abs",
+        "equipment": "Ab wheel"
+      },
+      {
+        "id": "f470280d-494c-5eb7-b2e0-14df71f636f0",
+        "name": "Arnold press",
+        "muscleGroup": "Shoulders",
+        "equipment": "Dumbbells"
+      },
+      {
+        "id": "cb6f8c7b-15eb-5bbe-ac3d-e4327430e1c3",
+        "name": "Assisted pull-up",
+        "muscleGroup": "Back",
+        "equipment": "Machine"
+      },
+      {
+        "id": "8a18f9e5-aaac-5c9a-9f51-da40ef275dfb",
+        "name": "Barbell back squat",
+        "muscleGroup": "Quads",
+        "equipment": "Barbell"
+      },
+      {
+        "id": "1430ccf0-e4cc-5806-8312-6e9d3282ae3e",
+        "name": "Barbell bench press",
+        "muscleGroup": "Chest",
+        "equipment": "Barbell"
+      },
+      {
+        "id": "9612ffc2-2731-5aa6-83b9-678efb4f1be7",
+        "name": "Barbell curl",
+        "muscleGroup": "Biceps",
+        "equipment": "Barbell"
+      },
+      {
+        "id": "074b339b-1540-5d8c-a14d-05d9eb298cec",
+        "name": "Barbell row",
+        "muscleGroup": "Back",
+        "equipment": "Barbell"
+      },
+      {
+        "id": "f62b25ae-fb45-5e2b-bdd5-44e3aada6468",
+        "name": "Bayesian cable curl",
+        "muscleGroup": "Biceps",
+        "equipment": "Cable"
+      },
+      {
+        "id": "48e29a99-6387-5bbc-ade8-ffad6190c9b9",
+        "name": "Bulgarian split squat",
+        "muscleGroup": "Quads",
+        "equipment": "Dumbbells"
+      },
+      {
+        "id": "a3bbe82b-d672-5c38-910c-1d1c09327048",
+        "name": "Cable crunch",
+        "muscleGroup": "Abs",
+        "equipment": "Cable"
+      },
+      {
+        "id": "e598f264-85d1-5c04-af3a-14e1fd62bb8e",
+        "name": "Cable lateral raise",
+        "muscleGroup": "Shoulders",
+        "equipment": "Cable"
+      },
+      {
+        "id": "1fcd7356-e912-5159-bbcd-5f1ac06a133c",
+        "name": "Cable triceps pushdown",
+        "muscleGroup": "Triceps",
+        "equipment": "Cable"
+      },
+      {
+        "id": "148a3d8e-a33e-595d-bb6a-d43904d02ae4",
+        "name": "Chest-supported machine row",
+        "muscleGroup": "Back",
+        "equipment": "Machine"
+      },
+      {
+        "id": "65a2bce5-ba1b-5df6-96df-01a54abd8b0f",
+        "name": "Chest-supported T-bar row",
+        "muscleGroup": "Back",
+        "equipment": "Machine"
+      },
+      {
+        "id": "270b2816-c813-53c9-88d3-e7ee26a90608",
+        "name": "Close-grip bench press",
+        "muscleGroup": "Triceps",
+        "equipment": "Barbell"
+      },
+      {
+        "id": "cf8c2306-33a1-5906-b3ff-707cace11259",
+        "name": "Conventional deadlift",
+        "muscleGroup": "Hamstrings",
+        "equipment": "Barbell"
+      },
+      {
+        "id": "f2f6e6f8-117e-52cf-aa9a-432c3f338d4e",
+        "name": "Dumbbell curl",
+        "muscleGroup": "Biceps",
+        "equipment": "Dumbbells"
+      },
+      {
+        "id": "ee25d796-43f1-5b9b-93e9-b06352aa20bc",
+        "name": "Dumbbell lateral raise",
+        "muscleGroup": "Shoulders",
+        "equipment": "Dumbbells"
+      },
+      {
+        "id": "c4ded241-4e15-595d-9a96-8c54eaa76116",
+        "name": "Dumbbell overhead triceps extension",
+        "muscleGroup": "Triceps",
+        "equipment": "Dumbbells"
+      },
+      {
+        "id": "ac3f9f8b-7b91-5ccf-8c46-74b4d5377cc9",
+        "name": "Dumbbell Romanian deadlift",
+        "muscleGroup": "Hamstrings",
+        "equipment": "Dumbbells"
+      },
+      {
+        "id": "3ae2e589-e544-5247-bfc4-27388b73cfa8",
+        "name": "EZ-bar skull crusher",
+        "muscleGroup": "Triceps",
+        "equipment": "EZ bar"
+      },
+      {
+        "id": "64d13603-b724-54d9-acbd-d0fed4ca90b0",
+        "name": "Face pull",
+        "muscleGroup": "Rear delts",
+        "equipment": "Cable"
+      },
+      {
+        "id": "6fef7538-91dd-5df4-9337-1a6fd7172dd6",
+        "name": "Front squat",
+        "muscleGroup": "Quads",
+        "equipment": "Barbell"
+      },
+      {
+        "id": "54c74ba2-a267-560a-85e0-c7bb2d45086b",
+        "name": "Hack squat",
+        "muscleGroup": "Quads",
+        "equipment": "Machine"
+      },
+      {
+        "id": "07d64c8f-8193-5885-b620-58c9e78823a1",
+        "name": "Hammer curl",
+        "muscleGroup": "Biceps",
+        "equipment": "Dumbbells"
+      },
+      {
+        "id": "2992fcc2-8200-5d75-9e74-8126182ba9df",
+        "name": "Hanging knee raise",
+        "muscleGroup": "Abs",
+        "equipment": "Bodyweight"
+      },
+      {
+        "id": "19d2df6f-7b0f-504d-a97c-eb29f0121597",
+        "name": "Hanging leg raise",
+        "muscleGroup": "Abs",
+        "equipment": "Bodyweight"
+      },
+      {
+        "id": "1c905a71-761d-5555-933a-6c276740171f",
+        "name": "Hip thrust",
+        "muscleGroup": "Glutes",
+        "equipment": "Machine or barbell"
+      },
+      {
+        "id": "101d37c9-0ac0-508b-9920-2714c5ba9a12",
+        "name": "Incline barbell press",
+        "muscleGroup": "Chest",
+        "equipment": "Barbell"
+      },
+      {
+        "id": "ce3cef89-4f03-51d2-9418-3002c6585066",
+        "name": "Incline dumbbell curl",
+        "muscleGroup": "Biceps",
+        "equipment": "Dumbbells"
+      },
+      {
+        "id": "5a3ae81d-b75a-5510-b660-b12a30bf1133",
+        "name": "Incline dumbbell press",
+        "muscleGroup": "Chest",
+        "equipment": "Dumbbells"
+      },
+      {
+        "id": "3e763f8c-d221-56a0-8158-812e45e34b7d",
+        "name": "Incline Smith press",
+        "muscleGroup": "Chest",
+        "equipment": "Smith machine"
+      },
+      {
+        "id": "1ccdd311-0f3b-540a-9f5d-46cf029b9e97",
+        "name": "Kneeling single-arm pulldown",
+        "muscleGroup": "Back",
+        "equipment": "Cable"
+      },
+      {
+        "id": "c39ff06c-d99d-513a-9a6e-1695498b6022",
+        "name": "Lat pulldown",
+        "muscleGroup": "Back",
+        "equipment": "Cable"
+      },
+      {
+        "id": "a978975d-87db-59bf-ac9f-b95ca7d84e78",
+        "name": "Lean-away dumbbell lateral raise",
+        "muscleGroup": "Shoulders",
+        "equipment": "Dumbbells"
+      },
+      {
+        "id": "16f850f9-9326-5a5e-a760-4515a8278d3a",
+        "name": "Leg extension",
+        "muscleGroup": "Quads",
+        "equipment": "Machine"
+      },
+      {
+        "id": "62eecbd8-1d01-504c-bd69-2dff021fe676",
+        "name": "Leg press",
+        "muscleGroup": "Quads",
+        "equipment": "Machine"
+      },
+      {
+        "id": "6f5a8ce4-7b3d-560a-be9d-37808cdf1485",
+        "name": "Low-to-high cable fly",
+        "muscleGroup": "Chest",
+        "equipment": "Cable"
+      },
+      {
+        "id": "5b633b78-7be8-5a91-ac3e-d409cff0d2c7",
+        "name": "Lying leg curl",
+        "muscleGroup": "Hamstrings",
+        "equipment": "Machine"
+      },
+      {
+        "id": "c83749e7-fc76-5eff-9967-6467fe039079",
+        "name": "Machine chest press",
+        "muscleGroup": "Chest",
+        "equipment": "Machine"
+      },
+      {
+        "id": "62ddc3ce-1612-5a62-a126-0f63d2fc6665",
+        "name": "Machine shoulder press",
+        "muscleGroup": "Shoulders",
+        "equipment": "Machine"
+      },
+      {
+        "id": "88da6a2f-8337-5715-94ae-319f6257aa83",
+        "name": "Meadows row",
+        "muscleGroup": "Back",
+        "equipment": "Barbell (landmine)"
+      },
+      {
+        "id": "cccb41c9-d4e3-53d2-b961-5b7ebdbb4afb",
+        "name": "Nordic curl",
+        "muscleGroup": "Hamstrings",
+        "equipment": "Bodyweight"
+      },
+      {
+        "id": "459add41-e130-56eb-b479-be7db98e72fd",
+        "name": "Overhead cable triceps extension",
+        "muscleGroup": "Triceps",
+        "equipment": "Cable"
+      },
+      {
+        "id": "42f9f167-e72b-5e43-804f-34f9e4a4ee69",
+        "name": "Pec deck",
+        "muscleGroup": "Chest",
+        "equipment": "Machine"
+      },
+      {
+        "id": "5fb78cf3-f814-5b0f-848b-39d96e68014c",
+        "name": "Pendlay row",
+        "muscleGroup": "Back",
+        "equipment": "Barbell"
+      },
+      {
+        "id": "77a6ebff-785c-50f3-b510-083e1ba1a389",
+        "name": "Pendulum squat",
+        "muscleGroup": "Quads",
+        "equipment": "Machine"
+      },
+      {
+        "id": "9a5fc0e9-51ca-530a-afcc-67ef85494f17",
+        "name": "Preacher curl",
+        "muscleGroup": "Biceps",
+        "equipment": "EZ bar"
+      },
+      {
+        "id": "d9a5ce8f-77a8-5f66-a527-e5c4639c1435",
+        "name": "Rear delt cable fly",
+        "muscleGroup": "Rear delts",
+        "equipment": "Cable"
+      },
+      {
+        "id": "28a2ec03-f1fa-583a-a16b-9f6e0238f166",
+        "name": "Reverse curl",
+        "muscleGroup": "Biceps",
+        "equipment": "EZ bar"
+      },
+      {
+        "id": "462007e9-3d18-5f94-b2b0-7356f280ff21",
+        "name": "Reverse pec deck",
+        "muscleGroup": "Rear delts",
+        "equipment": "Machine"
+      },
+      {
+        "id": "a8d6cc3c-a067-507e-adb7-ff1feb6d5769",
+        "name": "Romanian deadlift",
+        "muscleGroup": "Hamstrings",
+        "equipment": "Barbell"
+      },
+      {
+        "id": "b01b7154-81f4-57af-9e43-222009d5cf09",
+        "name": "Seal row",
+        "muscleGroup": "Back",
+        "equipment": "Barbell"
+      },
+      {
+        "id": "c03ea361-55d4-5983-9249-32e3e1eae2da",
+        "name": "Seated barbell press",
+        "muscleGroup": "Shoulders",
+        "equipment": "Barbell"
+      },
+      {
+        "id": "79cb48cf-6d87-5684-9649-c102f6eeab80",
+        "name": "Seated cable row",
+        "muscleGroup": "Back",
+        "equipment": "Cable"
+      },
+      {
+        "id": "785888b1-2031-577a-aeed-be9859e4123f",
+        "name": "Seated calf raise",
+        "muscleGroup": "Calves",
+        "equipment": "Machine"
+      },
+      {
+        "id": "9ac3e892-34cd-516c-94d6-467fd51f4b37",
+        "name": "Seated dumbbell shoulder press",
+        "muscleGroup": "Shoulders",
+        "equipment": "Dumbbells"
+      },
+      {
+        "id": "26077301-8e8d-5c9d-863a-f21b5132c1f3",
+        "name": "Seated leg curl",
+        "muscleGroup": "Hamstrings",
+        "equipment": "Machine"
+      },
+      {
+        "id": "94654c11-3e1e-5d57-8407-811f640d66bd",
+        "name": "Single-arm lat pulldown",
+        "muscleGroup": "Back",
+        "equipment": "Cable"
+      },
+      {
+        "id": "ae56985b-594e-5789-a450-1f730f9463bf",
+        "name": "Standing calf raise",
+        "muscleGroup": "Calves",
+        "equipment": "Machine"
+      },
+      {
+        "id": "f130b33a-5365-5c5e-b2c4-cf1d33e20a2c",
+        "name": "Standing overhead press",
+        "muscleGroup": "Shoulders",
+        "equipment": "Barbell"
+      },
+      {
+        "id": "e80c3610-a0cc-5e96-9d35-8c6b471d615f",
+        "name": "Stiff-leg deadlift",
+        "muscleGroup": "Hamstrings",
+        "equipment": "Barbell"
+      },
+      {
+        "id": "19d8741b-cba9-5911-8256-76746ab2c4fc",
+        "name": "Trap-bar deadlift",
+        "muscleGroup": "Hamstrings",
+        "equipment": "Trap bar"
+      },
+      {
+        "id": "9b51fe98-5fe7-5d3a-8031-2cfba81adac7",
+        "name": "Walking lunge",
+        "muscleGroup": "Quads",
+        "equipment": "Dumbbells"
+      },
+      {
+        "id": "43d2dac5-c448-5843-b541-a88bc8869024",
+        "name": "Weighted chin-up",
+        "muscleGroup": "Back",
+        "equipment": "Bodyweight + plates"
+      },
+      {
+        "id": "dd256805-c400-553c-a315-481a8775d9ed",
+        "name": "Weighted dips",
+        "muscleGroup": "Chest",
+        "equipment": "Bodyweight + plates"
+      },
+      {
+        "id": "cb005406-a073-5d47-9651-0a3f86cf72c3",
+        "name": "Weighted pull-up",
+        "muscleGroup": "Back",
+        "equipment": "Bodyweight + plates"
+      },
+      {
+        "id": "952baffb-fdbc-5d2d-b6b8-47addf4c26e4",
+        "name": "Wide-grip lat pulldown",
+        "muscleGroup": "Back",
+        "equipment": "Cable"
+      }
+    ],
+    "workouts": [
+      {
+        "id": "388fdd54-e5e8-5f48-aa1b-81fc8c7aad9f",
+        "name": "Push A · Intro",
+        "type": "Push",
+        "notes": "Tuesday. Mostly machines, moderate reps; RIR target by week is in the block notes.",
+        "exercises": [
+          {
+            "exerciseId": "62eecbd8-1d01-504c-bd69-2dff021fe676",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 150
+              }
+            ]
+          },
+          {
+            "exerciseId": "c83749e7-fc76-5eff-9967-6467fe039079",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 150
+              }
+            ]
+          },
+          {
+            "exerciseId": "9ac3e892-34cd-516c-94d6-467fd51f4b37",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 150
+              }
+            ]
+          },
+          {
+            "exerciseId": "16f850f9-9326-5a5e-a760-4515a8278d3a",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 12,
+                "repsMax": 15,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 12,
+                "repsMax": 15,
+                "restSeconds": 90
+              }
+            ]
+          },
+          {
+            "exerciseId": "e598f264-85d1-5c04-af3a-14e1fd62bb8e",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 12,
+                "repsMax": 15,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 12,
+                "repsMax": 15,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 12,
+                "repsMax": 15,
+                "restSeconds": 90
+              }
+            ]
+          },
+          {
+            "exerciseId": "1fcd7356-e912-5159-bbcd-5f1ac06a133c",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 12,
+                "repsMax": 15,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 12,
+                "repsMax": 15,
+                "restSeconds": 90
+              }
+            ]
+          },
+          {
+            "exerciseId": "ae56985b-594e-5789-a450-1f730f9463bf",
+            "notes": "Machine",
+            "sets": [
+              {
+                "repsMin": 12,
+                "repsMax": 15,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 12,
+                "repsMax": 15,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 12,
+                "repsMax": 15,
+                "restSeconds": 90
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "b2a925dd-7d37-5ced-bea1-2ce24c19d6a2",
+        "name": "Pull A · Intro",
+        "type": "Pull",
+        "notes": "Wednesday. Mostly machines, moderate reps.",
+        "exercises": [
+          {
+            "exerciseId": "c39ff06c-d99d-513a-9a6e-1695498b6022",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 150
+              }
+            ]
+          },
+          {
+            "exerciseId": "79cb48cf-6d87-5684-9649-c102f6eeab80",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 150
+              }
+            ]
+          },
+          {
+            "exerciseId": "26077301-8e8d-5c9d-863a-f21b5132c1f3",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 90
+              }
+            ]
+          },
+          {
+            "exerciseId": "ac3f9f8b-7b91-5ccf-8c46-74b4d5377cc9",
+            "notes": "Light",
+            "sets": [
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 150
+              }
+            ]
+          },
+          {
+            "exerciseId": "462007e9-3d18-5f94-b2b0-7356f280ff21",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 12,
+                "repsMax": 15,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 12,
+                "repsMax": 15,
+                "restSeconds": 90
+              }
+            ]
+          },
+          {
+            "exerciseId": "f2f6e6f8-117e-52cf-aa9a-432c3f338d4e",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 90
+              }
+            ]
+          },
+          {
+            "exerciseId": "a3bbe82b-d672-5c38-910c-1d1c09327048",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 12,
+                "repsMax": 15,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 12,
+                "repsMax": 15,
+                "restSeconds": 90
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "3b5beb60-37cf-5684-b47c-4d49c9b71997",
+        "name": "Push B · Intro",
+        "type": "Push",
+        "notes": "Friday. Same muscles as Push A, more volume, higher reps.",
+        "exercises": [
+          {
+            "exerciseId": "54c74ba2-a267-560a-85e0-c7bb2d45086b",
+            "notes": "Or Smith machine squat",
+            "sets": [
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 150
+              }
+            ]
+          },
+          {
+            "exerciseId": "5a3ae81d-b75a-5510-b660-b12a30bf1133",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 150
+              }
+            ]
+          },
+          {
+            "exerciseId": "42f9f167-e72b-5e43-804f-34f9e4a4ee69",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 12,
+                "repsMax": 15,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 12,
+                "repsMax": 15,
+                "restSeconds": 90
+              }
+            ]
+          },
+          {
+            "exerciseId": "62ddc3ce-1612-5a62-a126-0f63d2fc6665",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 150
+              }
+            ]
+          },
+          {
+            "exerciseId": "e598f264-85d1-5c04-af3a-14e1fd62bb8e",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 12,
+                "repsMax": 15,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 12,
+                "repsMax": 15,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 12,
+                "repsMax": 15,
+                "restSeconds": 90
+              }
+            ]
+          },
+          {
+            "exerciseId": "459add41-e130-56eb-b479-be7db98e72fd",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 12,
+                "repsMax": 15,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 12,
+                "repsMax": 15,
+                "restSeconds": 90
+              }
+            ]
+          },
+          {
+            "exerciseId": "785888b1-2031-577a-aeed-be9859e4123f",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 12,
+                "repsMax": 15,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 12,
+                "repsMax": 15,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 12,
+                "repsMax": 15,
+                "restSeconds": 90
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "2c3d26c2-2b69-5b30-ade0-5f73663f8ad2",
+        "name": "Pull B · Intro",
+        "type": "Pull",
+        "notes": "Saturday. Same muscles as Pull A, more volume, higher reps.",
+        "exercises": [
+          {
+            "exerciseId": "148a3d8e-a33e-595d-bb6a-d43904d02ae4",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 150
+              }
+            ]
+          },
+          {
+            "exerciseId": "cb6f8c7b-15eb-5bbe-ac3d-e4327430e1c3",
+            "notes": "Or neutral-grip pulldown",
+            "sets": [
+              {
+                "repsMin": 8,
+                "repsMax": 12,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 8,
+                "repsMax": 12,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 8,
+                "repsMax": 12,
+                "restSeconds": 150
+              }
+            ]
+          },
+          {
+            "exerciseId": "1c905a71-761d-5555-933a-6c276740171f",
+            "notes": "Machine or barbell",
+            "sets": [
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 150
+              }
+            ]
+          },
+          {
+            "exerciseId": "5b633b78-7be8-5a91-ac3e-d409cff0d2c7",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 90
+              }
+            ]
+          },
+          {
+            "exerciseId": "64d13603-b724-54d9-acbd-d0fed4ca90b0",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 12,
+                "repsMax": 15,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 12,
+                "repsMax": 15,
+                "restSeconds": 90
+              }
+            ]
+          },
+          {
+            "exerciseId": "07d64c8f-8193-5885-b620-58c9e78823a1",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 90
+              }
+            ]
+          },
+          {
+            "exerciseId": "2992fcc2-8200-5d75-9e74-8126182ba9df",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 10,
+                "repsMax": 15,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 10,
+                "repsMax": 15,
+                "restSeconds": 90
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "f0fa555a-4b11-57ab-821c-bb418fd2d2d7",
+        "name": "Push A · Core 1 (heavy)",
+        "type": "Push",
+        "notes": "Tuesday, heavy day: compounds lead, 5–8 reps.",
+        "exercises": [
+          {
+            "exerciseId": "8a18f9e5-aaac-5c9a-9f51-da40ef275dfb",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 5,
+                "repsMax": 7,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 5,
+                "repsMax": 7,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 5,
+                "repsMax": 7,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 5,
+                "repsMax": 7,
+                "restSeconds": 150
+              }
+            ]
+          },
+          {
+            "exerciseId": "1430ccf0-e4cc-5806-8312-6e9d3282ae3e",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 5,
+                "repsMax": 7,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 5,
+                "repsMax": 7,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 5,
+                "repsMax": 7,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 5,
+                "repsMax": 7,
+                "restSeconds": 150
+              }
+            ]
+          },
+          {
+            "exerciseId": "f130b33a-5365-5c5e-b2c4-cf1d33e20a2c",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 6,
+                "repsMax": 8,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 6,
+                "repsMax": 8,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 6,
+                "repsMax": 8,
+                "restSeconds": 150
+              }
+            ]
+          },
+          {
+            "exerciseId": "48e29a99-6387-5bbc-ade8-ffad6190c9b9",
+            "notes": "Per leg",
+            "sets": [
+              {
+                "repsMin": 8,
+                "repsMax": 10,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 8,
+                "repsMax": 10,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 8,
+                "repsMax": 10,
+                "restSeconds": 150
+              }
+            ]
+          },
+          {
+            "exerciseId": "e598f264-85d1-5c04-af3a-14e1fd62bb8e",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 12,
+                "repsMax": 15,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 12,
+                "repsMax": 15,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 12,
+                "repsMax": 15,
+                "restSeconds": 90
+              }
+            ]
+          },
+          {
+            "exerciseId": "459add41-e130-56eb-b479-be7db98e72fd",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 90
+              }
+            ]
+          },
+          {
+            "exerciseId": "ae56985b-594e-5789-a450-1f730f9463bf",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 8,
+                "repsMax": 12,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 8,
+                "repsMax": 12,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 8,
+                "repsMax": 12,
+                "restSeconds": 90
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "9b2790c4-5ca2-553a-8266-cbb4bcf3857e",
+        "name": "Pull A · Core 1 (heavy)",
+        "type": "Pull",
+        "notes": "Wednesday, heavy day.",
+        "exercises": [
+          {
+            "exerciseId": "cf8c2306-33a1-5906-b3ff-707cace11259",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 4,
+                "repsMax": 6,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 4,
+                "repsMax": 6,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 4,
+                "repsMax": 6,
+                "restSeconds": 150
+              }
+            ]
+          },
+          {
+            "exerciseId": "cb005406-a073-5d47-9651-0a3f86cf72c3",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 5,
+                "repsMax": 8,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 5,
+                "repsMax": 8,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 5,
+                "repsMax": 8,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 5,
+                "repsMax": 8,
+                "restSeconds": 150
+              }
+            ]
+          },
+          {
+            "exerciseId": "074b339b-1540-5d8c-a14d-05d9eb298cec",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 6,
+                "repsMax": 10,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 6,
+                "repsMax": 10,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 6,
+                "repsMax": 10,
+                "restSeconds": 150
+              }
+            ]
+          },
+          {
+            "exerciseId": "26077301-8e8d-5c9d-863a-f21b5132c1f3",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 8,
+                "repsMax": 12,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 8,
+                "repsMax": 12,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 8,
+                "repsMax": 12,
+                "restSeconds": 90
+              }
+            ]
+          },
+          {
+            "exerciseId": "64d13603-b724-54d9-acbd-d0fed4ca90b0",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 12,
+                "repsMax": 15,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 12,
+                "repsMax": 15,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 12,
+                "repsMax": 15,
+                "restSeconds": 90
+              }
+            ]
+          },
+          {
+            "exerciseId": "9612ffc2-2731-5aa6-83b9-678efb4f1be7",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 8,
+                "repsMax": 10,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 8,
+                "repsMax": 10,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 8,
+                "repsMax": 10,
+                "restSeconds": 90
+              }
+            ]
+          },
+          {
+            "exerciseId": "19d2df6f-7b0f-504d-a97c-eb29f0121597",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 10,
+                "repsMax": 15,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 10,
+                "repsMax": 15,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 10,
+                "repsMax": 15,
+                "restSeconds": 90
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "bb99f32f-7df5-5ef5-9fe4-3a4854368eb8",
+        "name": "Push B · Core 1 (volume)",
+        "type": "Push",
+        "notes": "Friday, volume day: 8–12 reps.",
+        "exercises": [
+          {
+            "exerciseId": "101d37c9-0ac0-508b-9920-2714c5ba9a12",
+            "notes": "Or incline dumbbell press",
+            "sets": [
+              {
+                "repsMin": 8,
+                "repsMax": 10,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 8,
+                "repsMax": 10,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 8,
+                "repsMax": 10,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 8,
+                "repsMax": 10,
+                "restSeconds": 150
+              }
+            ]
+          },
+          {
+            "exerciseId": "54c74ba2-a267-560a-85e0-c7bb2d45086b",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 8,
+                "repsMax": 12,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 8,
+                "repsMax": 12,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 8,
+                "repsMax": 12,
+                "restSeconds": 150
+              }
+            ]
+          },
+          {
+            "exerciseId": "9ac3e892-34cd-516c-94d6-467fd51f4b37",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 8,
+                "repsMax": 10,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 8,
+                "repsMax": 10,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 8,
+                "repsMax": 10,
+                "restSeconds": 150
+              }
+            ]
+          },
+          {
+            "exerciseId": "dd256805-c400-553c-a315-481a8775d9ed",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 8,
+                "repsMax": 10,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 8,
+                "repsMax": 10,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 8,
+                "repsMax": 10,
+                "restSeconds": 150
+              }
+            ]
+          },
+          {
+            "exerciseId": "16f850f9-9326-5a5e-a760-4515a8278d3a",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 12,
+                "repsMax": 15,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 12,
+                "repsMax": 15,
+                "restSeconds": 90
+              }
+            ]
+          },
+          {
+            "exerciseId": "ee25d796-43f1-5b9b-93e9-b06352aa20bc",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 15,
+                "repsMax": 20,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 15,
+                "repsMax": 20,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 15,
+                "repsMax": 20,
+                "restSeconds": 90
+              }
+            ]
+          },
+          {
+            "exerciseId": "3ae2e589-e544-5247-bfc4-27388b73cfa8",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 90
+              }
+            ]
+          },
+          {
+            "exerciseId": "785888b1-2031-577a-aeed-be9859e4123f",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 12,
+                "repsMax": 15,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 12,
+                "repsMax": 15,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 12,
+                "repsMax": 15,
+                "restSeconds": 90
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "b86b7a22-3aea-50b4-9285-2a4d088c8f3b",
+        "name": "Pull B · Core 1 (volume)",
+        "type": "Pull",
+        "notes": "Saturday, volume day.",
+        "exercises": [
+          {
+            "exerciseId": "a8d6cc3c-a067-507e-adb7-ff1feb6d5769",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 6,
+                "repsMax": 10,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 6,
+                "repsMax": 10,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 6,
+                "repsMax": 10,
+                "restSeconds": 150
+              }
+            ]
+          },
+          {
+            "exerciseId": "65a2bce5-ba1b-5df6-96df-01a54abd8b0f",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 8,
+                "repsMax": 10,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 8,
+                "repsMax": 10,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 8,
+                "repsMax": 10,
+                "restSeconds": 150
+              }
+            ]
+          },
+          {
+            "exerciseId": "94654c11-3e1e-5d57-8407-811f640d66bd",
+            "notes": "Per arm",
+            "sets": [
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 150
+              }
+            ]
+          },
+          {
+            "exerciseId": "5b633b78-7be8-5a91-ac3e-d409cff0d2c7",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 90
+              }
+            ]
+          },
+          {
+            "exerciseId": "d9a5ce8f-77a8-5f66-a527-e5c4639c1435",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 12,
+                "repsMax": 15,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 12,
+                "repsMax": 15,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 12,
+                "repsMax": 15,
+                "restSeconds": 90
+              }
+            ]
+          },
+          {
+            "exerciseId": "ce3cef89-4f03-51d2-9418-3002c6585066",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 90
+              }
+            ]
+          },
+          {
+            "exerciseId": "07d64c8f-8193-5885-b620-58c9e78823a1",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 90
+              }
+            ]
+          },
+          {
+            "exerciseId": "a3bbe82b-d672-5c38-910c-1d1c09327048",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 10,
+                "repsMax": 15,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 10,
+                "repsMax": 15,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 10,
+                "repsMax": 15,
+                "restSeconds": 90
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "dac378bb-2854-5bfb-ae37-0f9b2a652997",
+        "name": "Push A · Core 2 · Option 1",
+        "type": "Push",
+        "notes": "Tuesday, heavy day. Block 3 exercise set 1.",
+        "exercises": [
+          {
+            "exerciseId": "8a18f9e5-aaac-5c9a-9f51-da40ef275dfb",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 4,
+                "repsMax": 6,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 4,
+                "repsMax": 6,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 4,
+                "repsMax": 6,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 4,
+                "repsMax": 6,
+                "restSeconds": 150
+              }
+            ]
+          },
+          {
+            "exerciseId": "1430ccf0-e4cc-5806-8312-6e9d3282ae3e",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 4,
+                "repsMax": 6,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 4,
+                "repsMax": 6,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 4,
+                "repsMax": 6,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 4,
+                "repsMax": 6,
+                "restSeconds": 150
+              }
+            ]
+          },
+          {
+            "exerciseId": "c03ea361-55d4-5983-9249-32e3e1eae2da",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 6,
+                "repsMax": 8,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 6,
+                "repsMax": 8,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 6,
+                "repsMax": 8,
+                "restSeconds": 150
+              }
+            ]
+          },
+          {
+            "exerciseId": "48e29a99-6387-5bbc-ade8-ffad6190c9b9",
+            "notes": "Per leg",
+            "sets": [
+              {
+                "repsMin": 8,
+                "repsMax": 12,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 8,
+                "repsMax": 12,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 8,
+                "repsMax": 12,
+                "restSeconds": 150
+              }
+            ]
+          },
+          {
+            "exerciseId": "e598f264-85d1-5c04-af3a-14e1fd62bb8e",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 12,
+                "repsMax": 15,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 12,
+                "repsMax": 15,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 12,
+                "repsMax": 15,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 12,
+                "repsMax": 15,
+                "restSeconds": 90
+              }
+            ]
+          },
+          {
+            "exerciseId": "459add41-e130-56eb-b479-be7db98e72fd",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 90
+              }
+            ]
+          },
+          {
+            "exerciseId": "ae56985b-594e-5789-a450-1f730f9463bf",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 8,
+                "repsMax": 12,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 8,
+                "repsMax": 12,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 8,
+                "repsMax": 12,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 8,
+                "repsMax": 12,
+                "restSeconds": 90
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "a74827de-fa24-5ed2-abe4-f8fbd7f06203",
+        "name": "Pull A · Core 2 · Option 1",
+        "type": "Pull",
+        "notes": "Wednesday, heavy day. Block 3 exercise set 1.",
+        "exercises": [
+          {
+            "exerciseId": "cf8c2306-33a1-5906-b3ff-707cace11259",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 3,
+                "repsMax": 5,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 3,
+                "repsMax": 5,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 3,
+                "repsMax": 5,
+                "restSeconds": 150
+              }
+            ]
+          },
+          {
+            "exerciseId": "cb005406-a073-5d47-9651-0a3f86cf72c3",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 5,
+                "repsMax": 8,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 5,
+                "repsMax": 8,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 5,
+                "repsMax": 8,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 5,
+                "repsMax": 8,
+                "restSeconds": 150
+              }
+            ]
+          },
+          {
+            "exerciseId": "5fb78cf3-f814-5b0f-848b-39d96e68014c",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 6,
+                "repsMax": 8,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 6,
+                "repsMax": 8,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 6,
+                "repsMax": 8,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 6,
+                "repsMax": 8,
+                "restSeconds": 150
+              }
+            ]
+          },
+          {
+            "exerciseId": "26077301-8e8d-5c9d-863a-f21b5132c1f3",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 8,
+                "repsMax": 12,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 8,
+                "repsMax": 12,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 8,
+                "repsMax": 12,
+                "restSeconds": 90
+              }
+            ]
+          },
+          {
+            "exerciseId": "64d13603-b724-54d9-acbd-d0fed4ca90b0",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 12,
+                "repsMax": 15,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 12,
+                "repsMax": 15,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 12,
+                "repsMax": 15,
+                "restSeconds": 90
+              }
+            ]
+          },
+          {
+            "exerciseId": "9612ffc2-2731-5aa6-83b9-678efb4f1be7",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 8,
+                "repsMax": 10,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 8,
+                "repsMax": 10,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 8,
+                "repsMax": 10,
+                "restSeconds": 90
+              }
+            ]
+          },
+          {
+            "exerciseId": "19d2df6f-7b0f-504d-a97c-eb29f0121597",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 10,
+                "repsMax": 15,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 10,
+                "repsMax": 15,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 10,
+                "repsMax": 15,
+                "restSeconds": 90
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "088ab6fb-6a66-5c8a-970b-0df406a34da1",
+        "name": "Push B · Core 2 · Option 1",
+        "type": "Push",
+        "notes": "Friday, volume day. Block 3 exercise set 1.",
+        "exercises": [
+          {
+            "exerciseId": "5a3ae81d-b75a-5510-b660-b12a30bf1133",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 8,
+                "repsMax": 12,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 8,
+                "repsMax": 12,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 8,
+                "repsMax": 12,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 8,
+                "repsMax": 12,
+                "restSeconds": 150
+              }
+            ]
+          },
+          {
+            "exerciseId": "54c74ba2-a267-560a-85e0-c7bb2d45086b",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 8,
+                "repsMax": 12,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 8,
+                "repsMax": 12,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 8,
+                "repsMax": 12,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 8,
+                "repsMax": 12,
+                "restSeconds": 150
+              }
+            ]
+          },
+          {
+            "exerciseId": "dd256805-c400-553c-a315-481a8775d9ed",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 8,
+                "repsMax": 12,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 8,
+                "repsMax": 12,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 8,
+                "repsMax": 12,
+                "restSeconds": 150
+              }
+            ]
+          },
+          {
+            "exerciseId": "62ddc3ce-1612-5a62-a126-0f63d2fc6665",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 8,
+                "repsMax": 12,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 8,
+                "repsMax": 12,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 8,
+                "repsMax": 12,
+                "restSeconds": 150
+              }
+            ]
+          },
+          {
+            "exerciseId": "16f850f9-9326-5a5e-a760-4515a8278d3a",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 12,
+                "repsMax": 15,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 12,
+                "repsMax": 15,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 12,
+                "repsMax": 15,
+                "restSeconds": 90
+              }
+            ]
+          },
+          {
+            "exerciseId": "6f5a8ce4-7b3d-560a-be9d-37808cdf1485",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 12,
+                "repsMax": 15,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 12,
+                "repsMax": 15,
+                "restSeconds": 90
+              }
+            ]
+          },
+          {
+            "exerciseId": "ee25d796-43f1-5b9b-93e9-b06352aa20bc",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 15,
+                "repsMax": 20,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 15,
+                "repsMax": 20,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 15,
+                "repsMax": 20,
+                "restSeconds": 90
+              }
+            ]
+          },
+          {
+            "exerciseId": "3ae2e589-e544-5247-bfc4-27388b73cfa8",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 10,
+                "repsMax": 15,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 10,
+                "repsMax": 15,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 10,
+                "repsMax": 15,
+                "restSeconds": 90
+              }
+            ]
+          },
+          {
+            "exerciseId": "785888b1-2031-577a-aeed-be9859e4123f",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 12,
+                "repsMax": 15,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 12,
+                "repsMax": 15,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 12,
+                "repsMax": 15,
+                "restSeconds": 90
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "6ced3f95-1b36-5040-bcbd-16e3145fee1e",
+        "name": "Pull B · Core 2 · Option 1",
+        "type": "Pull",
+        "notes": "Saturday, volume day. Block 3 exercise set 1.",
+        "exercises": [
+          {
+            "exerciseId": "a8d6cc3c-a067-507e-adb7-ff1feb6d5769",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 8,
+                "repsMax": 10,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 8,
+                "repsMax": 10,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 8,
+                "repsMax": 10,
+                "restSeconds": 150
+              }
+            ]
+          },
+          {
+            "exerciseId": "65a2bce5-ba1b-5df6-96df-01a54abd8b0f",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 8,
+                "repsMax": 12,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 8,
+                "repsMax": 12,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 8,
+                "repsMax": 12,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 8,
+                "repsMax": 12,
+                "restSeconds": 150
+              }
+            ]
+          },
+          {
+            "exerciseId": "952baffb-fdbc-5d2d-b6b8-47addf4c26e4",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 150
+              }
+            ]
+          },
+          {
+            "exerciseId": "1c905a71-761d-5555-933a-6c276740171f",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 8,
+                "repsMax": 12,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 8,
+                "repsMax": 12,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 8,
+                "repsMax": 12,
+                "restSeconds": 150
+              }
+            ]
+          },
+          {
+            "exerciseId": "5b633b78-7be8-5a91-ac3e-d409cff0d2c7",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 90
+              }
+            ]
+          },
+          {
+            "exerciseId": "d9a5ce8f-77a8-5f66-a527-e5c4639c1435",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 15,
+                "repsMax": 20,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 15,
+                "repsMax": 20,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 15,
+                "repsMax": 20,
+                "restSeconds": 90
+              }
+            ]
+          },
+          {
+            "exerciseId": "ce3cef89-4f03-51d2-9418-3002c6585066",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 90
+              }
+            ]
+          },
+          {
+            "exerciseId": "07d64c8f-8193-5885-b620-58c9e78823a1",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 90
+              }
+            ]
+          },
+          {
+            "exerciseId": "a3bbe82b-d672-5c38-910c-1d1c09327048",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 10,
+                "repsMax": 15,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 10,
+                "repsMax": 15,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 10,
+                "repsMax": 15,
+                "restSeconds": 90
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "ecaaadcf-feb8-5957-b4b8-5dc1ec0cf01c",
+        "name": "Push A · Core 2 · Option 2",
+        "type": "Push",
+        "notes": "Tuesday, heavy day. Block 3 exercise set 2.",
+        "exercises": [
+          {
+            "exerciseId": "6fef7538-91dd-5df4-9337-1a6fd7172dd6",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 4,
+                "repsMax": 6,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 4,
+                "repsMax": 6,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 4,
+                "repsMax": 6,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 4,
+                "repsMax": 6,
+                "restSeconds": 150
+              }
+            ]
+          },
+          {
+            "exerciseId": "270b2816-c813-53c9-88d3-e7ee26a90608",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 4,
+                "repsMax": 6,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 4,
+                "repsMax": 6,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 4,
+                "repsMax": 6,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 4,
+                "repsMax": 6,
+                "restSeconds": 150
+              }
+            ]
+          },
+          {
+            "exerciseId": "f130b33a-5365-5c5e-b2c4-cf1d33e20a2c",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 6,
+                "repsMax": 8,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 6,
+                "repsMax": 8,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 6,
+                "repsMax": 8,
+                "restSeconds": 150
+              }
+            ]
+          },
+          {
+            "exerciseId": "9b51fe98-5fe7-5d3a-8031-2cfba81adac7",
+            "notes": "Per leg",
+            "sets": [
+              {
+                "repsMin": 8,
+                "repsMax": 12,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 8,
+                "repsMax": 12,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 8,
+                "repsMax": 12,
+                "restSeconds": 150
+              }
+            ]
+          },
+          {
+            "exerciseId": "a978975d-87db-59bf-ac9f-b95ca7d84e78",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 12,
+                "repsMax": 15,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 12,
+                "repsMax": 15,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 12,
+                "repsMax": 15,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 12,
+                "repsMax": 15,
+                "restSeconds": 90
+              }
+            ]
+          },
+          {
+            "exerciseId": "c4ded241-4e15-595d-9a96-8c54eaa76116",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 90
+              }
+            ]
+          },
+          {
+            "exerciseId": "ae56985b-594e-5789-a450-1f730f9463bf",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 8,
+                "repsMax": 12,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 8,
+                "repsMax": 12,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 8,
+                "repsMax": 12,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 8,
+                "repsMax": 12,
+                "restSeconds": 90
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "e27967b4-690b-5389-9800-51c242b6d977",
+        "name": "Pull A · Core 2 · Option 2",
+        "type": "Pull",
+        "notes": "Wednesday, heavy day. Block 3 exercise set 2.",
+        "exercises": [
+          {
+            "exerciseId": "19d8741b-cba9-5911-8256-76746ab2c4fc",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 3,
+                "repsMax": 5,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 3,
+                "repsMax": 5,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 3,
+                "repsMax": 5,
+                "restSeconds": 150
+              }
+            ]
+          },
+          {
+            "exerciseId": "43d2dac5-c448-5843-b541-a88bc8869024",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 5,
+                "repsMax": 8,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 5,
+                "repsMax": 8,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 5,
+                "repsMax": 8,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 5,
+                "repsMax": 8,
+                "restSeconds": 150
+              }
+            ]
+          },
+          {
+            "exerciseId": "b01b7154-81f4-57af-9e43-222009d5cf09",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 6,
+                "repsMax": 8,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 6,
+                "repsMax": 8,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 6,
+                "repsMax": 8,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 6,
+                "repsMax": 8,
+                "restSeconds": 150
+              }
+            ]
+          },
+          {
+            "exerciseId": "cccb41c9-d4e3-53d2-b961-5b7ebdbb4afb",
+            "notes": "Assisted",
+            "sets": [
+              {
+                "repsMin": 8,
+                "repsMax": 12,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 8,
+                "repsMax": 12,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 8,
+                "repsMax": 12,
+                "restSeconds": 90
+              }
+            ]
+          },
+          {
+            "exerciseId": "462007e9-3d18-5f94-b2b0-7356f280ff21",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 12,
+                "repsMax": 15,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 12,
+                "repsMax": 15,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 12,
+                "repsMax": 15,
+                "restSeconds": 90
+              }
+            ]
+          },
+          {
+            "exerciseId": "9a5fc0e9-51ca-530a-afcc-67ef85494f17",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 8,
+                "repsMax": 10,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 8,
+                "repsMax": 10,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 8,
+                "repsMax": 10,
+                "restSeconds": 90
+              }
+            ]
+          },
+          {
+            "exerciseId": "aa15623d-6c4e-5852-906d-7a3e59be9cb0",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 10,
+                "repsMax": 15,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 10,
+                "repsMax": 15,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 10,
+                "repsMax": 15,
+                "restSeconds": 90
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "c1eeef85-1ee4-5ec0-82c7-167e290fca5a",
+        "name": "Push B · Core 2 · Option 2",
+        "type": "Push",
+        "notes": "Friday, volume day. Block 3 exercise set 2.",
+        "exercises": [
+          {
+            "exerciseId": "3e763f8c-d221-56a0-8158-812e45e34b7d",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 8,
+                "repsMax": 12,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 8,
+                "repsMax": 12,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 8,
+                "repsMax": 12,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 8,
+                "repsMax": 12,
+                "restSeconds": 150
+              }
+            ]
+          },
+          {
+            "exerciseId": "77a6ebff-785c-50f3-b510-083e1ba1a389",
+            "notes": "Or leg press",
+            "sets": [
+              {
+                "repsMin": 8,
+                "repsMax": 12,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 8,
+                "repsMax": 12,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 8,
+                "repsMax": 12,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 8,
+                "repsMax": 12,
+                "restSeconds": 150
+              }
+            ]
+          },
+          {
+            "exerciseId": "c83749e7-fc76-5eff-9967-6467fe039079",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 8,
+                "repsMax": 12,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 8,
+                "repsMax": 12,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 8,
+                "repsMax": 12,
+                "restSeconds": 150
+              }
+            ]
+          },
+          {
+            "exerciseId": "f470280d-494c-5eb7-b2e0-14df71f636f0",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 8,
+                "repsMax": 12,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 8,
+                "repsMax": 12,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 8,
+                "repsMax": 12,
+                "restSeconds": 150
+              }
+            ]
+          },
+          {
+            "exerciseId": "16f850f9-9326-5a5e-a760-4515a8278d3a",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 12,
+                "repsMax": 15,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 12,
+                "repsMax": 15,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 12,
+                "repsMax": 15,
+                "restSeconds": 90
+              }
+            ]
+          },
+          {
+            "exerciseId": "42f9f167-e72b-5e43-804f-34f9e4a4ee69",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 12,
+                "repsMax": 15,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 12,
+                "repsMax": 15,
+                "restSeconds": 90
+              }
+            ]
+          },
+          {
+            "exerciseId": "ee25d796-43f1-5b9b-93e9-b06352aa20bc",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 15,
+                "repsMax": 20,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 15,
+                "repsMax": 20,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 15,
+                "repsMax": 20,
+                "restSeconds": 90
+              }
+            ]
+          },
+          {
+            "exerciseId": "1fcd7356-e912-5159-bbcd-5f1ac06a133c",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 10,
+                "repsMax": 15,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 10,
+                "repsMax": 15,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 10,
+                "repsMax": 15,
+                "restSeconds": 90
+              }
+            ]
+          },
+          {
+            "exerciseId": "785888b1-2031-577a-aeed-be9859e4123f",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 12,
+                "repsMax": 15,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 12,
+                "repsMax": 15,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 12,
+                "repsMax": 15,
+                "restSeconds": 90
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "e190b359-f1ff-5a0d-b88c-64eb1bc5cbd3",
+        "name": "Pull B · Core 2 · Option 2",
+        "type": "Pull",
+        "notes": "Saturday, volume day. Block 3 exercise set 2.",
+        "exercises": [
+          {
+            "exerciseId": "e80c3610-a0cc-5e96-9d35-8c6b471d615f",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 8,
+                "repsMax": 10,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 8,
+                "repsMax": 10,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 8,
+                "repsMax": 10,
+                "restSeconds": 150
+              }
+            ]
+          },
+          {
+            "exerciseId": "88da6a2f-8337-5715-94ae-319f6257aa83",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 8,
+                "repsMax": 12,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 8,
+                "repsMax": 12,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 8,
+                "repsMax": 12,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 8,
+                "repsMax": 12,
+                "restSeconds": 150
+              }
+            ]
+          },
+          {
+            "exerciseId": "1ccdd311-0f3b-540a-9f5d-46cf029b9e97",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 150
+              },
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 150
+              }
+            ]
+          },
+          {
+            "exerciseId": "dafdb6c5-9a8e-552b-a08c-338ad0967987",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 8,
+                "repsMax": 12,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 8,
+                "repsMax": 12,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 8,
+                "repsMax": 12,
+                "restSeconds": 90
+              }
+            ]
+          },
+          {
+            "exerciseId": "5b633b78-7be8-5a91-ac3e-d409cff0d2c7",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 90
+              }
+            ]
+          },
+          {
+            "exerciseId": "d9a5ce8f-77a8-5f66-a527-e5c4639c1435",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 15,
+                "repsMax": 20,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 15,
+                "repsMax": 20,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 15,
+                "repsMax": 20,
+                "restSeconds": 90
+              }
+            ]
+          },
+          {
+            "exerciseId": "f62b25ae-fb45-5e2b-bdd5-44e3aada6468",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 90
+              }
+            ]
+          },
+          {
+            "exerciseId": "28a2ec03-f1fa-583a-a16b-9f6e0238f166",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 10,
+                "repsMax": 12,
+                "restSeconds": 90
+              }
+            ]
+          },
+          {
+            "exerciseId": "a3bbe82b-d672-5c38-910c-1d1c09327048",
+            "notes": "",
+            "sets": [
+              {
+                "repsMin": 10,
+                "repsMax": 15,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 10,
+                "repsMax": 15,
+                "restSeconds": 90
+              },
+              {
+                "repsMin": 10,
+                "repsMax": 15,
+                "restSeconds": 90
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "trainingBlocks": [
+      {
+        "id": "8e4e077e-d953-54d9-8e0b-fce2d7d36a05",
+        "name": "Winter Arc 1 · Intro",
+        "startDate": "2026-11-03",
+        "endDate": "2026-11-30",
+        "notes": "4 weeks of mostly machines at moderate reps, ramping effort each week. About 8–10 sets per muscle per week. Goal: re-teach the body to lift, not to set PRs.\nRIR by week: week 1 at 4 RIR (find working weights), week 2 at 3 (add reps or load where it felt easy), week 3 at 2 (first real push), week 4 at 1–2 (push it, then roll into Block 2).\nDouble progression: when every set hits the top of the rep range at the target RIR, add load (+2.5 kg upper body, +5 kg lower body), then build reps back up. Rest 2–3 min on compounds, 1–2 min on isolations. Warm-up: 5 min easy cardio, then 2–3 ramp-up sets on the first compound. Sharp or joint pain: swap the exercise.",
+        "workoutIds": [
+          "388fdd54-e5e8-5f48-aa1b-81fc8c7aad9f",
+          "b2a925dd-7d37-5ced-bea1-2ce24c19d6a2",
+          "3b5beb60-37cf-5684-b47c-4d49c9b71997",
+          "2c3d26c2-2b69-5b30-ade0-5f73663f8ad2"
+        ],
+        "schedule": [
+          {
+            "dayOfWeek": "TUESDAY",
+            "workoutId": "388fdd54-e5e8-5f48-aa1b-81fc8c7aad9f"
+          },
+          {
+            "dayOfWeek": "WEDNESDAY",
+            "workoutId": "b2a925dd-7d37-5ced-bea1-2ce24c19d6a2"
+          },
+          {
+            "dayOfWeek": "FRIDAY",
+            "workoutId": "3b5beb60-37cf-5684-b47c-4d49c9b71997"
+          },
+          {
+            "dayOfWeek": "SATURDAY",
+            "workoutId": "2c3d26c2-2b69-5b30-ade0-5f73663f8ad2"
+          }
+        ]
+      },
+      {
+        "id": "dc895b99-291e-596d-a3d2-7fd542f6e7bd",
+        "name": "Winter Arc 2 · Core 1",
+        "startDate": "2026-12-01",
+        "endDate": "2027-02-22",
+        "notes": "Compounds lead every session; A days go heavy (5–8 reps), B days go hypertrophy (8–12 reps). About 12–16 sets per muscle per week. Two 6-week waves, each ending in a deload.\nRIR (compounds / isolations): weeks 1–2 and 7–8: 3 / 2. Weeks 3–4 and 9–10: 2 / 1. Weeks 5 and 11: 1 / 0 (to failure). Weeks 6 (5–11 Jan) and 12 (16–22 Feb): deload, same exercises, half the sets, 4+ RIR.\nWeek 4 lands on Christmas; if the holidays wreck the schedule, swap it with the week 6 deload.\nGauge progress by the big four (squat, bench, deadlift, pull-up): by week 12, clearly more weight or reps than in week 1.\nDouble progression: when every set hits the top of the rep range at the target RIR, add load (+2.5 kg upper body, +5 kg lower body), then build reps back up. Rest 2–3 min on compounds, 1–2 min on isolations. Warm-up: 5 min easy cardio, then 2–3 ramp-up sets on the first compound. Sharp or joint pain: swap the exercise.",
+        "workoutIds": [
+          "f0fa555a-4b11-57ab-821c-bb418fd2d2d7",
+          "9b2790c4-5ca2-553a-8266-cbb4bcf3857e",
+          "bb99f32f-7df5-5ef5-9fe4-3a4854368eb8",
+          "b86b7a22-3aea-50b4-9285-2a4d088c8f3b"
+        ],
+        "schedule": [
+          {
+            "dayOfWeek": "TUESDAY",
+            "workoutId": "f0fa555a-4b11-57ab-821c-bb418fd2d2d7"
+          },
+          {
+            "dayOfWeek": "WEDNESDAY",
+            "workoutId": "9b2790c4-5ca2-553a-8266-cbb4bcf3857e"
+          },
+          {
+            "dayOfWeek": "FRIDAY",
+            "workoutId": "bb99f32f-7df5-5ef5-9fe4-3a4854368eb8"
+          },
+          {
+            "dayOfWeek": "SATURDAY",
+            "workoutId": "b86b7a22-3aea-50b4-9285-2a4d088c8f3b"
+          }
+        ]
+      },
+      {
+        "id": "e5cc78e0-9ea4-5bfd-a87a-c00e55f9da4e",
+        "name": "Winter Arc 3 · Core 2 · M1",
+        "startDate": "2027-02-23",
+        "endDate": "2027-04-05",
+        "notes": "Block 3, mesocycle 1 (weeks 1–6), exercise set Option 1.\nEach mesocycle: weeks 1–2 at 3 RIR, weeks 3–4 at 2 RIR, week 5 at 0–1 RIR, week 6 deload (same exercises, half the sets, 4+ RIR). Add one set to the main lift of each lagging muscle in weeks 3–5. Intensity techniques (myo-reps, drop sets, lengthened partials) on the last set of isolation exercises only, never on squats or deadlifts. About 14–20 sets per muscle per week.\nCardio (low-impact, mostly Zone 2) on Mon, Thu or Sun, or after Pull sessions, never right before squats or deadlifts: 2 × 25 min Zone 2 a week; deload week 2 × 20 min easy. Plus 8,000–10,000 steps a day.\nDouble progression: when every set hits the top of the rep range at the target RIR, add load (+2.5 kg upper body, +5 kg lower body), then build reps back up. Rest 2–3 min on compounds, 1–2 min on isolations. Warm-up: 5 min easy cardio, then 2–3 ramp-up sets on the first compound. Sharp or joint pain: swap the exercise.",
+        "workoutIds": [
+          "dac378bb-2854-5bfb-ae37-0f9b2a652997",
+          "a74827de-fa24-5ed2-abe4-f8fbd7f06203",
+          "088ab6fb-6a66-5c8a-970b-0df406a34da1",
+          "6ced3f95-1b36-5040-bcbd-16e3145fee1e"
+        ],
+        "schedule": [
+          {
+            "dayOfWeek": "TUESDAY",
+            "workoutId": "dac378bb-2854-5bfb-ae37-0f9b2a652997"
+          },
+          {
+            "dayOfWeek": "WEDNESDAY",
+            "workoutId": "a74827de-fa24-5ed2-abe4-f8fbd7f06203"
+          },
+          {
+            "dayOfWeek": "FRIDAY",
+            "workoutId": "088ab6fb-6a66-5c8a-970b-0df406a34da1"
+          },
+          {
+            "dayOfWeek": "SATURDAY",
+            "workoutId": "6ced3f95-1b36-5040-bcbd-16e3145fee1e"
+          }
+        ]
+      },
+      {
+        "id": "365506af-f2cb-538e-a46f-2aa3337eca94",
+        "name": "Winter Arc 3 · Core 2 · M2",
+        "startDate": "2027-04-06",
+        "endDate": "2027-05-17",
+        "notes": "Block 3, mesocycle 2 (weeks 7–12), exercise set Option 2.\nEach mesocycle: weeks 1–2 at 3 RIR, weeks 3–4 at 2 RIR, week 5 at 0–1 RIR, week 6 deload (same exercises, half the sets, 4+ RIR). Add one set to the main lift of each lagging muscle in weeks 3–5. Intensity techniques (myo-reps, drop sets, lengthened partials) on the last set of isolation exercises only, never on squats or deadlifts. About 14–20 sets per muscle per week.\nCardio (low-impact, mostly Zone 2) on Mon, Thu or Sun, or after Pull sessions, never right before squats or deadlifts: 3 × 30 min Zone 2 a week; deload week 2 × 20 min easy. Plus 8,000–10,000 steps a day.\nDouble progression: when every set hits the top of the rep range at the target RIR, add load (+2.5 kg upper body, +5 kg lower body), then build reps back up. Rest 2–3 min on compounds, 1–2 min on isolations. Warm-up: 5 min easy cardio, then 2–3 ramp-up sets on the first compound. Sharp or joint pain: swap the exercise.",
+        "workoutIds": [
+          "ecaaadcf-feb8-5957-b4b8-5dc1ec0cf01c",
+          "e27967b4-690b-5389-9800-51c242b6d977",
+          "c1eeef85-1ee4-5ec0-82c7-167e290fca5a",
+          "e190b359-f1ff-5a0d-b88c-64eb1bc5cbd3"
+        ],
+        "schedule": [
+          {
+            "dayOfWeek": "TUESDAY",
+            "workoutId": "ecaaadcf-feb8-5957-b4b8-5dc1ec0cf01c"
+          },
+          {
+            "dayOfWeek": "WEDNESDAY",
+            "workoutId": "e27967b4-690b-5389-9800-51c242b6d977"
+          },
+          {
+            "dayOfWeek": "FRIDAY",
+            "workoutId": "c1eeef85-1ee4-5ec0-82c7-167e290fca5a"
+          },
+          {
+            "dayOfWeek": "SATURDAY",
+            "workoutId": "e190b359-f1ff-5a0d-b88c-64eb1bc5cbd3"
+          }
+        ]
+      },
+      {
+        "id": "a3c071f3-cffd-56f3-8c7b-e17532cf1ca7",
+        "name": "Winter Arc 3 · Core 2 · M3",
+        "startDate": "2027-05-18",
+        "endDate": "2027-06-28",
+        "notes": "Block 3, mesocycle 3 (weeks 13–18), exercise set Option 1: beat your M1 numbers.\nEach mesocycle: weeks 1–2 at 3 RIR, weeks 3–4 at 2 RIR, week 5 at 0–1 RIR, week 6 deload (same exercises, half the sets, 4+ RIR). Add one set to the main lift of each lagging muscle in weeks 3–5. Intensity techniques (myo-reps, drop sets, lengthened partials) on the last set of isolation exercises only, never on squats or deadlifts. About 14–20 sets per muscle per week.\nCardio (low-impact, mostly Zone 2) on Mon, Thu or Sun, or after Pull sessions, never right before squats or deadlifts: 3 × 35 min Zone 2 a week, plus bike sprints on Thursday: 8 × 20 s hard, 100 s easy. Deload week 2 × 20 min easy.\nDouble progression: when every set hits the top of the rep range at the target RIR, add load (+2.5 kg upper body, +5 kg lower body), then build reps back up. Rest 2–3 min on compounds, 1–2 min on isolations. Warm-up: 5 min easy cardio, then 2–3 ramp-up sets on the first compound. Sharp or joint pain: swap the exercise.",
+        "workoutIds": [
+          "dac378bb-2854-5bfb-ae37-0f9b2a652997",
+          "a74827de-fa24-5ed2-abe4-f8fbd7f06203",
+          "088ab6fb-6a66-5c8a-970b-0df406a34da1",
+          "6ced3f95-1b36-5040-bcbd-16e3145fee1e"
+        ],
+        "schedule": [
+          {
+            "dayOfWeek": "TUESDAY",
+            "workoutId": "dac378bb-2854-5bfb-ae37-0f9b2a652997"
+          },
+          {
+            "dayOfWeek": "WEDNESDAY",
+            "workoutId": "a74827de-fa24-5ed2-abe4-f8fbd7f06203"
+          },
+          {
+            "dayOfWeek": "FRIDAY",
+            "workoutId": "088ab6fb-6a66-5c8a-970b-0df406a34da1"
+          },
+          {
+            "dayOfWeek": "SATURDAY",
+            "workoutId": "6ced3f95-1b36-5040-bcbd-16e3145fee1e"
+          }
+        ]
+      },
+      {
+        "id": "bb1b8042-5a6d-5971-acdc-45d20e6f5ecb",
+        "name": "Winter Arc 3 · Core 2 · M4 + test",
+        "startDate": "2027-06-29",
+        "endDate": "2027-08-23",
+        "notes": "Block 3, mesocycle 4 (weeks 19–24, 29 Jun – 9 Aug), exercise set Option 2: beat your M2 numbers. Then the last 2 weeks of the plan:\nWeek 25 (10–16 Aug): work up to heavy triples on the big four (squat, bench, deadlift, pull-up). Week 26 (17–23 Aug): deload.\nEach mesocycle: weeks 1–2 at 3 RIR, weeks 3–4 at 2 RIR, week 5 at 0–1 RIR, week 6 deload (same exercises, half the sets, 4+ RIR). Add one set to the main lift of each lagging muscle in weeks 3–5. Intensity techniques (myo-reps, drop sets, lengthened partials) on the last set of isolation exercises only, never on squats or deadlifts. About 14–20 sets per muscle per week.\nCardio (low-impact, mostly Zone 2) on Mon, Thu or Sun, or after Pull sessions, never right before squats or deadlifts: 3 × 40 min Zone 2 a week, plus bike sprints on Thursday: 10 × 20 s hard, 100 s easy. Deload weeks 2 × 20 min easy.\nDouble progression: when every set hits the top of the rep range at the target RIR, add load (+2.5 kg upper body, +5 kg lower body), then build reps back up. Rest 2–3 min on compounds, 1–2 min on isolations. Warm-up: 5 min easy cardio, then 2–3 ramp-up sets on the first compound. Sharp or joint pain: swap the exercise.",
+        "workoutIds": [
+          "ecaaadcf-feb8-5957-b4b8-5dc1ec0cf01c",
+          "e27967b4-690b-5389-9800-51c242b6d977",
+          "c1eeef85-1ee4-5ec0-82c7-167e290fca5a",
+          "e190b359-f1ff-5a0d-b88c-64eb1bc5cbd3"
+        ],
+        "schedule": [
+          {
+            "dayOfWeek": "TUESDAY",
+            "workoutId": "ecaaadcf-feb8-5957-b4b8-5dc1ec0cf01c"
+          },
+          {
+            "dayOfWeek": "WEDNESDAY",
+            "workoutId": "e27967b4-690b-5389-9800-51c242b6d977"
+          },
+          {
+            "dayOfWeek": "FRIDAY",
+            "workoutId": "c1eeef85-1ee4-5ec0-82c7-167e290fca5a"
+          },
+          {
+            "dayOfWeek": "SATURDAY",
+            "workoutId": "e190b359-f1ff-5a0d-b88c-64eb1bc5cbd3"
+          }
+        ]
+      }
+    ]
+  }
+}

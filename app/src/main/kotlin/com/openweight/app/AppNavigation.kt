@@ -30,6 +30,11 @@ import androidx.navigation3.ui.NavDisplay
 import com.openweight.app.diet.DietHomeScreen
 import com.openweight.app.settings.SettingsRoute
 import com.openweight.app.workout.WorkoutHomeScreen
+import com.openweight.app.workout.exercise.ExerciseEditRoute
+import com.openweight.app.workout.exercise.ExerciseListRoute
+import com.openweight.app.workout.workouts.ExercisePickerRoute
+import com.openweight.app.workout.workouts.WorkoutEditRoute
+import com.openweight.app.workout.workouts.WorkoutListRoute
 import kotlinx.serialization.Serializable
 
 // Navigation keys. Each tab has its own back stack, so switching tabs keeps your place in each.
@@ -38,6 +43,18 @@ import kotlinx.serialization.Serializable
 @Serializable data object DietHome : NavKey
 
 @Serializable data object SettingsHome : NavKey
+
+// Workout tab
+@Serializable data object WorkoutList : NavKey
+
+@Serializable data class WorkoutEdit(val workoutId: String) : NavKey
+
+@Serializable data class ExercisePicker(val workoutId: String) : NavKey
+
+@Serializable data object ExerciseList : NavKey
+
+/** [exerciseId] null = a new exercise. */
+@Serializable data class ExerciseEdit(val exerciseId: String?) : NavKey
 
 enum class TopLevelDestination(
   @param:StringRes val label: Int,
@@ -92,11 +109,13 @@ fun OpenWeightAppUi(modifier: Modifier = Modifier) {
   ) { padding ->
     // Each tab's screens keep their state (scroll, selected panel, typed text) while another tab
     // is shown: the tab's whole subtree is saved under its own key and restored on return.
+    // Never pops a tab's first screen, even if a screen reports "done" twice.
+    val back: () -> Unit = { if (backStack.size > 1) backStack.removeAt(backStack.lastIndex) }
     tabStateHolder.SaveableStateProvider(current.name) {
       NavDisplay(
         backStack = backStack,
         modifier = Modifier.padding(padding),
-        onBack = { backStack.removeLastOrNull() },
+        onBack = back,
         entryDecorators =
           listOf(
             rememberSaveableStateHolderNavEntryDecorator(),
@@ -104,7 +123,35 @@ fun OpenWeightAppUi(modifier: Modifier = Modifier) {
           ),
         entryProvider =
           entryProvider {
-            entry<WorkoutHome> { WorkoutHomeScreen() }
+            entry<WorkoutHome> {
+            WorkoutHomeScreen(
+              onOpenWorkouts = { backStack.add(WorkoutList) },
+              onOpenExercises = { backStack.add(ExerciseList) },
+            )
+          }
+          entry<WorkoutList> {
+            WorkoutListRoute(onBack = back, onOpen = { backStack.add(WorkoutEdit(it)) })
+          }
+          entry<WorkoutEdit> { key ->
+            WorkoutEditRoute(
+              workoutId = key.workoutId,
+              onBack = back,
+              onOpenWorkout = {
+                backStack.removeLastOrNull()
+                backStack.add(WorkoutEdit(it))
+              },
+              onAddExercise = { backStack.add(ExercisePicker(key.workoutId)) },
+            )
+          }
+          entry<ExercisePicker> { key -> ExercisePickerRoute(workoutId = key.workoutId, onDone = back) }
+          entry<ExerciseList> {
+            ExerciseListRoute(
+              onBack = back,
+              onOpen = { backStack.add(ExerciseEdit(it)) },
+              onCreate = { backStack.add(ExerciseEdit(null)) },
+            )
+          }
+          entry<ExerciseEdit> { key -> ExerciseEditRoute(exerciseId = key.exerciseId, onDone = back) }
             entry<DietHome> { DietHomeScreen() }
             entry<SettingsHome> { SettingsRoute() }
           },
