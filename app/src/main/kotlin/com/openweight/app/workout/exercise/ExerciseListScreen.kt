@@ -65,12 +65,12 @@ fun ExerciseListRoute(
 }
 
 @Composable
-internal fun SearchField(query: String, onChange: (String) -> Unit) {
+fun SearchField(query: String, onChange: (String) -> Unit, placeholder: String? = null) {
   OutlinedTextField(
     value = query,
     onValueChange = onChange,
     modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
-    placeholder = { Text(stringResource(R.string.exercise_search)) },
+    placeholder = { Text(placeholder ?: stringResource(R.string.exercise_search)) },
     leadingIcon = { Icon(Icons.Filled.Search, contentDescription = null) },
     singleLine = true,
   )

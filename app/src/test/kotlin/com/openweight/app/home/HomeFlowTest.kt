@@ -66,8 +66,14 @@ class HomeFlowTest {
   @Test
   fun todaysWorkout_opensItsOverview_thenTheEditor() {
     waitForTag("week_agenda")
-    compose.onNodeWithTag("week_agenda").performScrollToNode(hasTestTag("day_workout_$today"))
-    compose.onNodeWithText("Winter Arc · week 2 of 5").assertIsDisplayed()
+    // The week scrolls itself to today on open; wait for that to settle rather than racing it.
+    compose.waitUntil(5_000) {
+      runCatching {
+          compose.onNodeWithTag("week_agenda").performScrollToNode(hasTestTag("day_workout_$today"))
+          compose.onNodeWithText("Winter Arc · week 2 of 5").assertIsDisplayed()
+        }
+        .isSuccess
+    }
 
     compose.onNodeWithTag("day_workout_$today").performClick()
     waitForText("1. Bench press")

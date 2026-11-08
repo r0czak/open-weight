@@ -28,6 +28,11 @@ import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.openweight.app.diet.DietHomeScreen
+import com.openweight.app.diet.ingredients.IngredientEditRoute
+import com.openweight.app.diet.ingredients.IngredientListRoute
+import com.openweight.app.diet.recipes.IngredientPickerRoute
+import com.openweight.app.diet.recipes.RecipeDetailRoute
+import com.openweight.app.diet.recipes.RecipeEditRoute
 import com.openweight.app.home.HomeRoute
 import com.openweight.app.workout.workouts.WorkoutOverviewRoute
 import java.time.LocalDate
@@ -57,6 +62,19 @@ import kotlinx.serialization.Serializable
 @Serializable data class BlockEdit(val blockId: String) : NavKey
 
 @Serializable data object WorkoutList : NavKey
+
+// Diet tab
+@Serializable data class RecipeView(val recipeId: String) : NavKey
+
+/** [recipeId] null = a new recipe. */
+@Serializable data class RecipeEdit(val recipeId: String?) : NavKey
+
+@Serializable data class IngredientPicker(val recipeId: String) : NavKey
+
+@Serializable data object IngredientList : NavKey
+
+/** [ingredientId] null = a new ingredient. */
+@Serializable data class IngredientEdit(val ingredientId: String?) : NavKey
 
 /** Read-only workout, as opened from a day on Home ([epochDay] = that day, if any). */
 @Serializable data class WorkoutOverview(val workoutId: String, val epochDay: Long? = null) : NavKey
@@ -184,7 +202,40 @@ fun OpenWeightAppUi(modifier: Modifier = Modifier) {
             )
           }
           entry<ExerciseEdit> { key -> ExerciseEditRoute(exerciseId = key.exerciseId, onDone = back) }
-            entry<DietHome> { DietHomeScreen() }
+            entry<DietHome> {
+            DietHomeScreen(
+              onOpenRecipe = { backStack.add(RecipeView(it)) },
+              onCreateRecipe = { backStack.add(RecipeEdit(null)) },
+              onOpenIngredients = { backStack.add(IngredientList) },
+            )
+          }
+          entry<RecipeView> { key ->
+            RecipeDetailRoute(
+              recipeId = key.recipeId,
+              onBack = back,
+              onEdit = { backStack.add(RecipeEdit(key.recipeId)) },
+              onOpenRecipe = {
+                backStack.removeLastOrNull()
+                backStack.add(RecipeView(it))
+              },
+            )
+          }
+          entry<RecipeEdit> { key ->
+            RecipeEditRoute(
+              recipeId = key.recipeId,
+              onDone = back,
+              onAddIngredient = { backStack.add(IngredientPicker(it)) },
+            )
+          }
+          entry<IngredientPicker> { key -> IngredientPickerRoute(recipeId = key.recipeId, onDone = back) }
+          entry<IngredientList> {
+            IngredientListRoute(
+              onBack = back,
+              onOpen = { backStack.add(IngredientEdit(it)) },
+              onCreate = { backStack.add(IngredientEdit(null)) },
+            )
+          }
+          entry<IngredientEdit> { key -> IngredientEditRoute(ingredientId = key.ingredientId, onDone = { back() }) }
             entry<SettingsHome> { SettingsRoute() }
           },
       )

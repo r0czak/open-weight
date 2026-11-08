@@ -223,4 +223,84 @@
     <string name="workout_edit">Edit workout</string>
     <string name="workout_start">Start workout</string>
     <string name="workout_start_soon">Live training (timers, logging your sets) comes in the next update.</string>
+    <!-- Ingredients -->
+    <string name="diet_ingredients">Ingredients</string>
+    <string name="ingredient_new">New ingredient</string>
+    <string name="ingredient_edit">Edit ingredient</string>
+    <string name="ingredient_search">Search ingredients</string>
+    <string name="ingredient_empty">No ingredients yet.</string>
+    <string name="ingredient_empty_hint">Add them here, or straight from a recipe.</string>
+    <string name="ingredient_kcal_per_100">%1$s kcal per %2$s</string>
+    <string name="ingredient_no_nutrition">no nutrition values</string>
+    <string name="ingredient_unit">Measured in</string>
+    <string name="ingredient_category">Shop category</string>
+    <string name="ingredient_nutrition_title">Nutrition per %1$s</string>
+    <string name="ingredient_nutrition_hint">From the packaging. Leave empty if you don\'t know; recipes then show their totals as incomplete.</string>
+    <string name="ingredient_grams_per_piece">Grams per piece (optional)</string>
+    <string name="ingredient_grams_per_piece_hint">e.g. 60 for an egg, so recipes can use \"2 pcs\"</string>
+    <string name="ingredient_create_hint">Add nutrition values later in Ingredients</string>
+    <string name="error_ingredient_exists">An ingredient with this name already exists</string>
+    <string name="error_ingredient_numbers">Nutrition values must be numbers, 0 or more; grams per piece more than 0.</string>
+    <string name="ingredient_delete_title">Delete ingredient?</string>
+    <string name="ingredient_delete_text">\"%1$s\" will be removed from your ingredients.</string>
+    <string name="ingredient_in_use_title">Ingredient in use</string>
+    <string name="unit_grams">Grams</string>
+    <string name="unit_millilitres">Millilitres</string>
+    <string name="unit_pieces">Pieces</string>
+    <string name="macro_kcal">kcal</string>
+    <string name="macro_kcal_short">calories</string>
+    <string name="macro_protein">protein</string>
+    <string name="macro_carbs">carbs</string>
+    <string name="macro_fat">fat</string>
+    <string name="macro_protein_g">Protein (g)</string>
+    <string name="macro_carbs_g">Carbs (g)</string>
+    <string name="macro_fat_g">Fat (g)</string>
+    <plurals name="ingredient_in_use_text">
+        <item quantity="one">It is used in %d recipe. Remove it from that recipe first.</item>
+        <item quantity="other">It is used in %d recipes. Remove it from those recipes first.</item>
+    </plurals>
+    <plurals name="used_in_recipes">
+        <item quantity="one">%d recipe</item>
+        <item quantity="other">%d recipes</item>
+    </plurals>
+    <plurals name="ingredient_count">
+        <item quantity="one">%d ingredient</item>
+        <item quantity="other">%d ingredients</item>
+    </plurals>
+
+    <!-- Recipes -->
+    <string name="recipe_new">New recipe</string>
+    <string name="recipe_edit">Edit recipe</string>
+    <string name="recipe_search">Search recipes</string>
+    <string name="recipe_empty">No recipes yet.</string>
+    <string name="recipe_empty_hint">Add one with the + button: ingredients with amounts, steps and servings.</string>
+    <string name="recipe_minutes">%1$d min</string>
+    <string name="recipe_kcal_per_serving">%1$s</string>
+    <string name="recipe_ingredients">Ingredients</string>
+    <string name="recipe_no_ingredients">No ingredients yet. Tap the pencil to add some.</string>
+    <string name="recipe_steps">Steps</string>
+    <string name="recipe_steps_hint">One step per line</string>
+    <string name="recipe_per_serving">Per serving</string>
+    <string name="recipe_whole">Whole recipe: %1$s · protein %2$s · carbs %3$s · fat %4$s</string>
+    <string name="recipe_incomplete">Not counted (no nutrition values or no weight per piece): %1$s</string>
+    <string name="recipe_servings">Servings</string>
+    <string name="recipe_prep_minutes">Prep time (min)</string>
+    <string name="recipe_tags">Tags</string>
+    <string name="recipe_tags_hint">e.g. breakfast, high protein</string>
+    <string name="recipe_save_first">Save the recipe first, then add its ingredients.</string>
+    <string name="recipe_add_ingredient">Add ingredient</string>
+    <string name="recipe_remove_ingredient">Remove from recipe</string>
+    <string name="recipe_quantity">Amount</string>
+    <string name="error_quantity">Enter an amount above 0.</string>
+    <string name="error_recipe_form">Check the name, servings (1–100) and prep time.</string>
+    <string name="recipe_delete_title">Delete recipe?</string>
+    <string name="recipe_delete_text">\"%1$s\" will be deleted. Its ingredients stay in your list.</string>
+    <plurals name="serving_count">
+        <item quantity="one">%d serving</item>
+        <item quantity="other">%d servings</item>
+    </plurals>
+    <plurals name="recipe_in_use">
+        <item quantity="one">This recipe is planned on %d meal. Remove it there first.</item>
+        <item quantity="other">This recipe is planned on %d meals. Remove it there first.</item>
+    </plurals>
 </resources>
