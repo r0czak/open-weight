@@ -50,7 +50,10 @@ class WorkoutFlowTest {
     compose.onNodeWithTag("exercise_name").performTextReplacement("Bench press")
     compose.onNodeWithTag("save_exercise").performClick()
     waitUntilGone("exercise_name")
-    compose.onNodeWithText("Bench press").assertIsDisplayed()
+    // The list slides back in after the editor closes: wait until it has finished, not just started.
+    compose.waitUntil(5_000) {
+      runCatching { compose.onNodeWithText("Bench press").assertIsDisplayed() }.isSuccess
+    }
     compose.onNodeWithContentDescription("Back").performClick()
     waitForTag("open_workouts")
 
