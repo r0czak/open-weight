@@ -15,12 +15,17 @@ Offline-first Android app for planning workouts (training blocks, workouts, exer
 - `core/` — `database/` (Room entities, converters, `OpenWeightDatabase`), `di/`, `model/`, `ui/` (theme, shared composables)
 - `workout/`, `diet/`, `settings/` (later: `transfer/`, `progress/`) — one package per feature: screens, ViewModels, domain rules, repositories
 - `AppNavigation.kt` — bottom tabs, each with its own Navigation 3 back stack
-- `app/schemas/` — exported Room schemas, committed; a version bump needs a migration + test
+- `transfer/` — Open Weight file format (`TransferFormat.kt`) and `ImportService`
+- `app/schemas/` — exported Room schemas, committed; a version bump needs a migration + test (`MigrationTest`)
+- `plans/` — import files for real training plans (+ the script that generates the Winter Arc one)
 
 ## Rules
 - The app must stay fully offline: no `INTERNET` permission (`OfflineGuardTest` enforces it).
 - Every record has a UUID text `id` plus `createdAt`/`updatedAt` (import/export relies on them).
 - User-visible text goes in `res/values/strings.xml`.
+- Editing rules (limits, in-use checks, ordering) live in repositories, not in the UI; screens call them.
+- Compose UI tests on Robolectric: wait for screens to settle (navigation animates), and use
+  `performTextReplacement` in dialogs (`performTextInput` focuses the field and the cursor blink keeps Compose busy).
 - Design docs (product spec, data model, import/export format, delivery plan) are the source of truth for behaviour; update them when a decision changes.
 
 ## Commands

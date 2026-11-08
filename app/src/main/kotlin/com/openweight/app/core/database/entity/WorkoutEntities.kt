@@ -63,7 +63,10 @@ data class WorkoutExerciseEntity(
   val updatedAt: Instant,
 )
 
-/** One planned set. A null weight means bodyweight. */
+/**
+ * One planned set: a rep target ([repsMin] alone, or a range up to [repsMax], e.g. 8–10), a weight
+ * (null = not set yet, or bodyweight) and the rest after the set.
+ */
 @Entity(
   tableName = "set_plan",
   foreignKeys =
@@ -81,7 +84,8 @@ data class SetPlanEntity(
   @PrimaryKey val id: String,
   val workoutExerciseId: String,
   val position: Int,
-  val reps: Int,
+  val repsMin: Int,
+  val repsMax: Int? = null,
   val weightKg: Double?,
   val restSeconds: Int,
   val createdAt: Instant,
