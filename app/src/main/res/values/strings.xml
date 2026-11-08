@@ -2,6 +2,7 @@
     <string name="app_name">Open Weight</string>
 
     <!-- Bottom navigation -->
+    <string name="tab_home">Home</string>
     <string name="tab_workout">Workout</string>
     <string name="tab_diet">Diet</string>
     <string name="tab_settings">Settings</string>
@@ -9,8 +10,8 @@
     <string name="coming_soon">Coming in a later update</string>
 
     <!-- Workout tab -->
-    <string name="workout_today">Today</string>
-    <string name="workout_today_empty">No training block is active today. Once you create a block, today\'s planned workout shows up here.</string>
+    <string name="workout_rest_day">Rest day</string>
+    <string name="workout_rest">Rest</string>
     <string name="workout_blocks">Training blocks</string>
     <string name="workout_workouts">Workouts</string>
     <string name="workout_exercises">Exercise library</string>
@@ -113,10 +114,6 @@
         <item quantity="one">This workout is part of %d training block. Remove it from the block first.</item>
         <item quantity="other">This workout is part of %d training blocks. Remove it from those blocks first.</item>
     </plurals>
-    <plurals name="blocks_saved">
-        <item quantity="one">%d block saved · the block editor comes in the next update</item>
-        <item quantity="other">%d blocks saved · the block editor comes in the next update</item>
-    </plurals>
 
     <!-- Sets -->
     <string name="set_col_set">Set</string>
@@ -167,4 +164,63 @@
         <item quantity="one">%d item you already have was left as it is</item>
         <item quantity="other">%d items you already have were left as they are</item>
     </plurals>
+    <!-- Training blocks -->
+    <string name="block_new">New training block</string>
+    <string name="block_name_hint">e.g. Winter Arc 1 · Intro</string>
+    <string name="block_starts">Starts</string>
+    <string name="block_ends">Ends</string>
+    <string name="block_length">Length</string>
+    <plurals name="block_length_weeks">
+        <item quantity="one">%d week</item>
+        <item quantity="other">%d weeks</item>
+    </plurals>
+    <plurals name="block_length_months">
+        <item quantity="one">%d month</item>
+        <item quantity="other">%d months</item>
+    </plurals>
+    <string name="error_block_dates">The block must end on or after its start date.</string>
+    <string name="block_empty">No training blocks yet.</string>
+    <string name="block_empty_hint">A block runs for a set time (like 4 months) and repeats a weekly schedule of up to 10 workouts.</string>
+    <string name="block_status_active">Active now</string>
+    <string name="block_status_upcoming">Upcoming</string>
+    <string name="block_status_past">Past</string>
+    <string name="block_week_short">Week %1$d of %2$d</string>
+    <string name="block_week_of">%1$s · week %2$d of %3$d</string>
+    <string name="block_edit_details">Edit name, dates and notes</string>
+    <string name="block_schedule">Weekly schedule</string>
+    <string name="block_notes_more">Show all notes</string>
+    <string name="block_schedule_hint">This week repeats from the start date until the block ends.</string>
+    <string name="block_workouts_count">Workouts (%1$d of %2$d)</string>
+    <string name="block_no_workouts">Add the workouts this block uses, then place them on the schedule.</string>
+    <string name="block_add_workouts_first">Add workouts to the block first</string>
+    <plurals name="block_add_workouts_title">
+        <item quantity="one">Add workouts (%d more fits)</item>
+        <item quantity="other">Add workouts (up to %d more)</item>
+    </plurals>
+    <string name="block_no_more_workouts">Every workout in your library is already in this block.</string>
+    <string name="block_overlap_warning">Overlaps with %1$s. On overlapping days, the block that started later is used.</string>
+    <string name="block_remove_workout_title">Remove from block?</string>
+    <string name="block_delete_title">Delete training block?</string>
+    <string name="block_delete_text">\"%1$s\" and its schedule will be deleted. Its workouts stay in your library.</string>
+    <plurals name="block_remove_workout_text">
+        <item quantity="one">\"%1$s\" is scheduled on %2$d day of the week. That day becomes a rest day.</item>
+        <item quantity="other">\"%1$s\" is scheduled on %2$d days of the week. Those days become rest days.</item>
+    </plurals>
+    <plurals name="block_weeks">
+        <item quantity="one">%d week</item>
+        <item quantity="other">%d weeks</item>
+    </plurals>
+    <plurals name="block_count">
+        <item quantity="one">%d block</item>
+        <item quantity="other">%d blocks</item>
+    </plurals>
+    <!-- Home -->
+    <string name="home_today">Today</string>
+    <string name="home_previous_week">Previous week</string>
+    <string name="home_next_week">Next week</string>
+    <string name="home_no_block">No training block</string>
+    <string name="home_meals_hint">Meals will show on each day here once the meal calendar is ready (Diet tab).</string>
+    <string name="workout_edit">Edit workout</string>
+    <string name="workout_start">Start workout</string>
+    <string name="workout_start_soon">Live training (timers, logging your sets) comes in the next update.</string>
 </resources>

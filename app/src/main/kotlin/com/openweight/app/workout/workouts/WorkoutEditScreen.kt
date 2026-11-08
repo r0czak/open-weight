@@ -334,7 +334,7 @@ private fun EntryCard(
 }
 
 @Composable
-private fun SetHeader() {
+internal fun SetHeader() {
   Row(Modifier.fillMaxWidth().padding(end = 12.dp, top = 4.dp, bottom = 4.dp)) {
     val style = MaterialTheme.typography.labelMedium
     val color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -346,9 +346,11 @@ private fun SetHeader() {
 }
 
 @Composable
-private fun SetRow(number: Int, set: PlannedSet, unit: WeightUnit, onClick: () -> Unit) {
+internal fun SetRow(number: Int, set: PlannedSet, unit: WeightUnit, onClick: (() -> Unit)?) {
   Row(
-    Modifier.fillMaxWidth().clickable(onClick = onClick).padding(end = 12.dp, top = 10.dp, bottom = 10.dp),
+    Modifier.fillMaxWidth()
+      .then(if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier)
+      .padding(end = 12.dp, top = 10.dp, bottom = 10.dp),
     verticalAlignment = Alignment.CenterVertically,
   ) {
     Text("$number", fontWeight = FontWeight.SemiBold, modifier = Modifier.width(40.dp))

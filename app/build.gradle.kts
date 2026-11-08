@@ -14,8 +14,8 @@ android {
     applicationId = "com.openweight.app"
     minSdk = 24
     targetSdk = 37
-    versionCode = 2
-    versionName = "0.1.0"
+    versionCode = 4
+    versionName = "0.3.0"
   }
 
   signingConfigs {

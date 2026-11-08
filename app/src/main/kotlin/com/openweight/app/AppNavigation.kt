@@ -28,8 +28,13 @@ import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.openweight.app.diet.DietHomeScreen
+import com.openweight.app.home.HomeRoute
+import com.openweight.app.workout.workouts.WorkoutOverviewRoute
+import java.time.LocalDate
 import com.openweight.app.settings.SettingsRoute
 import com.openweight.app.workout.WorkoutHomeScreen
+import com.openweight.app.workout.blocks.BlockEditRoute
+import com.openweight.app.workout.blocks.BlockListRoute
 import com.openweight.app.workout.exercise.ExerciseEditRoute
 import com.openweight.app.workout.exercise.ExerciseListRoute
 import com.openweight.app.workout.workouts.ExercisePickerRoute
@@ -38,6 +43,8 @@ import com.openweight.app.workout.workouts.WorkoutListRoute
 import kotlinx.serialization.Serializable
 
 // Navigation keys. Each tab has its own back stack, so switching tabs keeps your place in each.
+@Serializable data object HomeHome : NavKey
+
 @Serializable data object WorkoutHome : NavKey
 
 @Serializable data object DietHome : NavKey
@@ -45,7 +52,14 @@ import kotlinx.serialization.Serializable
 @Serializable data object SettingsHome : NavKey
 
 // Workout tab
+@Serializable data object BlockList : NavKey
+
+@Serializable data class BlockEdit(val blockId: String) : NavKey
+
 @Serializable data object WorkoutList : NavKey
+
+/** Read-only workout, as opened from a day on Home ([epochDay] = that day, if any). */
+@Serializable data class WorkoutOverview(val workoutId: String, val epochDay: Long? = null) : NavKey
 
 @Serializable data class WorkoutEdit(val workoutId: String) : NavKey
 
@@ -60,6 +74,7 @@ enum class TopLevelDestination(
   @param:StringRes val label: Int,
   @param:DrawableRes val icon: Int,
 ) {
+  HOME(R.string.tab_home, R.drawable.ic_tab_home),
   WORKOUT(R.string.tab_workout, R.drawable.ic_tab_workout),
   DIET(R.string.tab_diet, R.drawable.ic_tab_diet),
   SETTINGS(R.string.tab_settings, R.drawable.ic_tab_settings),
@@ -67,9 +82,10 @@ enum class TopLevelDestination(
 
 @Composable
 fun OpenWeightAppUi(modifier: Modifier = Modifier) {
-  var current by rememberSaveable { mutableStateOf(TopLevelDestination.WORKOUT) }
+  var current by rememberSaveable { mutableStateOf(TopLevelDestination.HOME) }
   val stacks: Map<TopLevelDestination, NavBackStack<NavKey>> =
     mapOf(
+      TopLevelDestination.HOME to rememberNavBackStack(HomeHome),
       TopLevelDestination.WORKOUT to rememberNavBackStack(WorkoutHome),
       TopLevelDestination.DIET to rememberNavBackStack(DietHome),
       TopLevelDestination.SETTINGS to rememberNavBackStack(SettingsHome),
@@ -77,9 +93,9 @@ fun OpenWeightAppUi(modifier: Modifier = Modifier) {
   val backStack = stacks.getValue(current)
   val tabStateHolder = rememberSaveableStateHolder()
 
-  // Back on the root of another tab returns to the Workout tab before leaving the app.
-  BackHandler(enabled = current != TopLevelDestination.WORKOUT && backStack.size == 1) {
-    current = TopLevelDestination.WORKOUT
+  // Back on the root of another tab returns to Home before leaving the app.
+  BackHandler(enabled = current != TopLevelDestination.HOME && backStack.size == 1) {
+    current = TopLevelDestination.HOME
   }
 
   Scaffold(
@@ -123,11 +139,27 @@ fun OpenWeightAppUi(modifier: Modifier = Modifier) {
           ),
         entryProvider =
           entryProvider {
-            entry<WorkoutHome> {
+            entry<HomeHome> {
+            HomeRoute(onOpenWorkout = { id, date -> backStack.add(WorkoutOverview(id, date.toEpochDay())) })
+          }
+          entry<WorkoutOverview> { key ->
+            WorkoutOverviewRoute(
+              workoutId = key.workoutId,
+              date = key.epochDay?.let(LocalDate::ofEpochDay),
+              onBack = back,
+              onEdit = { backStack.add(WorkoutEdit(key.workoutId)) },
+            )
+          }
+          entry<WorkoutHome> {
             WorkoutHomeScreen(
+              onOpenBlocks = { backStack.add(BlockList) },
               onOpenWorkouts = { backStack.add(WorkoutList) },
               onOpenExercises = { backStack.add(ExerciseList) },
             )
+          }
+          entry<BlockList> { BlockListRoute(onBack = back, onOpen = { backStack.add(BlockEdit(it)) }) }
+          entry<BlockEdit> { key ->
+            BlockEditRoute(blockId = key.blockId, onBack = back, onOpenWorkout = { backStack.add(WorkoutEdit(it)) })
           }
           entry<WorkoutList> {
             WorkoutListRoute(onBack = back, onOpen = { backStack.add(WorkoutEdit(it)) })
