@@ -2,6 +2,9 @@ plugins {
   alias(libs.plugins.android.application)
   alias(libs.plugins.compose.compiler)
   alias(libs.plugins.kotlin.serialization)
+  alias(libs.plugins.ksp)
+  alias(libs.plugins.hilt)
+  alias(libs.plugins.androidx.room)
 }
 
 android {
@@ -12,10 +15,25 @@ android {
     minSdk = 24
     targetSdk = 37
     versionCode = 1
-    versionName = "1.0"
+    versionName = "0.0.1"
+  }
+
+  signingConfigs {
+    // A shared debug key, committed on purpose: every build (local or CI) gets the same
+    // signature, so a newer APK installs over an older one and keeps the user's data.
+    // It protects nothing secret and must never be used for a store release.
+    getByName("debug") {
+      storeFile = file("debug.keystore")
+      storePassword = "android"
+      keyAlias = "androiddebugkey"
+      keyPassword = "android"
+    }
   }
 
   buildTypes {
+    debug {
+      signingConfig = signingConfigs.getByName("debug")
+    }
     release {
       isMinifyEnabled = false
       proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
@@ -24,12 +42,21 @@ android {
   compileOptions {
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17
+    isCoreLibraryDesugaringEnabled = true
   }
   buildFeatures {
     compose = true
     aidl = false
     buildConfig = false
     shaders = false
+  }
+
+  testOptions {
+    unitTests.isIncludeAndroidResources = true
+    unitTests.all {
+      // Robolectric's Android 16 sandbox reaches into this JDK internal on Java 21.
+      it.jvmArgs("--add-exports=java.base/jdk.internal.access=ALL-UNNAMED")
+    }
   }
 
   packaging {
@@ -40,13 +67,20 @@ android {
 }
 
 kotlin {
-  jvmToolchain(17)
+  jvmToolchain(21)
+}
+
+room {
+  schemaDirectory("$projectDir/schemas")
 }
 
 dependencies {
   val composeBom = platform(libs.androidx.compose.bom)
   implementation(composeBom)
   androidTestImplementation(composeBom)
+  testImplementation(composeBom)
+
+  coreLibraryDesugaring(libs.desugar.jdk.libs)
 
   // Core Android dependencies
   implementation(libs.androidx.core.ktx)
@@ -63,22 +97,40 @@ dependencies {
   implementation(libs.androidx.compose.material3)
   // Tooling
   debugImplementation(libs.androidx.compose.ui.tooling)
-  // Instrumented tests
-  androidTestImplementation(libs.androidx.compose.ui.test.junit4)
   debugImplementation(libs.androidx.compose.ui.test.manifest)
-
-  // Local tests: jUnit, coroutines, Android runner
-  testImplementation(libs.junit)
-  testImplementation(libs.kotlinx.coroutines.test)
-
-  // Instrumented tests: jUnit rules and runners
-  androidTestImplementation(libs.androidx.test.core)
-  androidTestImplementation(libs.androidx.test.ext.junit)
-  androidTestImplementation(libs.androidx.test.runner)
-  androidTestImplementation(libs.androidx.test.espresso.core)
 
   // Navigation
   implementation(libs.androidx.navigation3.ui)
   implementation(libs.androidx.navigation3.runtime)
   implementation(libs.androidx.lifecycle.viewmodel.navigation3)
+
+  // Storage
+  implementation(libs.androidx.room.runtime)
+  implementation(libs.androidx.room.ktx)
+  ksp(libs.androidx.room.compiler)
+  implementation(libs.androidx.datastore.preferences)
+
+  // Dependency injection
+  implementation(libs.hilt.android)
+  ksp(libs.hilt.compiler)
+  implementation(libs.androidx.hilt.lifecycle.viewmodel.compose)
+
+  // Local (JVM) tests, including Robolectric database and UI tests
+  testImplementation(libs.junit)
+  testImplementation(libs.kotlinx.coroutines.test)
+  testImplementation(libs.turbine)
+  testImplementation(libs.robolectric)
+  testImplementation(libs.androidx.test.core)
+  testImplementation(libs.androidx.test.ext.junit)
+  testImplementation(libs.androidx.room.testing)
+  testImplementation(libs.androidx.compose.ui.test.junit4)
+  testImplementation(libs.hilt.android.testing)
+  kspTest(libs.hilt.compiler)
+
+  // Instrumented tests (need a device or emulator)
+  androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+  androidTestImplementation(libs.androidx.test.core)
+  androidTestImplementation(libs.androidx.test.ext.junit)
+  androidTestImplementation(libs.androidx.test.runner)
+  androidTestImplementation(libs.androidx.test.espresso.core)
 }

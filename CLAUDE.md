@@ -1,28 +1,43 @@
 # Open Weight
 
-Android app for tracking workouts and diet.
+Offline-first Android app for planning workouts (training blocks, workouts, exercises) and diet
+(recipes, meal calendar, shopping list), with import/export of any data as JSON files.
 
 ## Stack
 - Kotlin, Jetpack Compose (Material 3), Navigation 3, AndroidX Lifecycle/ViewModel
-- Android Gradle Plugin 9, Gradle wrapper (see `gradle/wrapper/gradle-wrapper.properties`)
+- Room (KSP) for the database, DataStore for settings, Hilt for dependency injection
+- Android Gradle Plugin 9 (built-in Kotlin), Gradle wrapper, JVM toolchain 21 (bytecode target 17)
 - Versions live in `gradle/libs.versions.toml` — add new dependencies there
-- compileSdk/targetSdk 37, minSdk 24, JVM toolchain 17
+- compileSdk/targetSdk 37, minSdk 24 (java.time via core library desugaring)
 - Package / applicationId: `com.openweight.app`
 
-## Layout
-- `app/src/main/kotlin/com/openweight/app/` — `MainActivity`, navigation, `data/`, `ui/<feature>/`
-- `app/src/test/` — local JVM unit tests
-- `app/src/androidTest/` — instrumented/Compose UI tests (need a device or emulator)
+## Layout (`app/src/main/kotlin/com/openweight/app/`)
+- `core/` — `database/` (Room entities, converters, `OpenWeightDatabase`), `di/`, `model/`, `ui/` (theme, shared composables)
+- `workout/`, `diet/`, `settings/` (later: `transfer/`, `progress/`) — one package per feature: screens, ViewModels, domain rules, repositories
+- `AppNavigation.kt` — bottom tabs, each with its own Navigation 3 back stack
+- `app/schemas/` — exported Room schemas, committed; a version bump needs a migration + test
+
+## Rules
+- The app must stay fully offline: no `INTERNET` permission (`OfflineGuardTest` enforces it).
+- Every record has a UUID text `id` plus `createdAt`/`updatedAt` (import/export relies on them).
+- User-visible text goes in `res/values/strings.xml`.
+- Design docs (product spec, data model, import/export format, delivery plan) are the source of truth for behaviour; update them when a decision changes.
 
 ## Commands
 ```bash
-./gradlew assembleDebug          # build APK -> app/build/outputs/apk/debug/app-debug.apk
-./gradlew testDebugUnitTest      # unit tests
-./gradlew lintDebug              # Android lint
+./gradlew assembleDebug                         # APK -> app/build/outputs/apk/debug/app-debug.apk
+./gradlew testDebugUnitTest                     # unit + Robolectric (DB, UI) tests, no emulator needed
+./gradlew lintDebug                             # Android lint
 ```
+CI (`.github/workflows/android.yml`) runs all three on every push and uploads the APK.
+
+## Signing
+`app/debug.keystore` is a shared debug key committed on purpose, so every build installs over the
+previous one and keeps data. Never use it for a store release.
 
 ## Cloud environment notes
 - Android SDK is at `/opt/android-sdk` (`ANDROID_HOME`); `local.properties` is git-ignored.
-- No emulator in the cloud container: instrumented tests can't run there; rely on unit tests.
-- Maven Central may answer HTTP 429 during a cold dependency download; re-run with
-  `./gradlew --max-workers=1 ...` — cached artifacts make each retry go further.
+- No emulator: instrumented tests can't run; Robolectric covers DB and UI tests on the JVM.
+- Maven Central rate-limits the cloud machine (HTTP 429). `~/.gradle/init.d/maven-central-mirror.gradle.kts`
+  (created by the environment setup script, not in the repo) routes downloads through Google's
+  Maven Central mirror, including Robolectric's Android images.
