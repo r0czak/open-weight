@@ -2,6 +2,7 @@
     <string name="app_name">Open Weight</string>
 
     <!-- Bottom navigation -->
+    <string name="tab_home">Home</string>
     <string name="tab_workout">Workout</string>
     <string name="tab_diet">Diet</string>
     <string name="tab_settings">Settings</string>
@@ -9,15 +10,8 @@
     <string name="coming_soon">Coming in a later update</string>
 
     <!-- Workout tab -->
-    <string name="workout_today">Today</string>
-    <string name="workout_today_empty">No training block is active today. Once you create a block, today\'s planned workout shows up here.</string>
-    <string name="workout_today_next_block">No training block today. The next one starts on %1$s.</string>
-    <string name="workout_today_date">Today · %1$s</string>
     <string name="workout_rest_day">Rest day</string>
     <string name="workout_rest">Rest</string>
-    <string name="workout_no_block">No block</string>
-    <string name="workout_open">Open workout</string>
-    <string name="workout_coming_up">Coming up</string>
     <string name="workout_blocks">Training blocks</string>
     <string name="workout_workouts">Workouts</string>
     <string name="workout_exercises">Exercise library</string>
@@ -220,4 +214,13 @@
         <item quantity="one">%d block</item>
         <item quantity="other">%d blocks</item>
     </plurals>
+    <!-- Home -->
+    <string name="home_today">Today</string>
+    <string name="home_previous_week">Previous week</string>
+    <string name="home_next_week">Next week</string>
+    <string name="home_no_block">No training block</string>
+    <string name="home_meals_hint">Meals will show on each day here once the meal calendar is ready (Diet tab).</string>
+    <string name="workout_edit">Edit workout</string>
+    <string name="workout_start">Start workout</string>
+    <string name="workout_start_soon">Live training (timers, logging your sets) comes in the next update.</string>
 </resources>

@@ -44,6 +44,7 @@ class WorkoutFlowTest {
   @Test
   fun createExercise_thenBuildWorkout_thenEditASet() {
     // Exercise library: add one.
+    compose.onNodeWithTag("tab_WORKOUT").performClick()
     compose.onNodeWithTag("open_exercises").performClick()
     waitForText("No exercises yet.")
     compose.onNodeWithTag("add_exercise").performClick()

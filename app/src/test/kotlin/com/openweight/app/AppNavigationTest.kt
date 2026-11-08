@@ -32,13 +32,15 @@ class AppNavigationTest {
   }
 
   @Test
-  fun startsOnWorkoutTab_withToday() {
-    composeRule.onNodeWithTag("tab_WORKOUT").assertIsSelected()
+  fun startsOnHome_thenWorkoutTabListsBlocksWorkoutsExercises() {
+    composeRule.onNodeWithTag("tab_HOME").assertIsSelected()
     composeRule.waitUntil(5_000) {
-      composeRule.onAllNodesWithTag("today_card").fetchSemanticsNodes().isNotEmpty()
+      composeRule.onAllNodesWithTag("week_agenda").fetchSemanticsNodes().isNotEmpty()
     }
-    composeRule.onNodeWithText("Today").assertIsDisplayed()
+
+    composeRule.onNodeWithTag("tab_WORKOUT").performClick()
     composeRule.onNodeWithText("Training blocks").assertIsDisplayed()
+    composeRule.onNodeWithText("Exercise library").assertIsDisplayed()
   }
 
   @Test

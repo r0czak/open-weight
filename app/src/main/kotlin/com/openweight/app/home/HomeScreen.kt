@@ -1,0 +1,255 @@
+package com.openweight.app.home
+
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.openweight.app.R
+import com.openweight.app.core.ui.ScreenScaffold
+import com.openweight.app.core.ui.formatDateRange
+import com.openweight.app.core.ui.formatDayShort
+import java.time.LocalDate
+import java.time.format.TextStyle
+
+/** Home: the current week, Monday to Sunday, with each day's workout (and later its meals). */
+@Composable
+fun HomeRoute(
+  onOpenWorkout: (workoutId: String, date: LocalDate) -> Unit,
+  viewModel: HomeViewModel = hiltViewModel(),
+) {
+  val state by viewModel.state.collectAsStateWithLifecycle()
+  val listState = rememberLazyListState()
+  // Keep the selected day's card in view when it changes (tap in the strip, or a new week).
+  LaunchedEffect(state.selected, state.loading) {
+    val index = state.days.indexOfFirst { it.date == state.selected }
+    if (!state.loading && index >= 0) listState.animateScrollToItem(index)
+  }
+
+  ScreenScaffold(
+    title = formatDateRange(state.monday, state.monday.plusDays(6)),
+    actions = {
+      if (!state.isCurrentWeek) {
+        TextButton(onClick = viewModel::thisWeek, modifier = Modifier.testTag("this_week")) {
+          Text(stringResource(R.string.home_today))
+        }
+      }
+      IconButton(onClick = viewModel::previousWeek, modifier = Modifier.testTag("previous_week")) {
+        Icon(Icons.AutoMirrored.Filled.KeyboardArrowLeft, stringResource(R.string.home_previous_week))
+      }
+      IconButton(onClick = viewModel::nextWeek, modifier = Modifier.testTag("next_week")) {
+        Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, stringResource(R.string.home_next_week))
+      }
+    },
+  ) { padding ->
+    Column(Modifier.fillMaxSize().padding(padding)) {
+      DayStrip(state.days, state.selected, onSelect = viewModel::select)
+      LazyColumn(
+        state = listState,
+        modifier = Modifier.fillMaxSize().testTag("week_agenda"),
+        contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 24.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+      ) {
+        items(state.days, key = { it.date.toEpochDay() }) { day ->
+          DayCard(
+            day = day,
+            selected = day.date == state.selected,
+            onSelect = { viewModel.select(day.date) },
+            onOpenWorkout = { onOpenWorkout(it, day.date) },
+          )
+        }
+        item(key = "meals-hint") {
+          Text(
+            stringResource(R.string.home_meals_hint),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.padding(horizontal = 4.dp),
+          )
+        }
+      }
+    }
+  }
+}
+
+@Composable
+private fun DayStrip(days: List<WeekDay>, selected: LocalDate, onSelect: (LocalDate) -> Unit) {
+  val locale = LocalConfiguration.current.locales[0]
+  Row(Modifier.fillMaxWidth().padding(horizontal = 8.dp, vertical = 4.dp)) {
+    days.forEach { day ->
+      val isSelected = day.date == selected
+      Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier =
+          Modifier.weight(1f)
+            .clip(RoundedCornerShape(12.dp))
+            .clickable { onSelect(day.date) }
+            .then(
+              if (isSelected) Modifier.background(MaterialTheme.colorScheme.secondaryContainer) else Modifier
+            )
+            .padding(vertical = 6.dp)
+            .testTag("strip_${day.date}"),
+      ) {
+        Text(
+          day.date.dayOfWeek.getDisplayName(TextStyle.SHORT, locale),
+          style = MaterialTheme.typography.labelMedium,
+          color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+        Box(
+          contentAlignment = Alignment.Center,
+          modifier =
+            Modifier.padding(top = 2.dp)
+              .size(32.dp)
+              .clip(CircleShape)
+              .then(if (day.isToday) Modifier.background(MaterialTheme.colorScheme.primary) else Modifier),
+        ) {
+          Text(
+            day.date.dayOfMonth.toString(),
+            style = MaterialTheme.typography.titleMedium,
+            fontWeight = if (day.isToday) FontWeight.Bold else FontWeight.Normal,
+            color = if (day.isToday) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurface,
+          )
+        }
+        // A dot marks a training day.
+        Box(
+          Modifier.padding(top = 4.dp)
+            .size(6.dp)
+            .clip(CircleShape)
+            .background(
+              if (day.workout != null) MaterialTheme.colorScheme.primary
+              else MaterialTheme.colorScheme.surface.copy(alpha = 0f)
+            )
+        )
+      }
+    }
+  }
+}
+
+@Composable
+private fun DayCard(
+  day: WeekDay,
+  selected: Boolean,
+  onSelect: () -> Unit,
+  onOpenWorkout: (String) -> Unit,
+) {
+  Card(
+    modifier = Modifier.fillMaxWidth().testTag("day_card_${day.date}"),
+    colors =
+      CardDefaults.cardColors(
+        containerColor =
+          if (day.isToday) MaterialTheme.colorScheme.surfaceContainerHigh
+          else MaterialTheme.colorScheme.surfaceContainerLow
+      ),
+    border = if (selected) BorderStroke(2.dp, MaterialTheme.colorScheme.primary) else null,
+    onClick = onSelect,
+  ) {
+    Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+      Row(verticalAlignment = Alignment.CenterVertically) {
+        Text(
+          day.date.formatDayShort(),
+          style = MaterialTheme.typography.titleMedium,
+          modifier = Modifier.weight(1f),
+        )
+        if (day.isToday) {
+          Text(
+            stringResource(R.string.home_today),
+            style = MaterialTheme.typography.labelLarge,
+            color = MaterialTheme.colorScheme.primary,
+          )
+        }
+      }
+      day.block?.let {
+        Text(
+          stringResource(R.string.block_week_of, it.blockName, it.week, it.totalWeeks),
+          style = MaterialTheme.typography.bodySmall,
+          color = MaterialTheme.colorScheme.onSurfaceVariant,
+          maxLines = 1,
+          overflow = TextOverflow.Ellipsis,
+        )
+      }
+      Spacer(Modifier.height(2.dp))
+      val workout = day.workout
+      if (workout != null) {
+        Row(
+          verticalAlignment = Alignment.CenterVertically,
+          modifier =
+            Modifier.fillMaxWidth()
+              .clip(RoundedCornerShape(12.dp))
+              .background(MaterialTheme.colorScheme.primaryContainer)
+              .clickable { onOpenWorkout(workout.id) }
+              .padding(horizontal = 12.dp, vertical = 10.dp)
+              .testTag("day_workout_${day.date}"),
+        ) {
+          Icon(
+            painterResource(R.drawable.ic_tab_workout),
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.onPrimaryContainer,
+            modifier = Modifier.size(20.dp),
+          )
+          Column(Modifier.weight(1f).padding(start = 12.dp)) {
+            Text(
+              workout.name,
+              style = MaterialTheme.typography.titleSmall,
+              color = MaterialTheme.colorScheme.onPrimaryContainer,
+            )
+            Text(
+              pluralStringResource(R.plurals.exercise_count, workout.exerciseCount, workout.exerciseCount),
+              style = MaterialTheme.typography.bodySmall,
+              color = MaterialTheme.colorScheme.onPrimaryContainer,
+            )
+          }
+          Icon(
+            Icons.AutoMirrored.Filled.KeyboardArrowRight,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.onPrimaryContainer,
+          )
+        }
+      } else {
+        Text(
+          stringResource(if (day.block != null) R.string.workout_rest_day else R.string.home_no_block),
+          style = MaterialTheme.typography.bodyMedium,
+          color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+      }
+    }
+  }
+}

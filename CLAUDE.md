@@ -15,7 +15,8 @@ Offline-first Android app for planning workouts (training blocks, workouts, exer
 - `core/` — `database/` (Room entities, converters, `OpenWeightDatabase`), `di/`, `model/`, `ui/` (theme, shared composables)
 - `workout/`, `diet/`, `settings/` (later: `transfer/`, `progress/`) — one package per feature: screens, ViewModels, domain rules, repositories
 - `workout/blocks/` — training blocks; `Schedule.kt` holds the schedule rule (date → block → weekday's workout; overlapping blocks: the later start wins)
-- `AppNavigation.kt` — bottom tabs, each with its own Navigation 3 back stack
+- `home/` — Home tab (opens first): Mon–Sun week view; `WeekPlan.kt` builds each day from the schedule rule
+- `AppNavigation.kt` — bottom tabs (Home, Workout, Diet, Settings), each with its own Navigation 3 back stack
 - `transfer/` — Open Weight file format (`TransferFormat.kt`) and `ImportService`
 - `app/schemas/` — exported Room schemas, committed; a version bump needs a migration + test (`MigrationTest`)
 - `plans/` — import files for real training plans (+ the script that generates the Winter Arc one)

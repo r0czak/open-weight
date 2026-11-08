@@ -12,9 +12,7 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToNode
 import androidx.compose.ui.test.performTextReplacement
 import com.openweight.app.MainActivity
-import com.openweight.app.core.TimeAndIds
 import com.openweight.app.workout.blocks.TrainingBlockRepository
-import com.openweight.app.workout.data.SetValues
 import com.openweight.app.workout.data.WorkoutRepository
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -38,7 +36,6 @@ class BlockFlowTest {
 
   @Inject lateinit var workouts: WorkoutRepository
   @Inject lateinit var blocks: TrainingBlockRepository
-  @Inject lateinit var clock: TimeAndIds
 
   @Before fun setUp() = hiltRule.inject()
 
@@ -54,33 +51,13 @@ class BlockFlowTest {
     }
 
   @Test
-  fun todayCard_showsTheWorkoutPlannedForToday() {
-    val today = clock.today()
-    runBlocking {
-      val bench = workouts.saveExercise(null, "Bench press", "Chest", "Barbell", "")
-      val push = workouts.createWorkout("Push A", "Push")
-      workouts.addExercise(push, bench, 4, SetValues(5, 7))
-      val block = blocks.createBlock("Winter Arc", today.minusWeeks(1), today.plusWeeks(3))
-      blocks.addWorkouts(block, listOf(push))
-      blocks.setDay(block, today.dayOfWeek, push)
-    }
-
-    waitForTag("today_workout")
-    compose.onNodeWithText("Push A").assertIsDisplayed()
-    compose.onNodeWithText("Winter Arc · week 2 of 5").assertIsDisplayed()
-    compose.onNodeWithText("4 × 5–7").assertIsDisplayed()
-
-    compose.onNodeWithTag("open_today_workout").performClick()
-    waitForText("1. Bench press")
-  }
-
-  @Test
   fun createBlock_addWorkouts_andScheduleThem() {
     runBlocking {
       workouts.createWorkout("Push A", "Push")
       workouts.createWorkout("Pull A", "Pull")
     }
 
+    compose.onNodeWithTag("tab_WORKOUT").performClick()
     compose.onNodeWithTag("open_blocks").performClick()
     waitForTag("add_block")
     compose.onNodeWithTag("add_block").performClick()
