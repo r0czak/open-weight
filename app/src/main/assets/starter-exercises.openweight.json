@@ -1,0 +1,334 @@
+{
+  "format": "open-weight",
+  "formatVersion": 1,
+  "appVersion": "1.0.0",
+  "exportedAt": "2026-11-09T00:00:00Z",
+  "scope": {
+    "kind": "items",
+    "description": "Common exercises"
+  },
+  "data": {
+    "exercises": [
+      {
+        "id": "e36d4770-87d9-5af8-b5d3-58c4a3308026",
+        "name": "Barbell back squat",
+        "muscleGroup": "Quads",
+        "equipment": "Barbell",
+        "createdAt": "2026-11-09T00:00:00Z",
+        "updatedAt": "2026-11-09T00:00:00Z"
+      },
+      {
+        "id": "18e301a3-ef64-50bb-a506-a9ade8119229",
+        "name": "Front squat",
+        "muscleGroup": "Quads",
+        "equipment": "Barbell",
+        "createdAt": "2026-11-09T00:00:00Z",
+        "updatedAt": "2026-11-09T00:00:00Z"
+      },
+      {
+        "id": "9089ca0e-77fd-5c95-8227-19e47956bee6",
+        "name": "Leg press",
+        "muscleGroup": "Quads",
+        "equipment": "Machine",
+        "createdAt": "2026-11-09T00:00:00Z",
+        "updatedAt": "2026-11-09T00:00:00Z"
+      },
+      {
+        "id": "69966b71-6574-5926-90b4-d75c27ba237e",
+        "name": "Bulgarian split squat",
+        "muscleGroup": "Quads",
+        "equipment": "Dumbbells",
+        "createdAt": "2026-11-09T00:00:00Z",
+        "updatedAt": "2026-11-09T00:00:00Z"
+      },
+      {
+        "id": "41093810-9418-583f-b88d-df555cc9f460",
+        "name": "Walking lunge",
+        "muscleGroup": "Quads",
+        "equipment": "Dumbbells",
+        "createdAt": "2026-11-09T00:00:00Z",
+        "updatedAt": "2026-11-09T00:00:00Z"
+      },
+      {
+        "id": "42b6700b-fc04-5713-a9f5-be20c2483f9d",
+        "name": "Leg extension",
+        "muscleGroup": "Quads",
+        "equipment": "Machine",
+        "createdAt": "2026-11-09T00:00:00Z",
+        "updatedAt": "2026-11-09T00:00:00Z"
+      },
+      {
+        "id": "6dc9a7f1-13fd-5f0b-a756-32fe108bf8cc",
+        "name": "Conventional deadlift",
+        "muscleGroup": "Back",
+        "equipment": "Barbell",
+        "createdAt": "2026-11-09T00:00:00Z",
+        "updatedAt": "2026-11-09T00:00:00Z"
+      },
+      {
+        "id": "64051fe3-426b-5adb-a64c-0497e93f7ab6",
+        "name": "Romanian deadlift",
+        "muscleGroup": "Hamstrings",
+        "equipment": "Barbell",
+        "createdAt": "2026-11-09T00:00:00Z",
+        "updatedAt": "2026-11-09T00:00:00Z"
+      },
+      {
+        "id": "6dcc0b76-d0e5-5f5e-b479-5a3507c3de05",
+        "name": "Lying leg curl",
+        "muscleGroup": "Hamstrings",
+        "equipment": "Machine",
+        "createdAt": "2026-11-09T00:00:00Z",
+        "updatedAt": "2026-11-09T00:00:00Z"
+      },
+      {
+        "id": "e09cf0fd-b436-56f2-b533-d62d2e687a96",
+        "name": "Seated leg curl",
+        "muscleGroup": "Hamstrings",
+        "equipment": "Machine",
+        "createdAt": "2026-11-09T00:00:00Z",
+        "updatedAt": "2026-11-09T00:00:00Z"
+      },
+      {
+        "id": "7598bf9a-871a-592b-b840-50614cfc70b8",
+        "name": "Hip thrust",
+        "muscleGroup": "Glutes",
+        "equipment": "Barbell",
+        "createdAt": "2026-11-09T00:00:00Z",
+        "updatedAt": "2026-11-09T00:00:00Z"
+      },
+      {
+        "id": "85fdf4d7-a05f-5beb-90ad-384c96c4a2a2",
+        "name": "Standing calf raise",
+        "muscleGroup": "Calves",
+        "equipment": "Machine",
+        "createdAt": "2026-11-09T00:00:00Z",
+        "updatedAt": "2026-11-09T00:00:00Z"
+      },
+      {
+        "id": "25b709bf-fa93-5111-b9cb-dff8995cbec8",
+        "name": "Seated calf raise",
+        "muscleGroup": "Calves",
+        "equipment": "Machine",
+        "createdAt": "2026-11-09T00:00:00Z",
+        "updatedAt": "2026-11-09T00:00:00Z"
+      },
+      {
+        "id": "6491ac8b-af4b-5b2c-ba06-18f52696aff6",
+        "name": "Barbell bench press",
+        "muscleGroup": "Chest",
+        "equipment": "Barbell",
+        "createdAt": "2026-11-09T00:00:00Z",
+        "updatedAt": "2026-11-09T00:00:00Z"
+      },
+      {
+        "id": "0f5b30eb-de58-578e-ae54-9826bf11be5c",
+        "name": "Incline dumbbell press",
+        "muscleGroup": "Chest",
+        "equipment": "Dumbbells",
+        "createdAt": "2026-11-09T00:00:00Z",
+        "updatedAt": "2026-11-09T00:00:00Z"
+      },
+      {
+        "id": "13714b0d-11f3-5dd1-92c4-1c573267fb5d",
+        "name": "Dumbbell bench press",
+        "muscleGroup": "Chest",
+        "equipment": "Dumbbells",
+        "createdAt": "2026-11-09T00:00:00Z",
+        "updatedAt": "2026-11-09T00:00:00Z"
+      },
+      {
+        "id": "573afc29-6c76-519b-b75b-4d19a0f07526",
+        "name": "Push-up",
+        "muscleGroup": "Chest",
+        "equipment": "Bodyweight",
+        "createdAt": "2026-11-09T00:00:00Z",
+        "updatedAt": "2026-11-09T00:00:00Z"
+      },
+      {
+        "id": "08ec5a29-e410-561f-9b95-9aee009ee71f",
+        "name": "Dip",
+        "muscleGroup": "Chest",
+        "equipment": "Bodyweight",
+        "createdAt": "2026-11-09T00:00:00Z",
+        "updatedAt": "2026-11-09T00:00:00Z"
+      },
+      {
+        "id": "e5f43c7a-4620-5e9a-afa9-676426ddcea5",
+        "name": "Cable fly",
+        "muscleGroup": "Chest",
+        "equipment": "Cable",
+        "createdAt": "2026-11-09T00:00:00Z",
+        "updatedAt": "2026-11-09T00:00:00Z"
+      },
+      {
+        "id": "0e9ff9b8-4d41-5156-9391-a1ca6c1db0d1",
+        "name": "Overhead press",
+        "muscleGroup": "Shoulders",
+        "equipment": "Barbell",
+        "createdAt": "2026-11-09T00:00:00Z",
+        "updatedAt": "2026-11-09T00:00:00Z"
+      },
+      {
+        "id": "a7a7e15e-f703-533c-b282-991276cd4abb",
+        "name": "Seated dumbbell shoulder press",
+        "muscleGroup": "Shoulders",
+        "equipment": "Dumbbells",
+        "createdAt": "2026-11-09T00:00:00Z",
+        "updatedAt": "2026-11-09T00:00:00Z"
+      },
+      {
+        "id": "8c50764c-5de9-52f6-9adc-0aaaa316baa5",
+        "name": "Dumbbell lateral raise",
+        "muscleGroup": "Shoulders",
+        "equipment": "Dumbbells",
+        "createdAt": "2026-11-09T00:00:00Z",
+        "updatedAt": "2026-11-09T00:00:00Z"
+      },
+      {
+        "id": "d07dcc95-984f-5ae6-95a9-ba98e788afe4",
+        "name": "Cable lateral raise",
+        "muscleGroup": "Shoulders",
+        "equipment": "Cable",
+        "createdAt": "2026-11-09T00:00:00Z",
+        "updatedAt": "2026-11-09T00:00:00Z"
+      },
+      {
+        "id": "0afd907b-e8b0-5b44-909f-cd1b3372965d",
+        "name": "Face pull",
+        "muscleGroup": "Rear delts",
+        "equipment": "Cable",
+        "createdAt": "2026-11-09T00:00:00Z",
+        "updatedAt": "2026-11-09T00:00:00Z"
+      },
+      {
+        "id": "eb9141b0-9d42-5762-ba0d-699e6004a353",
+        "name": "Reverse pec deck",
+        "muscleGroup": "Rear delts",
+        "equipment": "Machine",
+        "createdAt": "2026-11-09T00:00:00Z",
+        "updatedAt": "2026-11-09T00:00:00Z"
+      },
+      {
+        "id": "a7696052-d3a3-5d1a-86aa-ff0b9deec642",
+        "name": "Pull-up",
+        "muscleGroup": "Back",
+        "equipment": "Bodyweight",
+        "createdAt": "2026-11-09T00:00:00Z",
+        "updatedAt": "2026-11-09T00:00:00Z"
+      },
+      {
+        "id": "111efbb2-e811-5f40-abde-4a1c83582318",
+        "name": "Chin-up",
+        "muscleGroup": "Back",
+        "equipment": "Bodyweight",
+        "createdAt": "2026-11-09T00:00:00Z",
+        "updatedAt": "2026-11-09T00:00:00Z"
+      },
+      {
+        "id": "8073649c-4048-56c1-96bf-34462c6f0e99",
+        "name": "Lat pulldown",
+        "muscleGroup": "Back",
+        "equipment": "Cable",
+        "createdAt": "2026-11-09T00:00:00Z",
+        "updatedAt": "2026-11-09T00:00:00Z"
+      },
+      {
+        "id": "c2566e9d-c771-5e03-806d-47eee700463c",
+        "name": "Barbell row",
+        "muscleGroup": "Back",
+        "equipment": "Barbell",
+        "createdAt": "2026-11-09T00:00:00Z",
+        "updatedAt": "2026-11-09T00:00:00Z"
+      },
+      {
+        "id": "c73cdcac-b84d-5b1f-ac6c-d43ccf21d281",
+        "name": "One-arm dumbbell row",
+        "muscleGroup": "Back",
+        "equipment": "Dumbbells",
+        "createdAt": "2026-11-09T00:00:00Z",
+        "updatedAt": "2026-11-09T00:00:00Z"
+      },
+      {
+        "id": "f29f4de4-dd08-5458-84c5-51c655663351",
+        "name": "Seated cable row",
+        "muscleGroup": "Back",
+        "equipment": "Cable",
+        "createdAt": "2026-11-09T00:00:00Z",
+        "updatedAt": "2026-11-09T00:00:00Z"
+      },
+      {
+        "id": "eacd45c7-9633-5316-88f8-42ea8229479c",
+        "name": "Barbell curl",
+        "muscleGroup": "Biceps",
+        "equipment": "Barbell",
+        "createdAt": "2026-11-09T00:00:00Z",
+        "updatedAt": "2026-11-09T00:00:00Z"
+      },
+      {
+        "id": "e59c3398-75ee-5b73-b216-095bb2a06ff2",
+        "name": "Dumbbell curl",
+        "muscleGroup": "Biceps",
+        "equipment": "Dumbbells",
+        "createdAt": "2026-11-09T00:00:00Z",
+        "updatedAt": "2026-11-09T00:00:00Z"
+      },
+      {
+        "id": "028a0889-aa6e-5167-b2ec-526cc789eceb",
+        "name": "Hammer curl",
+        "muscleGroup": "Biceps",
+        "equipment": "Dumbbells",
+        "createdAt": "2026-11-09T00:00:00Z",
+        "updatedAt": "2026-11-09T00:00:00Z"
+      },
+      {
+        "id": "fe5cf736-e206-564d-9524-7ec4b10da34e",
+        "name": "Cable triceps pushdown",
+        "muscleGroup": "Triceps",
+        "equipment": "Cable",
+        "createdAt": "2026-11-09T00:00:00Z",
+        "updatedAt": "2026-11-09T00:00:00Z"
+      },
+      {
+        "id": "644c5fff-a47f-50ad-bfea-f391e3336d6b",
+        "name": "EZ-bar skull crusher",
+        "muscleGroup": "Triceps",
+        "equipment": "EZ bar",
+        "createdAt": "2026-11-09T00:00:00Z",
+        "updatedAt": "2026-11-09T00:00:00Z"
+      },
+      {
+        "id": "4a08ff48-5337-5b30-8778-387c7581cb50",
+        "name": "Dumbbell overhead triceps extension",
+        "muscleGroup": "Triceps",
+        "equipment": "Dumbbells",
+        "createdAt": "2026-11-09T00:00:00Z",
+        "updatedAt": "2026-11-09T00:00:00Z"
+      },
+      {
+        "id": "eedd8978-1a7f-5660-b4cc-50d5d26ef549",
+        "name": "Plank",
+        "muscleGroup": "Abs",
+        "equipment": "Bodyweight",
+        "createdAt": "2026-11-09T00:00:00Z",
+        "updatedAt": "2026-11-09T00:00:00Z"
+      },
+      {
+        "id": "2a706f6f-c963-525e-83cf-6e7a6e7c6e2a",
+        "name": "Hanging leg raise",
+        "muscleGroup": "Abs",
+        "equipment": "Bodyweight",
+        "createdAt": "2026-11-09T00:00:00Z",
+        "updatedAt": "2026-11-09T00:00:00Z"
+      },
+      {
+        "id": "4dfd488f-2303-5119-a2ad-6ebfc05cbc2a",
+        "name": "Cable crunch",
+        "muscleGroup": "Abs",
+        "equipment": "Cable",
+        "createdAt": "2026-11-09T00:00:00Z",
+        "updatedAt": "2026-11-09T00:00:00Z"
+      }
+    ]
+  }
+}

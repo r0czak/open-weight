@@ -1,6 +1,6 @@
 package com.openweight.app.diet.shopping
 
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -46,6 +46,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextDecoration
@@ -279,10 +280,14 @@ private fun ShoppingList(
 private fun ItemRow(item: ShoppingItem, onCheck: (Boolean) -> Unit, onEdit: () -> Unit) {
   val faded = if (item.checked) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.onSurface
   Row(
-    Modifier.fillMaxWidth().clickable { onCheck(!item.checked) }.padding(start = 4.dp, end = 4.dp).testTag("shop_${item.name}"),
+    // The whole row is the checkbox, so TalkBack reads "Oats, 560 g, checked" as one item.
+    Modifier.fillMaxWidth()
+      .toggleable(value = item.checked, role = Role.Checkbox, onValueChange = onCheck)
+      .padding(start = 4.dp, end = 4.dp)
+      .testTag("shop_${item.name}"),
     verticalAlignment = Alignment.CenterVertically,
   ) {
-    Checkbox(checked = item.checked, onCheckedChange = onCheck, modifier = Modifier.testTag("shop_check_${item.name}"))
+    Checkbox(checked = item.checked, onCheckedChange = null, modifier = Modifier.padding(12.dp))
     Column(Modifier.weight(1f)) {
       Text(
         item.name,
