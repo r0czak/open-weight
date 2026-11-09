@@ -20,9 +20,7 @@
     <string name="diet_recipes">Meals &amp; recipes</string>
     <string name="diet_calendar">Calendar</string>
     <string name="diet_shopping">Shopping list</string>
-    <string name="diet_recipes_empty">Your recipes will live here: ingredients with quantities, steps and servings.</string>
-    <string name="diet_calendar_empty">Plan what you eat each day: breakfast, lunch, dinner and snacks.</string>
-    <string name="diet_shopping_empty">Your shopping list will be built from the meals on your calendar.</string>
+    <string name="diet_shopping_empty">Make a shopping list from the meals on your calendar.</string>
 
     <!-- Settings tab -->
     <string name="settings_units">Weight unit</string>
@@ -360,5 +358,36 @@
     <plurals name="servings_decimal">
         <item quantity="one">%s serving</item>
         <item quantity="other">%s servings</item>
+    </plurals>
+
+    <!-- Shopping list -->
+    <string name="shopping_empty_hint">Amounts are added up for every meal in the days you choose, scaled to the servings you eat.</string>
+    <string name="shopping_next_7_days">Make list for the next 7 days</string>
+    <string name="shopping_choose_dates">Choose dates</string>
+    <string name="shopping_for_meals">Meals %s</string>
+    <string name="shopping_progress">Ticked: %1$d/%2$d</string>
+    <string name="shopping_update">Update</string>
+    <string name="shopping_update_hint">Changed the calendar? Update keeps your ticks, the amounts you changed and the items you added.</string>
+    <string name="shopping_uncheck_all">Untick all</string>
+    <string name="shopping_other">Other</string>
+    <string name="shopping_nothing">Nothing to buy yet</string>
+    <string name="shopping_nothing_hint">No meals are planned in these days. Add some on the calendar, then tap Update.</string>
+    <string name="shopping_added_by_you">Added by you</string>
+    <string name="shopping_changed_by_you">Amount changed by you</string>
+    <string name="shopping_edit_item">Edit %s</string>
+    <string name="shopping_add_item">Add to the list</string>
+    <string name="shopping_item_name">Item</string>
+    <string name="shopping_amount_optional">Amount (optional)</string>
+    <string name="shopping_dates_title">Shop for meals on</string>
+    <string name="shopping_dates_pick">Pick the first and last day</string>
+    <plurals name="shopping_dates_too_long">
+        <item quantity="one">Choose up to %d day</item>
+        <item quantity="other">Choose up to %d days</item>
+    </plurals>
+    <string name="shopping_make_list">Make list</string>
+    <string name="shopping_updated">List updated (new: %1$d, changed: %2$d, removed: %3$d).</string>
+    <plurals name="shopping_kept">
+        <item quantity="one">%d amount you changed was kept.</item>
+        <item quantity="other">%d amounts you changed were kept.</item>
     </plurals>
 </resources>
