@@ -1,0 +1,1517 @@
+{
+  "format": "open-weight",
+  "formatVersion": 1,
+  "appVersion": "1.0.0",
+  "exportedAt": "2026-11-04T12:00:00Z",
+  "scope": {
+    "kind": "items",
+    "description": "Diet plan: Winter Arc Meal Plan (2,900 kcal)"
+  },
+  "data": {
+    "ingredients": [
+      {
+        "id": "8f7f50f9-4daf-5f3f-8fd7-b627a17fa5e7",
+        "name": "Oats",
+        "defaultUnit": "G",
+        "shopCategory": "Carbs and bakery",
+        "kcalPer100": 379,
+        "proteinPer100": 13.2,
+        "carbsPer100": 67.7,
+        "fatPer100": 6.5,
+        "createdAt": "2026-11-04T12:00:00Z",
+        "updatedAt": "2026-11-04T12:00:00Z"
+      },
+      {
+        "id": "8a02d169-c085-5a67-84b2-c412e41a8907",
+        "name": "Milk 2%",
+        "defaultUnit": "ML",
+        "shopCategory": "Dairy and eggs",
+        "kcalPer100": 50,
+        "proteinPer100": 3.3,
+        "carbsPer100": 4.8,
+        "fatPer100": 2.0,
+        "createdAt": "2026-11-04T12:00:00Z",
+        "updatedAt": "2026-11-04T12:00:00Z"
+      },
+      {
+        "id": "064e616b-3b95-5746-ac96-1fc8b5356881",
+        "name": "Natural skyr",
+        "defaultUnit": "G",
+        "shopCategory": "Dairy and eggs",
+        "kcalPer100": 63,
+        "proteinPer100": 11.0,
+        "carbsPer100": 4.0,
+        "fatPer100": 0.2,
+        "createdAt": "2026-11-04T12:00:00Z",
+        "updatedAt": "2026-11-04T12:00:00Z"
+      },
+      {
+        "id": "74ea241f-9748-50df-b438-712c74fb35ed",
+        "name": "Honey",
+        "defaultUnit": "G",
+        "shopCategory": "Pantry",
+        "kcalPer100": 304,
+        "proteinPer100": 0.3,
+        "carbsPer100": 82.0,
+        "fatPer100": 0.0,
+        "createdAt": "2026-11-04T12:00:00Z",
+        "updatedAt": "2026-11-04T12:00:00Z"
+      },
+      {
+        "id": "0f9a5dd0-6336-5465-b180-48effdd31399",
+        "name": "Cocoa powder, unsweetened",
+        "defaultUnit": "G",
+        "shopCategory": "Pantry",
+        "kcalPer100": 228,
+        "proteinPer100": 19.6,
+        "carbsPer100": 57.9,
+        "fatPer100": 13.7,
+        "createdAt": "2026-11-04T12:00:00Z",
+        "updatedAt": "2026-11-04T12:00:00Z"
+      },
+      {
+        "id": "3f921175-0c94-5e4d-a140-474297b64a13",
+        "name": "Dark chocolate 85%",
+        "defaultUnit": "G",
+        "shopCategory": "Pantry",
+        "kcalPer100": 584,
+        "proteinPer100": 12.5,
+        "carbsPer100": 19.0,
+        "fatPer100": 46.0,
+        "createdAt": "2026-11-04T12:00:00Z",
+        "updatedAt": "2026-11-04T12:00:00Z"
+      },
+      {
+        "id": "efd5a248-25a4-5c08-966c-5def9fc40ced",
+        "name": "Espresso",
+        "defaultUnit": "ML",
+        "shopCategory": "Pantry",
+        "kcalPer100": 2,
+        "proteinPer100": 0.1,
+        "carbsPer100": 0.0,
+        "fatPer100": 0.2,
+        "createdAt": "2026-11-04T12:00:00Z",
+        "updatedAt": "2026-11-04T12:00:00Z"
+      },
+      {
+        "id": "6ba7c36a-2f80-5c1c-bc11-a8e0aa914aa0",
+        "name": "Chicken breast",
+        "defaultUnit": "G",
+        "shopCategory": "Meat",
+        "kcalPer100": 120,
+        "proteinPer100": 22.5,
+        "carbsPer100": 0.0,
+        "fatPer100": 2.6,
+        "createdAt": "2026-11-04T12:00:00Z",
+        "updatedAt": "2026-11-04T12:00:00Z"
+      },
+      {
+        "id": "a0f70d8e-40e2-50e4-bba9-3896c3b7cb7f",
+        "name": "Penne or fusilli",
+        "defaultUnit": "G",
+        "shopCategory": "Carbs and bakery",
+        "kcalPer100": 371,
+        "proteinPer100": 13.0,
+        "carbsPer100": 75.0,
+        "fatPer100": 1.5,
+        "createdAt": "2026-11-04T12:00:00Z",
+        "updatedAt": "2026-11-04T12:00:00Z"
+      },
+      {
+        "id": "5e15d7e5-9fc9-5638-bdf9-f0be32624c00",
+        "name": "Broccoli",
+        "defaultUnit": "G",
+        "shopCategory": "Fruit and veg",
+        "kcalPer100": 34,
+        "proteinPer100": 2.8,
+        "carbsPer100": 6.6,
+        "fatPer100": 0.4,
+        "createdAt": "2026-11-04T12:00:00Z",
+        "updatedAt": "2026-11-04T12:00:00Z"
+      },
+      {
+        "id": "02450fa7-19ef-592a-9e36-cfffe99ec94f",
+        "name": "Cherry tomatoes",
+        "defaultUnit": "G",
+        "shopCategory": "Fruit and veg",
+        "kcalPer100": 18,
+        "proteinPer100": 0.9,
+        "carbsPer100": 3.9,
+        "fatPer100": 0.2,
+        "createdAt": "2026-11-04T12:00:00Z",
+        "updatedAt": "2026-11-04T12:00:00Z"
+      },
+      {
+        "id": "57d5902d-0f8a-5a0f-b474-de5fcee4cb79",
+        "name": "Pesto alla genovese",
+        "defaultUnit": "G",
+        "shopCategory": "Pantry",
+        "kcalPer100": 450,
+        "proteinPer100": 5.0,
+        "carbsPer100": 6.0,
+        "fatPer100": 45.0,
+        "createdAt": "2026-11-04T12:00:00Z",
+        "updatedAt": "2026-11-04T12:00:00Z"
+      },
+      {
+        "id": "9af9bfbf-e938-5296-94ac-e487b52d6673",
+        "name": "Parmesan",
+        "defaultUnit": "G",
+        "shopCategory": "Dairy and eggs",
+        "kcalPer100": 392,
+        "proteinPer100": 35.8,
+        "carbsPer100": 3.2,
+        "fatPer100": 25.8,
+        "createdAt": "2026-11-04T12:00:00Z",
+        "updatedAt": "2026-11-04T12:00:00Z"
+      },
+      {
+        "id": "87a128f9-649f-5ca2-aeb6-45b9f9925708",
+        "name": "Extra virgin olive oil",
+        "defaultUnit": "G",
+        "shopCategory": "Pantry",
+        "kcalPer100": 884,
+        "proteinPer100": 0.0,
+        "carbsPer100": 0.0,
+        "fatPer100": 100.0,
+        "createdAt": "2026-11-04T12:00:00Z",
+        "updatedAt": "2026-11-04T12:00:00Z"
+      },
+      {
+        "id": "5ca20427-9951-5ddf-974c-c64b0fb7d589",
+        "name": "Lemon",
+        "defaultUnit": "PCS",
+        "shopCategory": "Fruit and veg",
+        "kcalPer100": 29,
+        "proteinPer100": 1.1,
+        "carbsPer100": 9.3,
+        "fatPer100": 0.3,
+        "gramsPerPiece": 100,
+        "createdAt": "2026-11-04T12:00:00Z",
+        "updatedAt": "2026-11-04T12:00:00Z"
+      },
+      {
+        "id": "6ac9ad22-6140-55ec-bfda-3e620301487f",
+        "name": "Pork tenderloin",
+        "defaultUnit": "G",
+        "shopCategory": "Meat",
+        "kcalPer100": 120,
+        "proteinPer100": 21.0,
+        "carbsPer100": 0.0,
+        "fatPer100": 3.5,
+        "createdAt": "2026-11-04T12:00:00Z",
+        "updatedAt": "2026-11-04T12:00:00Z"
+      },
+      {
+        "id": "bd3071d8-8a0c-554d-985b-866480fb86e2",
+        "name": "Potatoes",
+        "defaultUnit": "G",
+        "shopCategory": "Fruit and veg",
+        "kcalPer100": 77,
+        "proteinPer100": 2.0,
+        "carbsPer100": 17.0,
+        "fatPer100": 0.1,
+        "createdAt": "2026-11-04T12:00:00Z",
+        "updatedAt": "2026-11-04T12:00:00Z"
+      },
+      {
+        "id": "983b31ad-1e3b-59c0-b6dc-5aa8dfb39fc0",
+        "name": "Bell pepper",
+        "defaultUnit": "PCS",
+        "shopCategory": "Fruit and veg",
+        "kcalPer100": 31,
+        "proteinPer100": 1.0,
+        "carbsPer100": 6.0,
+        "fatPer100": 0.3,
+        "gramsPerPiece": 160,
+        "createdAt": "2026-11-04T12:00:00Z",
+        "updatedAt": "2026-11-04T12:00:00Z"
+      },
+      {
+        "id": "b400c448-af08-5b8d-be80-de45e9e3bf1b",
+        "name": "Red onion",
+        "defaultUnit": "PCS",
+        "shopCategory": "Fruit and veg",
+        "kcalPer100": 40,
+        "proteinPer100": 1.1,
+        "carbsPer100": 9.3,
+        "fatPer100": 0.1,
+        "gramsPerPiece": 150,
+        "createdAt": "2026-11-04T12:00:00Z",
+        "updatedAt": "2026-11-04T12:00:00Z"
+      },
+      {
+        "id": "d67d5e81-5f3e-5e15-a5b6-7f4cf94df980",
+        "name": "Yellow onion",
+        "defaultUnit": "PCS",
+        "shopCategory": "Fruit and veg",
+        "kcalPer100": 40,
+        "proteinPer100": 1.1,
+        "carbsPer100": 9.3,
+        "fatPer100": 0.1,
+        "gramsPerPiece": 150,
+        "createdAt": "2026-11-04T12:00:00Z",
+        "updatedAt": "2026-11-04T12:00:00Z"
+      },
+      {
+        "id": "14a8c3fb-ac44-57d0-873c-c00f38431f7c",
+        "name": "Garlic",
+        "defaultUnit": "PCS",
+        "shopCategory": "Fruit and veg",
+        "kcalPer100": 149,
+        "proteinPer100": 6.4,
+        "carbsPer100": 33.0,
+        "fatPer100": 0.5,
+        "gramsPerPiece": 5,
+        "createdAt": "2026-11-04T12:00:00Z",
+        "updatedAt": "2026-11-04T12:00:00Z"
+      },
+      {
+        "id": "4cdfcdaf-8d46-55e1-9acb-ce87ae955650",
+        "name": "Fennel seeds",
+        "defaultUnit": "G",
+        "shopCategory": "Pantry",
+        "kcalPer100": 345,
+        "proteinPer100": 15.8,
+        "carbsPer100": 52.0,
+        "fatPer100": 14.9,
+        "createdAt": "2026-11-04T12:00:00Z",
+        "updatedAt": "2026-11-04T12:00:00Z"
+      },
+      {
+        "id": "b7cbbb30-59cb-530d-ba6a-1a421a8a4a87",
+        "name": "Fresh rosemary",
+        "defaultUnit": "G",
+        "shopCategory": "Fruit and veg",
+        "kcalPer100": 131,
+        "proteinPer100": 3.3,
+        "carbsPer100": 20.7,
+        "fatPer100": 5.9,
+        "createdAt": "2026-11-04T12:00:00Z",
+        "updatedAt": "2026-11-04T12:00:00Z"
+      },
+      {
+        "id": "08dd3b02-2bfb-5dfb-93fd-91d772c28bb0",
+        "name": "Ciabatta",
+        "defaultUnit": "G",
+        "shopCategory": "Carbs and bakery",
+        "kcalPer100": 270,
+        "proteinPer100": 9.0,
+        "carbsPer100": 50.0,
+        "fatPer100": 3.5,
+        "createdAt": "2026-11-04T12:00:00Z",
+        "updatedAt": "2026-11-04T12:00:00Z"
+      },
+      {
+        "id": "8c161e99-07ab-58bc-8c6f-cfba174bb08d",
+        "name": "Chicken thighs, boneless skinless",
+        "defaultUnit": "G",
+        "shopCategory": "Meat",
+        "kcalPer100": 121,
+        "proteinPer100": 19.7,
+        "carbsPer100": 0.0,
+        "fatPer100": 4.1,
+        "createdAt": "2026-11-04T12:00:00Z",
+        "updatedAt": "2026-11-04T12:00:00Z"
+      },
+      {
+        "id": "e0add731-5cf6-55de-a66a-aabb4eb93be2",
+        "name": "Rice",
+        "defaultUnit": "G",
+        "shopCategory": "Carbs and bakery",
+        "kcalPer100": 360,
+        "proteinPer100": 6.6,
+        "carbsPer100": 79.0,
+        "fatPer100": 0.6,
+        "createdAt": "2026-11-04T12:00:00Z",
+        "updatedAt": "2026-11-04T12:00:00Z"
+      },
+      {
+        "id": "62d1b907-1196-566d-ab0a-ba1b6c612568",
+        "name": "Passata",
+        "defaultUnit": "G",
+        "shopCategory": "Pantry",
+        "kcalPer100": 30,
+        "proteinPer100": 1.3,
+        "carbsPer100": 5.0,
+        "fatPer100": 0.2,
+        "createdAt": "2026-11-04T12:00:00Z",
+        "updatedAt": "2026-11-04T12:00:00Z"
+      },
+      {
+        "id": "d0b9084e-5175-5c73-bde6-bdad7b7965d3",
+        "name": "Mushrooms",
+        "defaultUnit": "G",
+        "shopCategory": "Fruit and veg",
+        "kcalPer100": 22,
+        "proteinPer100": 3.1,
+        "carbsPer100": 3.3,
+        "fatPer100": 0.3,
+        "createdAt": "2026-11-04T12:00:00Z",
+        "updatedAt": "2026-11-04T12:00:00Z"
+      },
+      {
+        "id": "59eb7823-ae8f-552d-a414-e789f93757c8",
+        "name": "Black olives",
+        "defaultUnit": "G",
+        "shopCategory": "Pantry",
+        "kcalPer100": 115,
+        "proteinPer100": 0.8,
+        "carbsPer100": 6.0,
+        "fatPer100": 10.7,
+        "createdAt": "2026-11-04T12:00:00Z",
+        "updatedAt": "2026-11-04T12:00:00Z"
+      },
+      {
+        "id": "6bad9e0b-c1d9-5896-85e5-1c0b8436bc49",
+        "name": "Dry red wine",
+        "defaultUnit": "ML",
+        "shopCategory": "Pantry",
+        "kcalPer100": 85,
+        "proteinPer100": 0.1,
+        "carbsPer100": 2.6,
+        "fatPer100": 0.0,
+        "createdAt": "2026-11-04T12:00:00Z",
+        "updatedAt": "2026-11-04T12:00:00Z"
+      },
+      {
+        "id": "432a99aa-0650-5262-b8e6-8b5dcea3e46e",
+        "name": "Steak (rump, sirloin or flank)",
+        "defaultUnit": "G",
+        "shopCategory": "Meat",
+        "kcalPer100": 135,
+        "proteinPer100": 22.0,
+        "carbsPer100": 0.0,
+        "fatPer100": 5.0,
+        "createdAt": "2026-11-04T12:00:00Z",
+        "updatedAt": "2026-11-04T12:00:00Z"
+      },
+      {
+        "id": "08d19742-5137-5a63-9e12-9c2c14acabac",
+        "name": "Rocket",
+        "defaultUnit": "G",
+        "shopCategory": "Fruit and veg",
+        "kcalPer100": 25,
+        "proteinPer100": 2.6,
+        "carbsPer100": 3.7,
+        "fatPer100": 0.7,
+        "createdAt": "2026-11-04T12:00:00Z",
+        "updatedAt": "2026-11-04T12:00:00Z"
+      },
+      {
+        "id": "62f7eb37-6bc4-587d-a53f-53c9cefd1735",
+        "name": "Balsamic glaze",
+        "defaultUnit": "G",
+        "shopCategory": "Pantry",
+        "kcalPer100": 260,
+        "proteinPer100": 0.5,
+        "carbsPer100": 60.0,
+        "fatPer100": 0.0,
+        "createdAt": "2026-11-04T12:00:00Z",
+        "updatedAt": "2026-11-04T12:00:00Z"
+      },
+      {
+        "id": "17b6283a-e893-5ecb-918a-c2caaa5ba620",
+        "name": "Pork shoulder, boneless",
+        "defaultUnit": "G",
+        "shopCategory": "Meat",
+        "kcalPer100": 160,
+        "proteinPer100": 19.0,
+        "carbsPer100": 0.0,
+        "fatPer100": 9.0,
+        "createdAt": "2026-11-04T12:00:00Z",
+        "updatedAt": "2026-11-04T12:00:00Z"
+      },
+      {
+        "id": "b2ceb9be-001a-5314-bd72-4481b2d91c9e",
+        "name": "Carrot",
+        "defaultUnit": "PCS",
+        "shopCategory": "Fruit and veg",
+        "kcalPer100": 41,
+        "proteinPer100": 0.9,
+        "carbsPer100": 9.6,
+        "fatPer100": 0.2,
+        "gramsPerPiece": 60,
+        "createdAt": "2026-11-04T12:00:00Z",
+        "updatedAt": "2026-11-04T12:00:00Z"
+      },
+      {
+        "id": "c933c8d6-66ea-5b7e-97ae-21b9c3327160",
+        "name": "Celery stick",
+        "defaultUnit": "PCS",
+        "shopCategory": "Fruit and veg",
+        "kcalPer100": 16,
+        "proteinPer100": 0.7,
+        "carbsPer100": 3.0,
+        "fatPer100": 0.2,
+        "gramsPerPiece": 40,
+        "createdAt": "2026-11-04T12:00:00Z",
+        "updatedAt": "2026-11-04T12:00:00Z"
+      },
+      {
+        "id": "35b8b0f7-492c-56be-b4aa-c35f9d29d9a1",
+        "name": "Pappardelle",
+        "defaultUnit": "G",
+        "shopCategory": "Carbs and bakery",
+        "kcalPer100": 380,
+        "proteinPer100": 14.0,
+        "carbsPer100": 70.0,
+        "fatPer100": 4.0,
+        "createdAt": "2026-11-04T12:00:00Z",
+        "updatedAt": "2026-11-04T12:00:00Z"
+      },
+      {
+        "id": "3102722a-1584-5570-835a-b14fd2e106f7",
+        "name": "Quick polenta",
+        "defaultUnit": "G",
+        "shopCategory": "Carbs and bakery",
+        "kcalPer100": 362,
+        "proteinPer100": 8.1,
+        "carbsPer100": 76.0,
+        "fatPer100": 1.8,
+        "createdAt": "2026-11-04T12:00:00Z",
+        "updatedAt": "2026-11-04T12:00:00Z"
+      },
+      {
+        "id": "19d9ef46-6195-5b16-87db-914afb2ab436",
+        "name": "Bresaola",
+        "defaultUnit": "G",
+        "shopCategory": "Meat",
+        "kcalPer100": 151,
+        "proteinPer100": 32.0,
+        "carbsPer100": 0.4,
+        "fatPer100": 2.6,
+        "createdAt": "2026-11-04T12:00:00Z",
+        "updatedAt": "2026-11-04T12:00:00Z"
+      },
+      {
+        "id": "825434bf-3a0f-590b-a5f9-6edbc4e6a306",
+        "name": "Light mozzarella",
+        "defaultUnit": "G",
+        "shopCategory": "Dairy and eggs",
+        "kcalPer100": 163,
+        "proteinPer100": 18.0,
+        "carbsPer100": 1.0,
+        "fatPer100": 9.5,
+        "createdAt": "2026-11-04T12:00:00Z",
+        "updatedAt": "2026-11-04T12:00:00Z"
+      },
+      {
+        "id": "144561cb-f786-534a-a77d-e805df22aab6",
+        "name": "Eggs",
+        "defaultUnit": "PCS",
+        "shopCategory": "Dairy and eggs",
+        "kcalPer100": 143,
+        "proteinPer100": 12.6,
+        "carbsPer100": 0.7,
+        "fatPer100": 9.5,
+        "gramsPerPiece": 55,
+        "createdAt": "2026-11-04T12:00:00Z",
+        "updatedAt": "2026-11-04T12:00:00Z"
+      },
+      {
+        "id": "d7a6d91d-6bc6-5824-b132-32c742a172ee",
+        "name": "Prosciutto crudo",
+        "defaultUnit": "G",
+        "shopCategory": "Meat",
+        "kcalPer100": 250,
+        "proteinPer100": 26.0,
+        "carbsPer100": 0.0,
+        "fatPer100": 16.0,
+        "createdAt": "2026-11-04T12:00:00Z",
+        "updatedAt": "2026-11-04T12:00:00Z"
+      },
+      {
+        "id": "056e0e4a-1bca-5c34-a440-39809240394c",
+        "name": "Fresh basil",
+        "defaultUnit": "G",
+        "shopCategory": "Fruit and veg",
+        "kcalPer100": 23,
+        "proteinPer100": 3.2,
+        "carbsPer100": 2.7,
+        "fatPer100": 0.6,
+        "createdAt": "2026-11-04T12:00:00Z",
+        "updatedAt": "2026-11-04T12:00:00Z"
+      },
+      {
+        "id": "26c78a8c-8d8f-53c2-9ab2-986cd63b675a",
+        "name": "Banana",
+        "defaultUnit": "PCS",
+        "shopCategory": "Fruit and veg",
+        "kcalPer100": 89,
+        "proteinPer100": 1.1,
+        "carbsPer100": 22.8,
+        "fatPer100": 0.3,
+        "gramsPerPiece": 118,
+        "createdAt": "2026-11-04T12:00:00Z",
+        "updatedAt": "2026-11-04T12:00:00Z"
+      }
+    ],
+    "recipes": [
+      {
+        "id": "049bc83e-f877-5349-ad39-c9d48d307dfa",
+        "name": "Tiramisu overnight oats",
+        "servings": 1,
+        "steps": "In the jar, stir together the oats, milk, espresso (or 1 tsp instant coffee in 30 ml hot water), a pinch of salt and half the honey.\nMix the skyr with the rest of the honey and spoon it on top as a separate layer.\nDust with cocoa, grate the chocolate over, lid it, and refrigerate overnight. Eat it cold.",
+        "tags": "breakfast, meal prep",
+        "notes": "Per jar. Her: 55 g oats · 110 ml milk · 150 g skyr · 10 g honey · 8 g cocoa · 8 g dark chocolate. Sunday prep: 6 jars (Mon-Wed), Thursday: 4 jars (Thu-Fri).",
+        "ingredients": [
+          {
+            "ingredientId": "8f7f50f9-4daf-5f3f-8fd7-b627a17fa5e7",
+            "quantity": 80,
+            "unit": "G"
+          },
+          {
+            "ingredientId": "8a02d169-c085-5a67-84b2-c412e41a8907",
+            "quantity": 150,
+            "unit": "ML"
+          },
+          {
+            "ingredientId": "064e616b-3b95-5746-ac96-1fc8b5356881",
+            "quantity": 200,
+            "unit": "G"
+          },
+          {
+            "ingredientId": "74ea241f-9748-50df-b438-712c74fb35ed",
+            "quantity": 15,
+            "unit": "G"
+          },
+          {
+            "ingredientId": "0f9a5dd0-6336-5465-b180-48effdd31399",
+            "quantity": 10,
+            "unit": "G"
+          },
+          {
+            "ingredientId": "3f921175-0c94-5e4d-a140-474297b64a13",
+            "quantity": 10,
+            "unit": "G"
+          },
+          {
+            "ingredientId": "efd5a248-25a4-5c08-966c-5def9fc40ced",
+            "quantity": 30,
+            "unit": "ML"
+          }
+        ],
+        "createdAt": "2026-11-04T12:00:00Z",
+        "updatedAt": "2026-11-04T12:00:00Z",
+        "prepMinutes": 5
+      },
+      {
+        "id": "374798a3-1f55-5aa6-933e-5cde046e15ff",
+        "name": "Prosciutto egg ciabatta",
+        "servings": 1,
+        "steps": "Toast the ciabatta.\nScramble the eggs low and slow, and pull them off while they still look a bit wet.\nPile on the eggs, torn mozzarella, prosciutto, tomatoes and basil. Salt and pepper.",
+        "tags": "breakfast, weekend",
+        "notes": "Sat + Sun. Her: 2 eggs · 70 g ciabatta · 25 g prosciutto · 25 g light mozzarella.",
+        "ingredients": [
+          {
+            "ingredientId": "144561cb-f786-534a-a77d-e805df22aab6",
+            "quantity": 3,
+            "unit": "PCS"
+          },
+          {
+            "ingredientId": "08dd3b02-2bfb-5dfb-93fd-91d772c28bb0",
+            "quantity": 100,
+            "unit": "G"
+          },
+          {
+            "ingredientId": "d7a6d91d-6bc6-5824-b132-32c742a172ee",
+            "quantity": 30,
+            "unit": "G"
+          },
+          {
+            "ingredientId": "825434bf-3a0f-590b-a5f9-6edbc4e6a306",
+            "quantity": 30,
+            "unit": "G"
+          },
+          {
+            "ingredientId": "02450fa7-19ef-592a-9e36-cfffe99ec94f",
+            "quantity": 50,
+            "unit": "G"
+          },
+          {
+            "ingredientId": "056e0e4a-1bca-5c34-a440-39809240394c",
+            "quantity": 3,
+            "unit": "G"
+          }
+        ],
+        "createdAt": "2026-11-04T12:00:00Z",
+        "updatedAt": "2026-11-04T12:00:00Z",
+        "prepMinutes": 10
+      },
+      {
+        "id": "3608f6d4-4108-5e02-8942-791dedc26bf1",
+        "name": "Chicken pesto pasta",
+        "servings": 1,
+        "steps": "Butterfly the chicken so it cooks evenly. Season hard with salt, pepper, garlic powder and oregano.\nSear it in the oil over high heat for 5-6 min a side until the centre hits 74 °C. Rest 5 min, then slice.\nBoil the pasta in well-salted water, adding the broccoli for the last 3 min. Save a mug of pasta water before you drain.\nBlister the tomatoes in the chicken pan for 3 min to pick up the browned bits.\nOff the heat, toss the pasta with pesto, parmesan and a splash of pasta water. Heat makes pesto go dark and bitter.\nSplit into 6 containers (4:3, yours bigger) and top each with chicken, tomatoes, lemon zest and chili.",
+        "tags": "lunch, meal prep",
+        "notes": "Batch for two (3 + 3, split 4:3): 950 g chicken breast · 510 g pasta · 600 g broccoli · 600 g cherry tomatoes · 150 g pesto · 75 g parmesan · 25 g olive oil · 2 lemons (zest). Her portion: about 130 g chicken, 70 g pasta.",
+        "ingredients": [
+          {
+            "ingredientId": "6ba7c36a-2f80-5c1c-bc11-a8e0aa914aa0",
+            "quantity": 181,
+            "unit": "G"
+          },
+          {
+            "ingredientId": "a0f70d8e-40e2-50e4-bba9-3896c3b7cb7f",
+            "quantity": 97,
+            "unit": "G"
+          },
+          {
+            "ingredientId": "5e15d7e5-9fc9-5638-bdf9-f0be32624c00",
+            "quantity": 114,
+            "unit": "G"
+          },
+          {
+            "ingredientId": "02450fa7-19ef-592a-9e36-cfffe99ec94f",
+            "quantity": 114,
+            "unit": "G"
+          },
+          {
+            "ingredientId": "57d5902d-0f8a-5a0f-b474-de5fcee4cb79",
+            "quantity": 29,
+            "unit": "G"
+          },
+          {
+            "ingredientId": "9af9bfbf-e938-5296-94ac-e487b52d6673",
+            "quantity": 14,
+            "unit": "G"
+          },
+          {
+            "ingredientId": "87a128f9-649f-5ca2-aeb6-45b9f9925708",
+            "quantity": 5.0,
+            "unit": "G"
+          },
+          {
+            "ingredientId": "5ca20427-9951-5ddf-974c-c64b0fb7d589",
+            "quantity": 0.4,
+            "unit": "PCS"
+          }
+        ],
+        "createdAt": "2026-11-04T12:00:00Z",
+        "updatedAt": "2026-11-04T12:00:00Z",
+        "prepMinutes": 30
+      },
+      {
+        "id": "d66d9fa4-c8d5-5fa2-a905-e4d09bca6351",
+        "name": "Porchetta-style pork + roast potatoes",
+        "servings": 1,
+        "steps": "Heat the oven to 220 °C. Chunk the potatoes, toss with 40 g oil, salt and half the rosemary, and roast 20 min.\nCrush the fennel seeds and garlic with the rest of the rosemary, the lemon zest, chili, salt and 15 g oil. Rub it all over the pork.\nSear the pork in 20 g oil for 2 min a side.\nAdd the sliced peppers and onion to the potato trays, set one tenderloin on each, and roast 15-18 min until the centre reads 63 °C.\nRest 10 min before slicing. Squeeze lemon over everything and spoon on the pan juices.\nEat with ciabatta for mopping up the juices.",
+        "tags": "dinner, meal prep",
+        "notes": "Batch for two (3 + 3, split 4:3): 1 kg pork tenderloin · 2 kg potatoes · 5 bell peppers · 2 red onions · 75 g olive oil · 6 garlic cloves · 1.5 tbsp fennel seeds · 1.5 tbsp rosemary · 2 lemons. Ciabatta: 50 g yours, 35 g hers. Her portion: about 145 g pork, 280 g potatoes.",
+        "ingredients": [
+          {
+            "ingredientId": "6ac9ad22-6140-55ec-bfda-3e620301487f",
+            "quantity": 190,
+            "unit": "G"
+          },
+          {
+            "ingredientId": "bd3071d8-8a0c-554d-985b-866480fb86e2",
+            "quantity": 381,
+            "unit": "G"
+          },
+          {
+            "ingredientId": "983b31ad-1e3b-59c0-b6dc-5aa8dfb39fc0",
+            "quantity": 0.95,
+            "unit": "PCS"
+          },
+          {
+            "ingredientId": "b400c448-af08-5b8d-be80-de45e9e3bf1b",
+            "quantity": 0.4,
+            "unit": "PCS"
+          },
+          {
+            "ingredientId": "87a128f9-649f-5ca2-aeb6-45b9f9925708",
+            "quantity": 14,
+            "unit": "G"
+          },
+          {
+            "ingredientId": "14a8c3fb-ac44-57d0-873c-c00f38431f7c",
+            "quantity": 1.15,
+            "unit": "PCS"
+          },
+          {
+            "ingredientId": "4cdfcdaf-8d46-55e1-9acb-ce87ae955650",
+            "quantity": 1.5,
+            "unit": "G"
+          },
+          {
+            "ingredientId": "b7cbbb30-59cb-530d-ba6a-1a421a8a4a87",
+            "quantity": 1.0,
+            "unit": "G"
+          },
+          {
+            "ingredientId": "5ca20427-9951-5ddf-974c-c64b0fb7d589",
+            "quantity": 0.4,
+            "unit": "PCS"
+          },
+          {
+            "ingredientId": "08dd3b02-2bfb-5dfb-93fd-91d772c28bb0",
+            "quantity": 50,
+            "unit": "G"
+          }
+        ],
+        "createdAt": "2026-11-04T12:00:00Z",
+        "updatedAt": "2026-11-04T12:00:00Z",
+        "prepMinutes": 45
+      },
+      {
+        "id": "27d4082c-5853-5853-947c-736c83663f5c",
+        "name": "Chicken cacciatore + rice",
+        "servings": 1,
+        "steps": "Season the thighs and brown them in 2 batches in 25 g oil for 4 min a side. Take them out.\nIn the remaining 25 g oil, cook the onion, pepper and mushrooms for 6 min, then the garlic for 1 min.\nPour in the wine and let it reduce by half while you scrape up the browned bits.\nAdd the tomatoes, oregano, a rosemary sprig, 2 bay leaves, chili and the olives, return the chicken, cover, and simmer 30 min.\nCook the rice while it simmers. Portion into 6 containers (4:3, yours bigger). It tastes even better on day 2.",
+        "tags": "lunch, meal prep",
+        "notes": "Batch for two (3 + 3, split 4:3): 1 kg chicken thighs · 560 g rice · 800 g passata · 250 g mushrooms · 2 bell peppers · 2 onions · 5 garlic cloves · 75 g black olives · 175 ml red wine · 50 g olive oil. Her portion: about 145 g thighs, 75 g rice.",
+        "ingredients": [
+          {
+            "ingredientId": "8c161e99-07ab-58bc-8c6f-cfba174bb08d",
+            "quantity": 190,
+            "unit": "G"
+          },
+          {
+            "ingredientId": "e0add731-5cf6-55de-a66a-aabb4eb93be2",
+            "quantity": 107,
+            "unit": "G"
+          },
+          {
+            "ingredientId": "62d1b907-1196-566d-ab0a-ba1b6c612568",
+            "quantity": 152,
+            "unit": "G"
+          },
+          {
+            "ingredientId": "d0b9084e-5175-5c73-bde6-bdad7b7965d3",
+            "quantity": 48,
+            "unit": "G"
+          },
+          {
+            "ingredientId": "983b31ad-1e3b-59c0-b6dc-5aa8dfb39fc0",
+            "quantity": 0.4,
+            "unit": "PCS"
+          },
+          {
+            "ingredientId": "d67d5e81-5f3e-5e15-a5b6-7f4cf94df980",
+            "quantity": 0.4,
+            "unit": "PCS"
+          },
+          {
+            "ingredientId": "14a8c3fb-ac44-57d0-873c-c00f38431f7c",
+            "quantity": 0.95,
+            "unit": "PCS"
+          },
+          {
+            "ingredientId": "59eb7823-ae8f-552d-a414-e789f93757c8",
+            "quantity": 14,
+            "unit": "G"
+          },
+          {
+            "ingredientId": "6bad9e0b-c1d9-5896-85e5-1c0b8436bc49",
+            "quantity": 33,
+            "unit": "ML"
+          },
+          {
+            "ingredientId": "87a128f9-649f-5ca2-aeb6-45b9f9925708",
+            "quantity": 10,
+            "unit": "G"
+          }
+        ],
+        "createdAt": "2026-11-04T12:00:00Z",
+        "updatedAt": "2026-11-04T12:00:00Z",
+        "prepMinutes": 50
+      },
+      {
+        "id": "822bc559-03ed-507d-a100-0c4b696a56c8",
+        "name": "Steak tagliata + rosemary potatoes",
+        "servings": 1,
+        "steps": "Thursday prep: roast the potatoes with olive oil, rosemary, smashed garlic and salt on 2 trays at 220 °C for 35-40 min, then split into 6 containers (4:3, yours bigger).\nEach night: take the steak out 20 min before cooking, pat it dry, and salt it well.\nGet the pan smoking hot. Cook 2-3 min a side for medium-rare (2 cm thick), with a garlic clove and rosemary in for the last minute.\nRest 5 min. Meanwhile, crisp the potatoes in the same pan.\nSlice thin against the grain. Serve over rocket and halved tomatoes, then add parmesan, balsamic and flaky salt.",
+        "tags": "dinner",
+        "notes": "Steak is cooked fresh each night. Potato batch (Thursday, 3 + 3): 2.3 kg potatoes · 50 g olive oil · rosemary · 5 garlic cloves. Her: 150 g steak · 4 g oil · 10 g parmesan · about 320 g potatoes.",
+        "ingredients": [
+          {
+            "ingredientId": "432a99aa-0650-5262-b8e6-8b5dcea3e46e",
+            "quantity": 200,
+            "unit": "G"
+          },
+          {
+            "ingredientId": "87a128f9-649f-5ca2-aeb6-45b9f9925708",
+            "quantity": 5,
+            "unit": "G"
+          },
+          {
+            "ingredientId": "9af9bfbf-e938-5296-94ac-e487b52d6673",
+            "quantity": 15,
+            "unit": "G"
+          },
+          {
+            "ingredientId": "08d19742-5137-5a63-9e12-9c2c14acabac",
+            "quantity": 30,
+            "unit": "G"
+          },
+          {
+            "ingredientId": "02450fa7-19ef-592a-9e36-cfffe99ec94f",
+            "quantity": 100,
+            "unit": "G"
+          },
+          {
+            "ingredientId": "62f7eb37-6bc4-587d-a53f-53c9cefd1735",
+            "quantity": 10,
+            "unit": "G"
+          },
+          {
+            "ingredientId": "bd3071d8-8a0c-554d-985b-866480fb86e2",
+            "quantity": 438,
+            "unit": "G"
+          },
+          {
+            "ingredientId": "87a128f9-649f-5ca2-aeb6-45b9f9925708",
+            "quantity": 10,
+            "unit": "G"
+          },
+          {
+            "ingredientId": "14a8c3fb-ac44-57d0-873c-c00f38431f7c",
+            "quantity": 0.95,
+            "unit": "PCS"
+          },
+          {
+            "ingredientId": "b7cbbb30-59cb-530d-ba6a-1a421a8a4a87",
+            "quantity": 1.0,
+            "unit": "G"
+          }
+        ],
+        "createdAt": "2026-11-04T12:00:00Z",
+        "updatedAt": "2026-11-04T12:00:00Z",
+        "prepMinutes": 15
+      },
+      {
+        "id": "1dcc60d7-0e31-5e5c-9f71-7210913c9046",
+        "name": "Pork ragù pappardelle",
+        "servings": 1,
+        "steps": "Brown the pork shoulder (cut into 6 chunks) hard in 2 batches, 8-10 min each. That crust is the flavour, so don't rush it. Take it out.\nCook the finely diced onion, carrot and celery for 8 min until soft and sweet. Add the garlic for 1 min.\nAdd the wine and reduce by half. Then add the passata, 350 ml water, 3 bay leaves, rosemary, chili, salt and the pork.\nCover and simmer on very low for 2.5-3 hours, until the pork falls apart. Shred it with 2 forks, season, and split it into 8 containers: 4 bigger ones for you, 4 smaller ones for her.\nFreeze the last 4 portions (2 each) for next Sunday.\nToss your portion with 100 g pappardelle, 15 g parmesan and a splash of pasta water.",
+        "tags": "lunch, sunday",
+        "notes": "Ragù batch (8 portions: 4 yours, 4 hers; made every other week): 1.25 kg boneless pork shoulder · 2 onions, 2 carrots, 2 celery sticks · 5 garlic cloves · 35 g olive oil · 250 ml dry red wine · 1 kg passata · 3 bay leaves · rosemary · chili · salt. Her: 70 g pappardelle · 10 g parmesan.",
+        "ingredients": [
+          {
+            "ingredientId": "17b6283a-e893-5ecb-918a-c2caaa5ba620",
+            "quantity": 179,
+            "unit": "G"
+          },
+          {
+            "ingredientId": "d67d5e81-5f3e-5e15-a5b6-7f4cf94df980",
+            "quantity": 0.3,
+            "unit": "PCS"
+          },
+          {
+            "ingredientId": "b2ceb9be-001a-5314-bd72-4481b2d91c9e",
+            "quantity": 0.3,
+            "unit": "PCS"
+          },
+          {
+            "ingredientId": "c933c8d6-66ea-5b7e-97ae-21b9c3327160",
+            "quantity": 0.3,
+            "unit": "PCS"
+          },
+          {
+            "ingredientId": "14a8c3fb-ac44-57d0-873c-c00f38431f7c",
+            "quantity": 0.7,
+            "unit": "PCS"
+          },
+          {
+            "ingredientId": "87a128f9-649f-5ca2-aeb6-45b9f9925708",
+            "quantity": 5,
+            "unit": "G"
+          },
+          {
+            "ingredientId": "6bad9e0b-c1d9-5896-85e5-1c0b8436bc49",
+            "quantity": 36,
+            "unit": "ML"
+          },
+          {
+            "ingredientId": "62d1b907-1196-566d-ab0a-ba1b6c612568",
+            "quantity": 143,
+            "unit": "G"
+          },
+          {
+            "ingredientId": "b7cbbb30-59cb-530d-ba6a-1a421a8a4a87",
+            "quantity": 0.5,
+            "unit": "G"
+          },
+          {
+            "ingredientId": "35b8b0f7-492c-56be-b4aa-c35f9d29d9a1",
+            "quantity": 100,
+            "unit": "G"
+          },
+          {
+            "ingredientId": "9af9bfbf-e938-5296-94ac-e487b52d6673",
+            "quantity": 15,
+            "unit": "G"
+          }
+        ],
+        "createdAt": "2026-11-04T12:00:00Z",
+        "updatedAt": "2026-11-04T12:00:00Z",
+        "prepMinutes": 180
+      },
+      {
+        "id": "fe5bea0f-c5a2-5ce2-ab18-cc33029daa15",
+        "name": "Pork ragù on polenta",
+        "servings": 1,
+        "steps": "Brown the pork shoulder (cut into 6 chunks) hard in 2 batches, 8-10 min each. That crust is the flavour, so don't rush it. Take it out.\nCook the finely diced onion, carrot and celery for 8 min until soft and sweet. Add the garlic for 1 min.\nAdd the wine and reduce by half. Then add the passata, 350 ml water, 3 bay leaves, rosemary, chili, salt and the pork.\nCover and simmer on very low for 2.5-3 hours, until the pork falls apart. Shred it with 2 forks, season, and split it into 8 containers: 4 bigger ones for you, 4 smaller ones for her.\nFreeze the last 4 portions (2 each) for next Sunday.\nSpoon your portion over 90 g quick polenta (cooked as the pack says, salted) with 15 g parmesan.",
+        "tags": "dinner, sunday",
+        "notes": "Ragù batch (8 portions: 4 yours, 4 hers; made every other week): 1.25 kg boneless pork shoulder · 2 onions, 2 carrots, 2 celery sticks · 5 garlic cloves · 35 g olive oil · 250 ml dry red wine · 1 kg passata · 3 bay leaves · rosemary · chili · salt. Her: 65 g polenta · 10 g parmesan.",
+        "ingredients": [
+          {
+            "ingredientId": "17b6283a-e893-5ecb-918a-c2caaa5ba620",
+            "quantity": 179,
+            "unit": "G"
+          },
+          {
+            "ingredientId": "d67d5e81-5f3e-5e15-a5b6-7f4cf94df980",
+            "quantity": 0.3,
+            "unit": "PCS"
+          },
+          {
+            "ingredientId": "b2ceb9be-001a-5314-bd72-4481b2d91c9e",
+            "quantity": 0.3,
+            "unit": "PCS"
+          },
+          {
+            "ingredientId": "c933c8d6-66ea-5b7e-97ae-21b9c3327160",
+            "quantity": 0.3,
+            "unit": "PCS"
+          },
+          {
+            "ingredientId": "14a8c3fb-ac44-57d0-873c-c00f38431f7c",
+            "quantity": 0.7,
+            "unit": "PCS"
+          },
+          {
+            "ingredientId": "87a128f9-649f-5ca2-aeb6-45b9f9925708",
+            "quantity": 5,
+            "unit": "G"
+          },
+          {
+            "ingredientId": "6bad9e0b-c1d9-5896-85e5-1c0b8436bc49",
+            "quantity": 36,
+            "unit": "ML"
+          },
+          {
+            "ingredientId": "62d1b907-1196-566d-ab0a-ba1b6c612568",
+            "quantity": 143,
+            "unit": "G"
+          },
+          {
+            "ingredientId": "b7cbbb30-59cb-530d-ba6a-1a421a8a4a87",
+            "quantity": 0.5,
+            "unit": "G"
+          },
+          {
+            "ingredientId": "3102722a-1584-5570-835a-b14fd2e106f7",
+            "quantity": 90,
+            "unit": "G"
+          },
+          {
+            "ingredientId": "9af9bfbf-e938-5296-94ac-e487b52d6673",
+            "quantity": 15,
+            "unit": "G"
+          }
+        ],
+        "createdAt": "2026-11-04T12:00:00Z",
+        "updatedAt": "2026-11-04T12:00:00Z",
+        "prepMinutes": 180
+      },
+      {
+        "id": "0398e86f-5114-5e42-a501-f4af65bea381",
+        "name": "Bresaola panino",
+        "servings": 1,
+        "steps": "Toast the bread, stack bresaola, mozzarella and rocket, add a drizzle of balsamic and black pepper, and eat. On gym days, eat it 1.5-2 hours before training.",
+        "tags": "snack, daily",
+        "notes": "Her: 70 g ciabatta · 45 g bresaola · 45 g light mozzarella. Build it fresh: made ahead, the bread goes soggy. Budget swap: lean cooked ham instead of bresaola.",
+        "ingredients": [
+          {
+            "ingredientId": "08dd3b02-2bfb-5dfb-93fd-91d772c28bb0",
+            "quantity": 100,
+            "unit": "G"
+          },
+          {
+            "ingredientId": "19d9ef46-6195-5b16-87db-914afb2ab436",
+            "quantity": 60,
+            "unit": "G"
+          },
+          {
+            "ingredientId": "825434bf-3a0f-590b-a5f9-6edbc4e6a306",
+            "quantity": 60,
+            "unit": "G"
+          },
+          {
+            "ingredientId": "08d19742-5137-5a63-9e12-9c2c14acabac",
+            "quantity": 15,
+            "unit": "G"
+          },
+          {
+            "ingredientId": "62f7eb37-6bc4-587d-a53f-53c9cefd1735",
+            "quantity": 5,
+            "unit": "G"
+          }
+        ],
+        "createdAt": "2026-11-04T12:00:00Z",
+        "updatedAt": "2026-11-04T12:00:00Z",
+        "prepMinutes": 2
+      },
+      {
+        "id": "5336f554-7802-52d6-aacd-fe1d535b6f2b",
+        "name": "Banana",
+        "servings": 1,
+        "steps": "",
+        "tags": "snack",
+        "notes": "With the panino.",
+        "ingredients": [
+          {
+            "ingredientId": "26c78a8c-8d8f-53c2-9ab2-986cd63b675a",
+            "quantity": 1,
+            "unit": "PCS"
+          }
+        ],
+        "createdAt": "2026-11-04T12:00:00Z",
+        "updatedAt": "2026-11-04T12:00:00Z"
+      }
+    ],
+    "dietPlans": [
+      {
+        "id": "83cf4941-56be-5e6f-a990-c07988533c25",
+        "name": "Winter Arc – you (2,900 kcal)",
+        "notes": "Your meals, about 2,900 kcal and 190 g protein a day. Gym days: Tue, Wed, Fri, Sat. Prep on Sunday (Sun + Mon-Wed) and Thursday (Thu-Sat).",
+        "meals": [
+          {
+            "dayOfWeek": "MONDAY",
+            "slot": "BREAKFAST",
+            "recipeId": "049bc83e-f877-5349-ad39-c9d48d307dfa",
+            "servings": 1.0
+          },
+          {
+            "dayOfWeek": "TUESDAY",
+            "slot": "BREAKFAST",
+            "recipeId": "049bc83e-f877-5349-ad39-c9d48d307dfa",
+            "servings": 1.0
+          },
+          {
+            "dayOfWeek": "WEDNESDAY",
+            "slot": "BREAKFAST",
+            "recipeId": "049bc83e-f877-5349-ad39-c9d48d307dfa",
+            "servings": 1.0
+          },
+          {
+            "dayOfWeek": "THURSDAY",
+            "slot": "BREAKFAST",
+            "recipeId": "049bc83e-f877-5349-ad39-c9d48d307dfa",
+            "servings": 1.0
+          },
+          {
+            "dayOfWeek": "FRIDAY",
+            "slot": "BREAKFAST",
+            "recipeId": "049bc83e-f877-5349-ad39-c9d48d307dfa",
+            "servings": 1.0
+          },
+          {
+            "dayOfWeek": "SATURDAY",
+            "slot": "BREAKFAST",
+            "recipeId": "374798a3-1f55-5aa6-933e-5cde046e15ff",
+            "servings": 1.0
+          },
+          {
+            "dayOfWeek": "SUNDAY",
+            "slot": "BREAKFAST",
+            "recipeId": "374798a3-1f55-5aa6-933e-5cde046e15ff",
+            "servings": 1.0
+          },
+          {
+            "dayOfWeek": "MONDAY",
+            "slot": "LUNCH",
+            "recipeId": "3608f6d4-4108-5e02-8942-791dedc26bf1",
+            "servings": 1.0
+          },
+          {
+            "dayOfWeek": "TUESDAY",
+            "slot": "LUNCH",
+            "recipeId": "3608f6d4-4108-5e02-8942-791dedc26bf1",
+            "servings": 1.0
+          },
+          {
+            "dayOfWeek": "WEDNESDAY",
+            "slot": "LUNCH",
+            "recipeId": "3608f6d4-4108-5e02-8942-791dedc26bf1",
+            "servings": 1.0
+          },
+          {
+            "dayOfWeek": "THURSDAY",
+            "slot": "LUNCH",
+            "recipeId": "27d4082c-5853-5853-947c-736c83663f5c",
+            "servings": 1.0
+          },
+          {
+            "dayOfWeek": "FRIDAY",
+            "slot": "LUNCH",
+            "recipeId": "27d4082c-5853-5853-947c-736c83663f5c",
+            "servings": 1.0
+          },
+          {
+            "dayOfWeek": "SATURDAY",
+            "slot": "LUNCH",
+            "recipeId": "27d4082c-5853-5853-947c-736c83663f5c",
+            "servings": 1.0
+          },
+          {
+            "dayOfWeek": "SUNDAY",
+            "slot": "LUNCH",
+            "recipeId": "1dcc60d7-0e31-5e5c-9f71-7210913c9046",
+            "servings": 1.0
+          },
+          {
+            "dayOfWeek": "MONDAY",
+            "slot": "SNACK",
+            "recipeId": "0398e86f-5114-5e42-a501-f4af65bea381",
+            "servings": 1.0
+          },
+          {
+            "dayOfWeek": "TUESDAY",
+            "slot": "SNACK",
+            "recipeId": "0398e86f-5114-5e42-a501-f4af65bea381",
+            "servings": 1.0
+          },
+          {
+            "dayOfWeek": "WEDNESDAY",
+            "slot": "SNACK",
+            "recipeId": "0398e86f-5114-5e42-a501-f4af65bea381",
+            "servings": 1.0
+          },
+          {
+            "dayOfWeek": "THURSDAY",
+            "slot": "SNACK",
+            "recipeId": "0398e86f-5114-5e42-a501-f4af65bea381",
+            "servings": 1.0
+          },
+          {
+            "dayOfWeek": "FRIDAY",
+            "slot": "SNACK",
+            "recipeId": "0398e86f-5114-5e42-a501-f4af65bea381",
+            "servings": 1.0
+          },
+          {
+            "dayOfWeek": "SATURDAY",
+            "slot": "SNACK",
+            "recipeId": "0398e86f-5114-5e42-a501-f4af65bea381",
+            "servings": 1.0
+          },
+          {
+            "dayOfWeek": "SUNDAY",
+            "slot": "SNACK",
+            "recipeId": "0398e86f-5114-5e42-a501-f4af65bea381",
+            "servings": 1.0
+          },
+          {
+            "dayOfWeek": "MONDAY",
+            "slot": "SNACK",
+            "recipeId": "5336f554-7802-52d6-aacd-fe1d535b6f2b",
+            "servings": 1.0
+          },
+          {
+            "dayOfWeek": "TUESDAY",
+            "slot": "SNACK",
+            "recipeId": "5336f554-7802-52d6-aacd-fe1d535b6f2b",
+            "servings": 1.0
+          },
+          {
+            "dayOfWeek": "WEDNESDAY",
+            "slot": "SNACK",
+            "recipeId": "5336f554-7802-52d6-aacd-fe1d535b6f2b",
+            "servings": 1.0
+          },
+          {
+            "dayOfWeek": "THURSDAY",
+            "slot": "SNACK",
+            "recipeId": "5336f554-7802-52d6-aacd-fe1d535b6f2b",
+            "servings": 1.0
+          },
+          {
+            "dayOfWeek": "FRIDAY",
+            "slot": "SNACK",
+            "recipeId": "5336f554-7802-52d6-aacd-fe1d535b6f2b",
+            "servings": 1.0
+          },
+          {
+            "dayOfWeek": "SATURDAY",
+            "slot": "SNACK",
+            "recipeId": "5336f554-7802-52d6-aacd-fe1d535b6f2b",
+            "servings": 1.0
+          },
+          {
+            "dayOfWeek": "SUNDAY",
+            "slot": "SNACK",
+            "recipeId": "5336f554-7802-52d6-aacd-fe1d535b6f2b",
+            "servings": 1.0
+          },
+          {
+            "dayOfWeek": "MONDAY",
+            "slot": "DINNER",
+            "recipeId": "d66d9fa4-c8d5-5fa2-a905-e4d09bca6351",
+            "servings": 1.0
+          },
+          {
+            "dayOfWeek": "TUESDAY",
+            "slot": "DINNER",
+            "recipeId": "d66d9fa4-c8d5-5fa2-a905-e4d09bca6351",
+            "servings": 1.0
+          },
+          {
+            "dayOfWeek": "WEDNESDAY",
+            "slot": "DINNER",
+            "recipeId": "d66d9fa4-c8d5-5fa2-a905-e4d09bca6351",
+            "servings": 1.0
+          },
+          {
+            "dayOfWeek": "THURSDAY",
+            "slot": "DINNER",
+            "recipeId": "822bc559-03ed-507d-a100-0c4b696a56c8",
+            "servings": 1.0
+          },
+          {
+            "dayOfWeek": "FRIDAY",
+            "slot": "DINNER",
+            "recipeId": "822bc559-03ed-507d-a100-0c4b696a56c8",
+            "servings": 1.0
+          },
+          {
+            "dayOfWeek": "SATURDAY",
+            "slot": "DINNER",
+            "recipeId": "822bc559-03ed-507d-a100-0c4b696a56c8",
+            "servings": 1.0
+          },
+          {
+            "dayOfWeek": "SUNDAY",
+            "slot": "DINNER",
+            "recipeId": "fe5bea0f-c5a2-5ce2-ab18-cc33029daa15",
+            "servings": 1.0
+          }
+        ],
+        "createdAt": "2026-11-04T12:00:00Z",
+        "updatedAt": "2026-11-04T12:00:00Z"
+      },
+      {
+        "id": "60b59ab0-3734-5102-a4ac-afee50ab12ba",
+        "name": "Winter Arc – for two",
+        "notes": "Your portion plus hers (about 3/4 of yours, banana 1 each) in every meal: apply this one when the shopping list should cover both of you. Her days come to about 2,100 kcal and 140 g protein.",
+        "meals": [
+          {
+            "dayOfWeek": "MONDAY",
+            "slot": "BREAKFAST",
+            "recipeId": "049bc83e-f877-5349-ad39-c9d48d307dfa",
+            "servings": 1.75
+          },
+          {
+            "dayOfWeek": "TUESDAY",
+            "slot": "BREAKFAST",
+            "recipeId": "049bc83e-f877-5349-ad39-c9d48d307dfa",
+            "servings": 1.75
+          },
+          {
+            "dayOfWeek": "WEDNESDAY",
+            "slot": "BREAKFAST",
+            "recipeId": "049bc83e-f877-5349-ad39-c9d48d307dfa",
+            "servings": 1.75
+          },
+          {
+            "dayOfWeek": "THURSDAY",
+            "slot": "BREAKFAST",
+            "recipeId": "049bc83e-f877-5349-ad39-c9d48d307dfa",
+            "servings": 1.75
+          },
+          {
+            "dayOfWeek": "FRIDAY",
+            "slot": "BREAKFAST",
+            "recipeId": "049bc83e-f877-5349-ad39-c9d48d307dfa",
+            "servings": 1.75
+          },
+          {
+            "dayOfWeek": "SATURDAY",
+            "slot": "BREAKFAST",
+            "recipeId": "374798a3-1f55-5aa6-933e-5cde046e15ff",
+            "servings": 1.7
+          },
+          {
+            "dayOfWeek": "SUNDAY",
+            "slot": "BREAKFAST",
+            "recipeId": "374798a3-1f55-5aa6-933e-5cde046e15ff",
+            "servings": 1.7
+          },
+          {
+            "dayOfWeek": "MONDAY",
+            "slot": "LUNCH",
+            "recipeId": "3608f6d4-4108-5e02-8942-791dedc26bf1",
+            "servings": 1.7
+          },
+          {
+            "dayOfWeek": "TUESDAY",
+            "slot": "LUNCH",
+            "recipeId": "3608f6d4-4108-5e02-8942-791dedc26bf1",
+            "servings": 1.7
+          },
+          {
+            "dayOfWeek": "WEDNESDAY",
+            "slot": "LUNCH",
+            "recipeId": "3608f6d4-4108-5e02-8942-791dedc26bf1",
+            "servings": 1.7
+          },
+          {
+            "dayOfWeek": "THURSDAY",
+            "slot": "LUNCH",
+            "recipeId": "27d4082c-5853-5853-947c-736c83663f5c",
+            "servings": 1.7
+          },
+          {
+            "dayOfWeek": "FRIDAY",
+            "slot": "LUNCH",
+            "recipeId": "27d4082c-5853-5853-947c-736c83663f5c",
+            "servings": 1.7
+          },
+          {
+            "dayOfWeek": "SATURDAY",
+            "slot": "LUNCH",
+            "recipeId": "27d4082c-5853-5853-947c-736c83663f5c",
+            "servings": 1.7
+          },
+          {
+            "dayOfWeek": "SUNDAY",
+            "slot": "LUNCH",
+            "recipeId": "1dcc60d7-0e31-5e5c-9f71-7210913c9046",
+            "servings": 1.7
+          },
+          {
+            "dayOfWeek": "MONDAY",
+            "slot": "SNACK",
+            "recipeId": "0398e86f-5114-5e42-a501-f4af65bea381",
+            "servings": 1.75
+          },
+          {
+            "dayOfWeek": "TUESDAY",
+            "slot": "SNACK",
+            "recipeId": "0398e86f-5114-5e42-a501-f4af65bea381",
+            "servings": 1.75
+          },
+          {
+            "dayOfWeek": "WEDNESDAY",
+            "slot": "SNACK",
+            "recipeId": "0398e86f-5114-5e42-a501-f4af65bea381",
+            "servings": 1.75
+          },
+          {
+            "dayOfWeek": "THURSDAY",
+            "slot": "SNACK",
+            "recipeId": "0398e86f-5114-5e42-a501-f4af65bea381",
+            "servings": 1.75
+          },
+          {
+            "dayOfWeek": "FRIDAY",
+            "slot": "SNACK",
+            "recipeId": "0398e86f-5114-5e42-a501-f4af65bea381",
+            "servings": 1.75
+          },
+          {
+            "dayOfWeek": "SATURDAY",
+            "slot": "SNACK",
+            "recipeId": "0398e86f-5114-5e42-a501-f4af65bea381",
+            "servings": 1.75
+          },
+          {
+            "dayOfWeek": "SUNDAY",
+            "slot": "SNACK",
+            "recipeId": "0398e86f-5114-5e42-a501-f4af65bea381",
+            "servings": 1.75
+          },
+          {
+            "dayOfWeek": "MONDAY",
+            "slot": "SNACK",
+            "recipeId": "5336f554-7802-52d6-aacd-fe1d535b6f2b",
+            "servings": 2.0
+          },
+          {
+            "dayOfWeek": "TUESDAY",
+            "slot": "SNACK",
+            "recipeId": "5336f554-7802-52d6-aacd-fe1d535b6f2b",
+            "servings": 2.0
+          },
+          {
+            "dayOfWeek": "WEDNESDAY",
+            "slot": "SNACK",
+            "recipeId": "5336f554-7802-52d6-aacd-fe1d535b6f2b",
+            "servings": 2.0
+          },
+          {
+            "dayOfWeek": "THURSDAY",
+            "slot": "SNACK",
+            "recipeId": "5336f554-7802-52d6-aacd-fe1d535b6f2b",
+            "servings": 2.0
+          },
+          {
+            "dayOfWeek": "FRIDAY",
+            "slot": "SNACK",
+            "recipeId": "5336f554-7802-52d6-aacd-fe1d535b6f2b",
+            "servings": 2.0
+          },
+          {
+            "dayOfWeek": "SATURDAY",
+            "slot": "SNACK",
+            "recipeId": "5336f554-7802-52d6-aacd-fe1d535b6f2b",
+            "servings": 2.0
+          },
+          {
+            "dayOfWeek": "SUNDAY",
+            "slot": "SNACK",
+            "recipeId": "5336f554-7802-52d6-aacd-fe1d535b6f2b",
+            "servings": 2.0
+          },
+          {
+            "dayOfWeek": "MONDAY",
+            "slot": "DINNER",
+            "recipeId": "d66d9fa4-c8d5-5fa2-a905-e4d09bca6351",
+            "servings": 1.7
+          },
+          {
+            "dayOfWeek": "TUESDAY",
+            "slot": "DINNER",
+            "recipeId": "d66d9fa4-c8d5-5fa2-a905-e4d09bca6351",
+            "servings": 1.7
+          },
+          {
+            "dayOfWeek": "WEDNESDAY",
+            "slot": "DINNER",
+            "recipeId": "d66d9fa4-c8d5-5fa2-a905-e4d09bca6351",
+            "servings": 1.7
+          },
+          {
+            "dayOfWeek": "THURSDAY",
+            "slot": "DINNER",
+            "recipeId": "822bc559-03ed-507d-a100-0c4b696a56c8",
+            "servings": 1.75
+          },
+          {
+            "dayOfWeek": "FRIDAY",
+            "slot": "DINNER",
+            "recipeId": "822bc559-03ed-507d-a100-0c4b696a56c8",
+            "servings": 1.75
+          },
+          {
+            "dayOfWeek": "SATURDAY",
+            "slot": "DINNER",
+            "recipeId": "822bc559-03ed-507d-a100-0c4b696a56c8",
+            "servings": 1.75
+          },
+          {
+            "dayOfWeek": "SUNDAY",
+            "slot": "DINNER",
+            "recipeId": "fe5bea0f-c5a2-5ce2-ab18-cc33029daa15",
+            "servings": 1.7
+          }
+        ],
+        "createdAt": "2026-11-04T12:00:00Z",
+        "updatedAt": "2026-11-04T12:00:00Z"
+      }
+    ]
+  }
+}
