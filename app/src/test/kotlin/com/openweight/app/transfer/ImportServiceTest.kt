@@ -38,9 +38,11 @@ class ImportServiceTest {
 
   @Test
   fun winterArcPlan_importsCompletely() = runTest {
-    val summary = importer.import(winterArc)
+    val result = importer.import(winterArc)
 
-    assertEquals(ImportSummary(exercisesAdded = 69, workoutsAdded = 16, blocksAdded = 6), summary)
+    assertEquals(KindResult(added = 69), result[RecordKind.EXERCISE])
+    assertEquals(KindResult(added = 16), result[RecordKind.WORKOUT])
+    assertEquals(KindResult(added = 6), result[RecordKind.TRAINING_BLOCK])
     val all = workouts.workouts().first()
     assertEquals(16, all.size)
     assertEquals(367, all.sumOf { it.setCount })
@@ -108,10 +110,10 @@ class ImportServiceTest {
     importer.import(winterArc)
     val again = importer.import(winterArc)
 
-    assertTrue(again.nothingNew)
-    assertEquals(69, again.exercisesMatched)
-    assertEquals(16, again.workoutsSkipped)
-    assertEquals(6, again.blocksSkipped)
+    assertTrue(again.nothingChanged)
+    assertEquals(69, again[RecordKind.EXERCISE].skipped)
+    assertEquals(16, again[RecordKind.WORKOUT].skipped)
+    assertEquals(6, again[RecordKind.TRAINING_BLOCK].skipped)
     assertEquals(16, workouts.workouts().first().size)
   }
 
@@ -119,10 +121,9 @@ class ImportServiceTest {
   fun exerciseWithSameName_isReusedNotDuplicated() = runTest {
     val mine = workouts.saveExercise(null, "LEG PRESS", "Legs", "Machine", "")
 
-    val summary = importer.import(winterArc)
+    val result = importer.import(winterArc)
 
-    assertEquals(68, summary.exercisesAdded)
-    assertEquals(1, summary.exercisesMatched)
+    assertEquals(KindResult(added = 68, skipped = 1), result[RecordKind.EXERCISE])
     val legPress = workouts.exercises().first().filter { it.name.equals("leg press", ignoreCase = true) }
     assertEquals(listOf(mine), legPress.map { it.id })
     assertEquals(1, legPress.single().usageCount) // used by Push A · Intro
@@ -165,9 +166,9 @@ class ImportServiceTest {
   fun unknownFields_areIgnored() = runTest {
     val json =
       """{"format":"open-weight","formatVersion":1,"futureField":true,
-         "data":{"recipes":[{"id":"r"}],"exercises":[{"id":"e","name":"Curl","colour":"red"}]}}"""
+         "data":{"bodyWeights":[{"date":"2026-11-08"}],"exercises":[{"id":"e","name":"Curl","colour":"red"}]}}"""
 
-    assertEquals(1, importer.import(json.toByteArray()).exercisesAdded)
+    assertEquals(1, importer.import(json.toByteArray())[RecordKind.EXERCISE].added)
   }
 
   private fun file(exercises: String = "[]", workouts: String = "[]", blocks: String = "[]") =

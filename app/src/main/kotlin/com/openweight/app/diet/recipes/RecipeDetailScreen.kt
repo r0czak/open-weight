@@ -52,6 +52,8 @@ import com.openweight.app.diet.formatGrams
 import com.openweight.app.diet.formatKcal
 import com.openweight.app.diet.formatQuantity
 import com.openweight.app.workout.data.DeleteResult
+import com.openweight.app.transfer.ExportRequest
+import com.openweight.app.transfer.ui.ExportDialog
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -125,6 +127,7 @@ fun RecipeDetailRoute(
   val snackbar = remember { SnackbarHostState() }
   val resources = LocalResources.current
   var menu by remember { mutableStateOf(false) }
+  var exporting by remember { mutableStateOf(false) }
   var confirmDelete by remember { mutableStateOf(false) }
   LaunchedEffect(state) { if (state is RecipeViewState.Gone) onBack() }
   LaunchedEffect(viewModel) {
@@ -148,8 +151,10 @@ fun RecipeDetailRoute(
         IconButton(onClick = { menu = true }) { Icon(Icons.Filled.MoreVert, stringResource(R.string.action_more)) }
         DropdownMenu(expanded = menu, onDismissRequest = { menu = false }) {
           DropdownMenuItem(text = { Text(stringResource(R.string.action_duplicate)) }, onClick = { menu = false; viewModel.duplicate() })
+          DropdownMenuItem(text = { Text(stringResource(R.string.action_export)) }, onClick = { menu = false; exporting = true }, modifier = Modifier.testTag("export_item"))
           DropdownMenuItem(text = { Text(stringResource(R.string.action_delete)) }, onClick = { menu = false; confirmDelete = true })
         }
+        if (exporting) ExportDialog(ExportRequest.Items(recipeIds = setOf(recipeId)), onDismiss = { exporting = false })
       }
     },
   ) { padding ->

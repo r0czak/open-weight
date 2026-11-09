@@ -13,14 +13,18 @@ Offline-first Android app for planning workouts (training blocks, workouts, exer
 
 ## Layout (`app/src/main/kotlin/com/openweight/app/`)
 - `core/` — `database/` (Room entities, converters, `OpenWeightDatabase`), `di/`, `model/`, `ui/` (theme, shared composables)
-- `workout/`, `diet/`, `settings/` (later: `transfer/`, `progress/`) — one package per feature: screens, ViewModels, domain rules, repositories
+- `workout/`, `diet/`, `settings/`, `transfer/` (later: `progress/`) — one package per feature: screens, ViewModels, domain rules, repositories
 - `workout/blocks/` — training blocks; `Schedule.kt` holds the schedule rule (date → block → weekday's workout; overlapping blocks: the later start wins)
 - `diet/` — ingredients and recipes; `data/Nutrition.kt` holds the calories/macros rule (per 100 g or ml, pieces via grams per piece, uncountable lines listed, never silently dropped)
 - `diet/shopping/` — shopping list panel; rules in `diet/data/ShoppingListBuilder.kt` (sum per ingredient and unit kind, scaled to servings, rounded up for the shop) and `ShoppingRepository.kt` (update keeps manual items, ticks and hand-edited amounts)
 - `diet/calendar/`, `diet/plans/` — meal calendar and diet plans; rules in `diet/data/MealPlanRepository.kt` (copy day/week, apply a plan: skip or replace busy days)
 - `home/` — Home tab (opens first): Mon–Sun week view; `WeekPlan.kt` builds each day (workout + meals)
 - `AppNavigation.kt` — bottom tabs (Home, Workout, Diet, Settings), each with its own Navigation 3 back stack
-- `transfer/` — Open Weight file format (`TransferFormat.kt`) and `ImportService`
+- `transfer/` — Open Weight file format (`TransferFormat.kt`); `ExportService` (scopes: everything, workout, diet, picked items, date range;
+  a file always includes what its records depend on); `ImportService` (preview, then Skip / Replace / Newer wins / Keep both per match,
+  links follow their records, one transaction, "Replace everything"); `ImportSession` (the file being imported, shared by Settings,
+  files shared from other apps and the preview screen; saves the automatic copy before Replace everything); `ui/` (export dialog and
+  screen, import preview)
 - `app/schemas/` — exported Room schemas, committed; a version bump needs a migration + test (`MigrationTest`)
 - `plans/` — import files for real training plans (+ the script that generates the Winter Arc one)
 

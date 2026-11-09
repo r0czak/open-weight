@@ -53,6 +53,8 @@ import com.openweight.app.core.model.formatReps
 import com.openweight.app.core.model.formatRest
 import com.openweight.app.core.ui.EmptyState
 import com.openweight.app.core.ui.ScreenScaffold
+import com.openweight.app.transfer.ExportRequest
+import com.openweight.app.transfer.ui.ExportDialog
 import com.openweight.app.workout.data.PlannedSet
 import com.openweight.app.workout.data.WorkoutDetail
 import com.openweight.app.workout.data.WorkoutEntry
@@ -90,6 +92,7 @@ fun WorkoutEditRoute(
   var editingInfo by remember { mutableStateOf(false) }
   var confirmDelete by remember { mutableStateOf(false) }
   var menu by remember { mutableStateOf(false) }
+  var exporting by remember { mutableStateOf(false) }
 
   ScreenScaffold(
     title = loaded?.workout?.name.orEmpty(),
@@ -116,6 +119,7 @@ fun WorkoutEditRoute(
                 viewModel.duplicate()
               },
             )
+            DropdownMenuItem(text = { Text(stringResource(R.string.action_export)) }, onClick = { menu = false; exporting = true }, modifier = Modifier.testTag("export_item"))
             DropdownMenuItem(
               text = { Text(stringResource(R.string.action_delete)) },
               onClick = {
@@ -124,6 +128,7 @@ fun WorkoutEditRoute(
               },
             )
           }
+          if (exporting) ExportDialog(ExportRequest.Items(workoutIds = setOf(workoutId)), onDismiss = { exporting = false })
         }
       }
     },

@@ -77,6 +77,8 @@ import com.openweight.app.diet.data.MealPlanRepository
 import com.openweight.app.diet.data.PlanMeal
 import com.openweight.app.diet.formatKcal
 import com.openweight.app.diet.formatNumber
+import com.openweight.app.transfer.ExportRequest
+import com.openweight.app.transfer.ui.ExportDialog
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -227,6 +229,7 @@ fun DietPlanEditRoute(
   val resources = LocalResources.current
   val locale = LocalConfiguration.current.locales[0]
   var menu by remember { mutableStateOf(false) }
+  var exporting by remember { mutableStateOf(false) }
   var renaming by remember { mutableStateOf(false) }
   var confirmDelete by remember { mutableStateOf(false) }
   var applying by remember { mutableStateOf(false) }
@@ -249,8 +252,10 @@ fun DietPlanEditRoute(
         IconButton(onClick = { menu = true }) { Icon(Icons.Filled.MoreVert, stringResource(R.string.action_more)) }
         DropdownMenu(expanded = menu, onDismissRequest = { menu = false }) {
           DropdownMenuItem(text = { Text(stringResource(R.string.plan_edit_details)) }, onClick = { menu = false; renaming = true })
+          DropdownMenuItem(text = { Text(stringResource(R.string.action_export)) }, onClick = { menu = false; exporting = true }, modifier = Modifier.testTag("export_item"))
           DropdownMenuItem(text = { Text(stringResource(R.string.action_delete)) }, onClick = { menu = false; confirmDelete = true })
         }
+        if (exporting) ExportDialog(ExportRequest.Items(dietPlanIds = setOf(planId)), onDismiss = { exporting = false })
       }
     },
   ) { padding ->
