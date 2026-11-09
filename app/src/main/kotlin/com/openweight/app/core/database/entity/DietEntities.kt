@@ -10,7 +10,10 @@ import java.time.DayOfWeek
 import java.time.Instant
 import java.time.LocalDate
 
-/** Nutrition values are optional and given per 100 g (or 100 ml for liquids). */
+/**
+ * Nutrition values are optional and given per 100 g, or per 100 ml when [defaultUnit] is a volume.
+ * [gramsPerPiece] lets amounts in pieces ("2 eggs") count towards calories and macros.
+ */
 @Entity(tableName = "ingredient", indices = [Index("name")])
 data class IngredientEntity(
   @PrimaryKey val id: String,
@@ -21,6 +24,7 @@ data class IngredientEntity(
   val proteinPer100: Double? = null,
   val carbsPer100: Double? = null,
   val fatPer100: Double? = null,
+  val gramsPerPiece: Double? = null,
   val createdAt: Instant,
   val updatedAt: Instant,
 )

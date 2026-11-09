@@ -39,7 +39,27 @@ class MigrationTest {
     }
   }
 
+  @Test
+  fun v2ToV3_keepsIngredients_withNoPieceWeight() {
+    helper.createDatabase(DB3, 2).use { db ->
+      db.execSQL(
+        "INSERT INTO ingredient (id, name, defaultUnit, shopCategory, kcalPer100, proteinPer100, carbsPer100, fatPer100, createdAt, updatedAt) " +
+          "VALUES ('i1', 'Oats', 'G', 'Grains & pasta', 379.0, 13.2, 67.7, 6.5, 0, 0)"
+      )
+    }
+
+    helper.runMigrationsAndValidate(DB3, 3, true).use { db ->
+      db.query("SELECT name, kcalPer100, gramsPerPiece FROM ingredient WHERE id = 'i1'").use {
+        assertTrue(it.moveToFirst())
+        assertEquals("Oats", it.getString(0))
+        assertEquals(379.0, it.getDouble(1), 0.0)
+        assertTrue(it.isNull(2))
+      }
+    }
+  }
+
   private companion object {
+    const val DB3 = "migration-test-3.db"
     const val DB = "migration-test.db"
   }
 }

@@ -7,6 +7,8 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.room.migration.AutoMigrationSpec
 import com.openweight.app.core.database.dao.ExerciseDao
+import com.openweight.app.core.database.dao.IngredientDao
+import com.openweight.app.core.database.dao.RecipeDao
 import com.openweight.app.core.database.dao.TrainingBlockDao
 import com.openweight.app.core.database.dao.WorkoutDao
 import com.openweight.app.core.database.entity.BlockScheduleDayEntity
@@ -30,9 +32,14 @@ import com.openweight.app.core.database.entity.WorkoutExerciseEntity
  * every version bump needs a migration and a test that upgrades from the previous version.
  */
 @Database(
-  version = 2,
+  version = 3,
   exportSchema = true,
-  autoMigrations = [AutoMigration(from = 1, to = 2, spec = OpenWeightDatabase.Migration1To2::class)],
+  autoMigrations =
+    [
+      AutoMigration(from = 1, to = 2, spec = OpenWeightDatabase.Migration1To2::class),
+      // v3: ingredient.gramsPerPiece (nullable), so pieces count towards macros.
+      AutoMigration(from = 2, to = 3),
+    ],
   entities =
     [
       // Workout
@@ -61,6 +68,10 @@ abstract class OpenWeightDatabase : RoomDatabase() {
   abstract fun workoutDao(): WorkoutDao
 
   abstract fun trainingBlockDao(): TrainingBlockDao
+
+  abstract fun ingredientDao(): IngredientDao
+
+  abstract fun recipeDao(): RecipeDao
 
   /** v2: a set's target became a rep range (`reps` → `repsMin`, plus optional `repsMax`). */
   @RenameColumn(tableName = "set_plan", fromColumnName = "reps", toColumnName = "repsMin")
