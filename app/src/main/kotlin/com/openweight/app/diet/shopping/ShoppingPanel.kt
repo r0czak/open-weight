@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -22,8 +21,6 @@ import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
-import androidx.compose.material3.DatePickerDialog
-import androidx.compose.material3.DateRangePicker
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -38,7 +35,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.rememberDateRangePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -49,7 +45,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
@@ -63,10 +58,9 @@ import androidx.lifecycle.viewModelScope
 import com.openweight.app.R
 import com.openweight.app.core.TimeAndIds
 import com.openweight.app.core.model.QuantityUnit
+import com.openweight.app.core.ui.DateRangeDialog
 import com.openweight.app.core.ui.EmptyState
 import com.openweight.app.core.ui.formatDateRange
-import com.openweight.app.core.ui.pickerMillisToDate
-import com.openweight.app.core.ui.toPickerMillis
 import com.openweight.app.diet.data.DietRepository
 import com.openweight.app.diet.data.GenerateResult
 import com.openweight.app.diet.data.ShoppingItem
@@ -79,7 +73,6 @@ import com.openweight.app.diet.label
 import com.openweight.app.diet.parseNumber
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.LocalDate
-import java.time.temporal.ChronoUnit
 import javax.inject.Inject
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -164,6 +157,9 @@ fun ShoppingPanel(
 
   if (choosingDates) {
     DateRangeDialog(
+      title = stringResource(R.string.shopping_dates_title),
+      confirmLabel = stringResource(R.string.shopping_make_list),
+      maxDays = ShoppingRepository.MAX_DAYS,
       initialFrom = list?.from ?: viewModel.today,
       initialTo = list?.to ?: viewModel.today.plusDays(6),
       onDismiss = { choosingDates = false },
@@ -314,43 +310,6 @@ private fun ItemRow(item: ShoppingItem, onCheck: (Boolean) -> Unit, onEdit: () -
     IconButton(onClick = onEdit, modifier = Modifier.testTag("shop_edit_${item.name}")) {
       Icon(Icons.Filled.Edit, stringResource(R.string.shopping_edit_item, item.name))
     }
-  }
-}
-
-/** The date range a list covers: up to [ShoppingRepository.MAX_DAYS] days. */
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun DateRangeDialog(initialFrom: LocalDate, initialTo: LocalDate, onDismiss: () -> Unit, onConfirm: (LocalDate, LocalDate) -> Unit) {
-  val picker =
-    rememberDateRangePickerState(initialSelectedStartDateMillis = initialFrom.toPickerMillis(), initialSelectedEndDateMillis = initialTo.toPickerMillis())
-  val from = picker.selectedStartDateMillis?.let(::pickerMillisToDate)
-  val to = picker.selectedEndDateMillis?.let(::pickerMillisToDate) ?: from
-  val tooLong = from != null && to != null && ChronoUnit.DAYS.between(from, to) >= ShoppingRepository.MAX_DAYS
-  DatePickerDialog(
-    onDismissRequest = onDismiss,
-    confirmButton = {
-      TextButton(onClick = { if (from != null && to != null) onConfirm(from, to) }, enabled = from != null && !tooLong, modifier = Modifier.testTag("shopping_dates_ok")) {
-        Text(stringResource(R.string.shopping_make_list))
-      }
-    },
-    dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.action_cancel)) } },
-  ) {
-    DateRangePicker(
-      state = picker,
-      title = { Text(stringResource(R.string.shopping_dates_title), Modifier.padding(start = 24.dp, top = 16.dp)) },
-      headline = {
-        Text(
-          if (tooLong) pluralStringResource(R.plurals.shopping_dates_too_long, ShoppingRepository.MAX_DAYS, ShoppingRepository.MAX_DAYS)
-          else if (from != null && to != null) formatDateRange(from, to)
-          else stringResource(R.string.shopping_dates_pick),
-          style = MaterialTheme.typography.titleMedium,
-          color = if (tooLong) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface,
-          modifier = Modifier.padding(start = 24.dp, bottom = 8.dp),
-        )
-      },
-      showModeToggle = false,
-      modifier = Modifier.height(480.dp),
-    )
   }
 }
 

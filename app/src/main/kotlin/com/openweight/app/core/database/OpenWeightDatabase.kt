@@ -11,6 +11,7 @@ import com.openweight.app.core.database.dao.IngredientDao
 import com.openweight.app.core.database.dao.MealPlanDao
 import com.openweight.app.core.database.dao.RecipeDao
 import com.openweight.app.core.database.dao.ShoppingDao
+import com.openweight.app.core.database.dao.TransferDao
 import com.openweight.app.core.database.dao.TrainingBlockDao
 import com.openweight.app.core.database.dao.WorkoutDao
 import com.openweight.app.core.database.entity.BlockScheduleDayEntity
@@ -78,6 +79,8 @@ abstract class OpenWeightDatabase : RoomDatabase() {
   abstract fun mealPlanDao(): MealPlanDao
 
   abstract fun shoppingDao(): ShoppingDao
+
+  abstract fun transferDao(): TransferDao
 
   /** v2: a set's target became a rep range (`reps` → `repsMin`, plus optional `repsMax`). */
   @RenameColumn(tableName = "set_plan", fromColumnName = "reps", toColumnName = "repsMin")

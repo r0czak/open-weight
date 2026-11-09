@@ -58,6 +58,8 @@ import com.openweight.app.core.ui.ScreenScaffold
 import com.openweight.app.core.ui.formatDateRange
 import com.openweight.app.workout.data.WorkoutRepository
 import com.openweight.app.workout.data.WorkoutSummary
+import com.openweight.app.transfer.ExportRequest
+import com.openweight.app.transfer.ui.ExportDialog
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -154,6 +156,7 @@ fun BlockEditRoute(
   LaunchedEffect(state) { if (state is BlockEditState.Gone) onBack() }
   val loaded = state as? BlockEditState.Loaded
   var menu by remember { mutableStateOf(false) }
+  var exporting by remember { mutableStateOf(false) }
   var editingInfo by remember { mutableStateOf(false) }
   var confirmDelete by remember { mutableStateOf(false) }
   var adding by remember { mutableStateOf(false) }
@@ -175,6 +178,7 @@ fun BlockEditRoute(
                 editingInfo = true
               },
             )
+            DropdownMenuItem(text = { Text(stringResource(R.string.action_export)) }, onClick = { menu = false; exporting = true }, modifier = Modifier.testTag("export_item"))
             DropdownMenuItem(
               text = { Text(stringResource(R.string.action_delete)) },
               onClick = {
@@ -183,6 +187,7 @@ fun BlockEditRoute(
               },
             )
           }
+          if (exporting) ExportDialog(ExportRequest.Items(blockIds = setOf(blockId)), onDismiss = { exporting = false })
         }
       }
     },

@@ -1,52 +1,39 @@
 package com.openweight.app.settings
 
-import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.openweight.app.core.model.ThemeMode
 import com.openweight.app.core.model.WeightUnit
-import com.openweight.app.transfer.ImportException
-import com.openweight.app.transfer.ImportService
-import com.openweight.app.transfer.ImportSummary
+import com.openweight.app.transfer.ImportSession
+import com.openweight.app.transfer.TransferFiles
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
-import java.io.IOException
+import java.time.Instant
 import javax.inject.Inject
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-
-sealed interface ImportState {
-  data object Idle : ImportState
-
-  data object Running : ImportState
-
-  data class Done(val summary: ImportSummary) : ImportState
-
-  data class Failed(val message: String?) : ImportState
-}
 
 @HiltViewModel
 class SettingsViewModel
 @Inject
 constructor(
   private val repository: SettingsRepository,
-  private val importService: ImportService,
-  @param:ApplicationContext private val context: Context,
+  private val importSession: ImportSession,
+  private val files: TransferFiles,
 ) : ViewModel() {
 
   /** Null until the stored settings have been read, so the UI never flashes the wrong theme. */
   val settings: StateFlow<Settings?> =
     repository.settings.stateIn(viewModelScope, SharingStarted.Eagerly, null)
 
-  private val _importState = MutableStateFlow<ImportState>(ImportState.Idle)
-  val importState: StateFlow<ImportState> = _importState.asStateFlow()
+  /** When the copy taken before the last "Replace everything" was saved; re-read after each import. */
+  val lastAutoBackup: StateFlow<Instant?> =
+    importSession.step
+      .map { files.autoBackupTime() }
+      .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
 
   fun setWeightUnit(unit: WeightUnit) {
     viewModelScope.launch { repository.setWeightUnit(unit) }
@@ -56,41 +43,12 @@ constructor(
     viewModelScope.launch { repository.setThemeMode(mode) }
   }
 
+  /** Opens the file in the import preview (the app navigates there). */
   fun importFile(uri: Uri) {
-    _importState.value = ImportState.Running
-    viewModelScope.launch {
-      _importState.value =
-        try {
-          val bytes =
-            withContext(Dispatchers.IO) {
-              context.contentResolver.openInputStream(uri)?.use { input ->
-                // Read at most one byte past the limit, so an oversized file is refused cheaply.
-                input.readNBytesCompat(ImportService.MAX_FILE_BYTES + 1)
-              } ?: throw IOException("Can't open the file")
-            }
-          ImportState.Done(importService.import(bytes))
-        } catch (e: ImportException) {
-          ImportState.Failed(e.message)
-        } catch (e: IOException) {
-          ImportState.Failed(null)
-        } catch (e: SecurityException) {
-          ImportState.Failed(null)
-        }
-    }
+    viewModelScope.launch { importSession.open(uri) }
   }
 
-  fun dismissImport() {
-    _importState.value = ImportState.Idle
+  fun undoLastRestore() {
+    viewModelScope.launch { importSession.openUndo() }
   }
-}
-
-private fun java.io.InputStream.readNBytesCompat(limit: Int): ByteArray {
-  val out = java.io.ByteArrayOutputStream()
-  val buffer = ByteArray(64 * 1024)
-  while (out.size() < limit) {
-    val read = read(buffer, 0, minOf(buffer.size, limit - out.size()))
-    if (read < 0) break
-    out.write(buffer, 0, read)
-  }
-  return out.toByteArray()
 }

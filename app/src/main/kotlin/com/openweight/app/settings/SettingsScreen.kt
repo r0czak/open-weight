@@ -13,7 +13,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
@@ -23,11 +22,12 @@ import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -37,12 +37,19 @@ import com.openweight.app.R
 import com.openweight.app.core.model.ThemeMode
 import com.openweight.app.core.model.WeightUnit
 import com.openweight.app.core.ui.ScreenScaffold
+import com.openweight.app.core.ui.formatMedium
+import com.openweight.app.transfer.ExportRequest
+import com.openweight.app.transfer.ui.ExportDialog
+import java.time.Instant
+import java.time.ZoneId
 import com.openweight.app.core.ui.theme.OpenWeightTheme
 
 @Composable
-fun SettingsRoute(modifier: Modifier = Modifier, viewModel: SettingsViewModel = hiltViewModel()) {
+fun SettingsRoute(onOpenExport: () -> Unit, modifier: Modifier = Modifier, viewModel: SettingsViewModel = hiltViewModel()) {
   val settings by viewModel.settings.collectAsStateWithLifecycle()
-  val importState by viewModel.importState.collectAsStateWithLifecycle()
+  val lastAutoBackup by viewModel.lastAutoBackup.collectAsStateWithLifecycle()
+  var backingUp by remember { mutableStateOf(false) }
+  var confirmUndo by remember { mutableStateOf(false) }
   val pickFile =
     rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
       if (uri != null) viewModel.importFile(uri)
@@ -53,59 +60,25 @@ fun SettingsRoute(modifier: Modifier = Modifier, viewModel: SettingsViewModel = 
     onThemeModeChange = viewModel::setThemeMode,
     // Any file: some apps label .json files oddly, and the importer checks the content anyway.
     onImport = { pickFile.launch(arrayOf("*/*")) },
+    onBackup = { backingUp = true },
+    onExport = onOpenExport,
+    lastAutoBackup = lastAutoBackup,
+    onUndoRestore = { confirmUndo = true },
     modifier = modifier,
   )
-  ImportResultDialog(importState, onDismiss = viewModel::dismissImport)
-}
-
-@Composable
-private fun ImportResultDialog(state: ImportState, onDismiss: () -> Unit) {
-  when (state) {
-    ImportState.Idle -> Unit
-    ImportState.Running ->
-      AlertDialog(
-        onDismissRequest = {},
-        title = { Text(stringResource(R.string.import_running)) },
-        text = { LinearProgressIndicator(Modifier.fillMaxWidth()) },
-        confirmButton = {},
-      )
-    is ImportState.Failed ->
-      AlertDialog(
-        onDismissRequest = onDismiss,
-        title = { Text(stringResource(R.string.import_failed_title)) },
-        text = {
-          Text(
-            (state.message ?: stringResource(R.string.import_failed_read)) + "\n\n" +
-              stringResource(R.string.import_nothing_changed)
-          )
-        },
-        confirmButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.action_ok)) } },
-      )
-    is ImportState.Done -> {
-      val s = state.summary
-      AlertDialog(
-        onDismissRequest = onDismiss,
-        title = {
-          Text(
-            stringResource(
-              if (s.nothingNew) R.string.import_nothing_new_title else R.string.import_done_title
-            )
-          )
-        },
-        text = {
-          val lines = buildList {
-            if (s.blocksAdded > 0) add(pluralStringResource(R.plurals.import_blocks_added, s.blocksAdded, s.blocksAdded))
-            if (s.workoutsAdded > 0) add(pluralStringResource(R.plurals.import_workouts_added, s.workoutsAdded, s.workoutsAdded))
-            if (s.exercisesAdded > 0) add(pluralStringResource(R.plurals.import_exercises_added, s.exercisesAdded, s.exercisesAdded))
-            if (s.exercisesMatched > 0) add(pluralStringResource(R.plurals.import_exercises_matched, s.exercisesMatched, s.exercisesMatched))
-            val skipped = s.workoutsSkipped + s.blocksSkipped
-            if (skipped > 0) add(pluralStringResource(R.plurals.import_skipped, skipped, skipped))
-          }
-          Text(lines.joinToString("\n"), modifier = Modifier.testTag("import_summary"))
-        },
-        confirmButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.action_ok)) } },
-      )
-    }
+  if (backingUp) ExportDialog(ExportRequest.Everything, onDismiss = { backingUp = false })
+  if (confirmUndo) {
+    AlertDialog(
+      onDismissRequest = { confirmUndo = false },
+      title = { Text(stringResource(R.string.settings_undo_restore)) },
+      text = { Text(stringResource(R.string.settings_undo_restore_confirm)) },
+      confirmButton = {
+        TextButton(onClick = { confirmUndo = false; viewModel.undoLastRestore() }, modifier = Modifier.testTag("undo_restore_continue")) {
+          Text(stringResource(R.string.action_continue))
+        }
+      },
+      dismissButton = { TextButton(onClick = { confirmUndo = false }) { Text(stringResource(R.string.action_cancel)) } },
+    )
   }
 }
 
@@ -116,6 +89,10 @@ fun SettingsScreen(
   onThemeModeChange: (ThemeMode) -> Unit,
   modifier: Modifier = Modifier,
   onImport: () -> Unit = {},
+  onBackup: () -> Unit = {},
+  onExport: () -> Unit = {},
+  lastAutoBackup: Instant? = null,
+  onUndoRestore: () -> Unit = {},
 ) {
   val context = LocalContext.current
   val version = remember(context) { context.versionName() }
@@ -154,14 +131,29 @@ fun SettingsScreen(
       HorizontalDivider(Modifier.padding(top = 8.dp))
       SectionTitle(stringResource(R.string.settings_data))
       ListItem(
+        modifier = Modifier.clickable(onClick = onBackup).testTag("backup"),
         headlineContent = { Text(stringResource(R.string.settings_backup)) },
-        supportingContent = { Text(stringResource(R.string.coming_soon)) },
+        supportingContent = { Text(stringResource(R.string.settings_backup_hint)) },
+      )
+      ListItem(
+        modifier = Modifier.clickable(onClick = onExport).testTag("export"),
+        headlineContent = { Text(stringResource(R.string.settings_export)) },
+        supportingContent = { Text(stringResource(R.string.settings_export_hint)) },
       )
       ListItem(
         modifier = Modifier.clickable(onClick = onImport).testTag("import_file"),
         headlineContent = { Text(stringResource(R.string.settings_import)) },
         supportingContent = { Text(stringResource(R.string.settings_import_hint)) },
       )
+      if (lastAutoBackup != null) {
+        ListItem(
+          modifier = Modifier.clickable(onClick = onUndoRestore).testTag("undo_restore"),
+          headlineContent = { Text(stringResource(R.string.settings_undo_restore)) },
+          supportingContent = {
+            Text(stringResource(R.string.settings_undo_restore_hint, lastAutoBackup.atZone(ZoneId.systemDefault()).toLocalDate().formatMedium()))
+          },
+        )
+      }
 
       HorizontalDivider()
       SectionTitle(stringResource(R.string.settings_about))

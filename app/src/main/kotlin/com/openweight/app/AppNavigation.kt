@@ -11,7 +11,9 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.saveable.rememberSaveableStateHolder
@@ -28,6 +30,7 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.openweight.app.core.model.MealSlot
 import com.openweight.app.core.ui.formatDayShort
 import com.openweight.app.diet.DietHomeScreen
@@ -46,6 +49,9 @@ import com.openweight.app.home.HomeRoute
 import com.openweight.app.workout.workouts.WorkoutOverviewRoute
 import java.time.LocalDate
 import com.openweight.app.settings.SettingsRoute
+import com.openweight.app.transfer.ui.ExportRoute
+import com.openweight.app.transfer.ui.ImportRoute
+import kotlinx.coroutines.flow.StateFlow
 import com.openweight.app.workout.WorkoutHomeScreen
 import com.openweight.app.workout.blocks.BlockEditRoute
 import com.openweight.app.workout.blocks.BlockListRoute
@@ -64,6 +70,11 @@ import kotlinx.serialization.Serializable
 @Serializable data object DietHome : NavKey
 
 @Serializable data object SettingsHome : NavKey
+
+/** The import preview for the file in [com.openweight.app.transfer.ImportSession]. */
+@Serializable data object ImportPreview : NavKey
+
+@Serializable data object ExportPicker : NavKey
 
 // Workout tab
 @Serializable data object BlockList : NavKey
@@ -120,8 +131,12 @@ enum class TopLevelDestination(
   SETTINGS(R.string.tab_settings, R.drawable.ic_tab_settings),
 }
 
+/**
+ * [importOpens] counts files opened for import (from Settings, or shared by another app); each new
+ * one shows the import preview in the Settings tab.
+ */
 @Composable
-fun OpenWeightAppUi(modifier: Modifier = Modifier) {
+fun OpenWeightAppUi(modifier: Modifier = Modifier, importOpens: StateFlow<Int>? = null) {
   var current by rememberSaveable { mutableStateOf(TopLevelDestination.HOME) }
   val stacks: Map<TopLevelDestination, NavBackStack<NavKey>> =
     mapOf(
@@ -132,6 +147,19 @@ fun OpenWeightAppUi(modifier: Modifier = Modifier) {
     )
   val backStack = stacks.getValue(current)
   val tabStateHolder = rememberSaveableStateHolder()
+
+  if (importOpens != null) {
+    val opens by importOpens.collectAsStateWithLifecycle()
+    var handledOpens by rememberSaveable { mutableIntStateOf(opens) }
+    LaunchedEffect(opens) {
+      if (opens > handledOpens) {
+        handledOpens = opens
+        current = TopLevelDestination.SETTINGS
+        val settings = stacks.getValue(TopLevelDestination.SETTINGS)
+        if (settings.lastOrNull() != ImportPreview) settings.add(ImportPreview)
+      }
+    }
+  }
 
   // Back on the root of another tab returns to Home before leaving the app.
   BackHandler(enabled = current != TopLevelDestination.HOME && backStack.size == 1) {
@@ -287,7 +315,9 @@ fun OpenWeightAppUi(modifier: Modifier = Modifier) {
             )
           }
           entry<IngredientEdit> { key -> IngredientEditRoute(ingredientId = key.ingredientId, onDone = { back() }) }
-            entry<SettingsHome> { SettingsRoute() }
+            entry<SettingsHome> { SettingsRoute(onOpenExport = { backStack.add(ExportPicker) }) }
+            entry<ImportPreview> { ImportRoute(onBack = back) }
+            entry<ExportPicker> { ExportRoute(onBack = back) }
           },
       )
     }

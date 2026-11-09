@@ -7,7 +7,6 @@
     <string name="tab_diet">Diet</string>
     <string name="tab_settings">Settings</string>
 
-    <string name="coming_soon">Coming in a later update</string>
 
     <!-- Workout tab -->
     <string name="workout_rest_day">Rest day</string>
@@ -31,8 +30,8 @@
     <string name="settings_theme_light">Light</string>
     <string name="settings_theme_dark">Dark</string>
     <string name="settings_data">Your data</string>
-    <string name="settings_backup">Backup and restore</string>
-    <string name="settings_import">Import a file</string>
+    <string name="settings_backup">Back up everything</string>
+    <string name="settings_import">Import from a file</string>
     <string name="settings_about">About</string>
     <string name="settings_version">Version %1$s</string>
     <string name="settings_offline">Works fully offline. Your data stays on this phone unless you export it.</string>
@@ -135,33 +134,13 @@
     <string name="error_sets">Sets must be between 1 and 20.</string>
 
     <!-- Import -->
-    <string name="settings_import_hint">Add workouts and training blocks from an Open Weight file</string>
+    <string name="settings_import_hint">Add workouts, recipes or a whole backup from an Open Weight file. You see what changes first.</string>
     <string name="import_running">Importing…</string>
     <string name="import_failed_title">Couldn\'t import this file</string>
     <string name="import_failed_read">The file couldn\'t be read.</string>
     <string name="import_nothing_changed">Nothing was changed.</string>
     <string name="import_done_title">Import finished</string>
     <string name="import_nothing_new_title">Already up to date</string>
-    <plurals name="import_blocks_added">
-        <item quantity="one">%d training block added</item>
-        <item quantity="other">%d training blocks added</item>
-    </plurals>
-    <plurals name="import_workouts_added">
-        <item quantity="one">%d workout added</item>
-        <item quantity="other">%d workouts added</item>
-    </plurals>
-    <plurals name="import_exercises_added">
-        <item quantity="one">%d exercise added</item>
-        <item quantity="other">%d exercises added</item>
-    </plurals>
-    <plurals name="import_exercises_matched">
-        <item quantity="one">%d exercise was already in your library</item>
-        <item quantity="other">%d exercises were already in your library</item>
-    </plurals>
-    <plurals name="import_skipped">
-        <item quantity="one">%d item you already have was left as it is</item>
-        <item quantity="other">%d items you already have were left as they are</item>
-    </plurals>
     <!-- Training blocks -->
     <string name="block_new">New training block</string>
     <string name="block_name_hint">e.g. Winter Arc 1 · Intro</string>
@@ -379,8 +358,8 @@
     <string name="shopping_item_name">Item</string>
     <string name="shopping_amount_optional">Amount (optional)</string>
     <string name="shopping_dates_title">Shop for meals on</string>
-    <string name="shopping_dates_pick">Pick the first and last day</string>
-    <plurals name="shopping_dates_too_long">
+    <string name="dates_pick">Pick the first and last day</string>
+    <plurals name="dates_too_long">
         <item quantity="one">Choose up to %d day</item>
         <item quantity="other">Choose up to %d days</item>
     </plurals>
@@ -390,4 +369,94 @@
         <item quantity="one">%d amount you changed was kept.</item>
         <item quantity="other">%d amounts you changed were kept.</item>
     </plurals>
+
+    <!-- Import and export -->
+    <string name="action_done">Done</string>
+    <string name="action_continue">Continue</string>
+    <string name="settings_backup_hint">All workout and diet data and settings, in one file. Save it somewhere safe or send it to yourself.</string>
+    <string name="settings_export">Export…</string>
+    <string name="settings_export_hint">All workout data, all diet data, calendar dates, or items you pick</string>
+    <string name="settings_undo_restore">Undo last restore</string>
+    <string name="settings_undo_restore_hint">Puts back your data as it was before the last \"Replace everything\" (saved %s)</string>
+    <string name="settings_undo_restore_confirm">You\'ll see what the saved copy holds before anything changes.</string>
+    <string name="export_title">Export</string>
+    <string name="export_ready">Ready: %s</string>
+    <string name="export_save">Save to a file</string>
+    <string name="export_share">Share</string>
+    <string name="export_share_title">Send the Open Weight file</string>
+    <string name="export_saved_title">Saved</string>
+    <string name="export_saved">Saved %s.</string>
+    <string name="export_failed">Couldn\'t save the file. Nothing was changed in the app.</string>
+    <string name="export_screen_title">Export</string>
+    <string name="export_workout">All workout data</string>
+    <string name="export_workout_hint">Exercises, workouts and training blocks</string>
+    <string name="export_diet">All diet data</string>
+    <string name="export_diet_hint">Ingredients, recipes, diet plans, the calendar and the shopping list</string>
+    <string name="export_range">Calendar dates</string>
+    <string name="export_range_hint">The meals in a date range, with their recipes and ingredients</string>
+    <string name="export_items">Pick items</string>
+    <string name="export_items_hint">Training blocks, workouts, recipes or diet plans, mixed as you like</string>
+    <string name="export_section_blocks">Training blocks</string>
+    <string name="export_section_workouts">Workouts</string>
+    <string name="export_section_recipes">Recipes</string>
+    <string name="export_section_plans">Diet plans</string>
+    <string name="export_pick_something">Pick at least one item.</string>
+    <string name="export_includes_needed">What they need comes along: a block\'s workouts and their exercises, a recipe\'s ingredients.</string>
+    <string name="export_go">Export</string>
+    <string name="action_export">Export</string>
+    <string name="import_title">Import</string>
+    <string name="import_nothing_open">No file is open. Choose one in Settings → Import from a file.</string>
+    <string name="import_reading">Reading the file…</string>
+    <string name="import_scope_full">Full backup</string>
+    <string name="import_scope_workout">Workout data</string>
+    <string name="import_scope_diet">Diet data</string>
+    <string name="import_scope_range">Calendar meals</string>
+    <string name="import_scope_items">Shared items</string>
+    <string name="import_scope_undo">Your data before the last restore</string>
+    <string name="import_undo_hint">Everything in the app now is replaced by this copy. The data you have now is saved first, so this can be undone too.</string>
+    <string name="import_exported_on">Exported %s</string>
+    <string name="import_saved_on">Saved %s</string>
+    <string name="import_in_file">In this file</string>
+    <string name="import_count_all_new">All new: %d</string>
+    <string name="import_count">New: %1$d · already in the app: %2$d</string>
+    <string name="import_settings">Settings</string>
+    <string name="import_settings_hint">Weight unit and theme</string>
+    <string name="import_how">How to restore</string>
+    <string name="import_merge">Merge with what\'s here</string>
+    <string name="import_merge_hint">Adds what\'s new; you choose what happens to what\'s already here.</string>
+    <string name="import_replace_all">Replace everything</string>
+    <string name="import_replace_all_hint">The app ends up exactly like the backup. Your current data is saved on the phone first, and Settings → Undo last restore puts it back.</string>
+    <string name="import_replace_confirm_title">Replace everything?</string>
+    <string name="import_replace_confirm">Everything in the app is deleted and replaced by this file. Your current data is saved first, so you can undo this from Settings.</string>
+    <string name="import_already_here">Already in the app (%d)</string>
+    <string name="import_per_item_hint">To treat one item differently, use its button below.</string>
+    <string name="import_choice_skip">Skip</string>
+    <string name="import_choice_skip_hint">Keep the app\'s version, ignore the file\'s</string>
+    <string name="import_choice_replace">Replace</string>
+    <string name="import_choice_replace_hint">The file\'s version overwrites the app\'s</string>
+    <string name="import_choice_newer">Newer wins</string>
+    <string name="import_choice_newer_hint">Keep whichever was changed last</string>
+    <string name="import_choice_both">Keep both</string>
+    <string name="import_choice_both_hint">Add the file\'s version as a copy, named \"… (imported)\"</string>
+    <string name="import_copy_suffix">" (imported)"</string>
+    <string name="import_as_above">As above</string>
+    <string name="import_same_name">same name</string>
+    <string name="import_newer_in_file">newer in the file</string>
+    <string name="import_newer_in_app">newer in the app</string>
+    <string name="import_go">Import</string>
+    <string name="import_undo_go">Put back this copy</string>
+    <string name="import_result_added">added: %d</string>
+    <string name="import_result_replaced">replaced: %d</string>
+    <string name="import_result_copied">copies: %d</string>
+    <string name="import_result_skipped">skipped: %d</string>
+    <string name="import_settings_restored">Settings restored.</string>
+    <string name="import_undo_available">Your previous data was saved. Settings → Undo last restore puts it back.</string>
+    <string name="kind_blocks">Training blocks</string>
+    <string name="kind_workouts">Workouts</string>
+    <string name="kind_exercises">Exercises</string>
+    <string name="kind_plans">Diet plans</string>
+    <string name="kind_recipes">Recipes</string>
+    <string name="kind_ingredients">Ingredients</string>
+    <string name="kind_meals">Calendar meals</string>
+    <string name="kind_shopping_lists">Shopping lists</string>
 </resources>

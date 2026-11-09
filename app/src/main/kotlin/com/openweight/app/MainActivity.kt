@@ -1,5 +1,7 @@
 package com.openweight.app
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -11,18 +13,27 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.core.content.IntentCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.openweight.app.core.model.ThemeMode
 import com.openweight.app.core.ui.theme.OpenWeightTheme
 import com.openweight.app.settings.SettingsViewModel
+import com.openweight.app.transfer.ImportSession
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
   private val settingsViewModel: SettingsViewModel by viewModels()
 
+  @Inject lateinit var importSession: ImportSession
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+    // Only a fresh start: after rotation the same intent was already handled.
+    if (savedInstanceState == null) openSharedFile(intent)
 
     enableEdgeToEdge()
     setContent {
@@ -35,9 +46,25 @@ class MainActivity : ComponentActivity() {
         }
       OpenWeightTheme(darkTheme = darkTheme) {
         Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-          OpenWeightAppUi()
+          OpenWeightAppUi(importOpens = importSession.openCount)
         }
       }
     }
+  }
+
+  override fun onNewIntent(intent: Intent) {
+    super.onNewIntent(intent)
+    openSharedFile(intent)
+  }
+
+  /** A .json file opened or shared from another app goes to the import preview. */
+  private fun openSharedFile(intent: Intent?) {
+    val uri =
+      when (intent?.action) {
+        Intent.ACTION_VIEW -> intent.data
+        Intent.ACTION_SEND -> IntentCompat.getParcelableExtra(intent, Intent.EXTRA_STREAM, Uri::class.java)
+        else -> null
+      } ?: return
+    lifecycleScope.launch { importSession.open(uri) }
   }
 }
