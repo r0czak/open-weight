@@ -14,6 +14,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -49,6 +51,8 @@ import com.openweight.app.R
 import com.openweight.app.core.ui.ScreenScaffold
 import com.openweight.app.core.ui.formatDateRange
 import com.openweight.app.core.ui.formatDayShort
+import com.openweight.app.diet.calendar.slotLabel
+import com.openweight.app.diet.formatKcal
 import java.time.LocalDate
 import java.time.format.TextStyle
 
@@ -56,6 +60,7 @@ import java.time.format.TextStyle
 @Composable
 fun HomeRoute(
   onOpenWorkout: (workoutId: String, date: LocalDate) -> Unit,
+  onOpenRecipe: (recipeId: String) -> Unit,
   viewModel: HomeViewModel = hiltViewModel(),
 ) {
   val state by viewModel.state.collectAsStateWithLifecycle()
@@ -96,14 +101,7 @@ fun HomeRoute(
             selected = day.date == state.selected,
             onSelect = { viewModel.select(day.date) },
             onOpenWorkout = { onOpenWorkout(it, day.date) },
-          )
-        }
-        item(key = "meals-hint") {
-          Text(
-            stringResource(R.string.home_meals_hint),
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.padding(horizontal = 4.dp),
+            onOpenRecipe = onOpenRecipe,
           )
         }
       }
@@ -149,19 +147,19 @@ private fun DayStrip(days: List<WeekDay>, selected: LocalDate, onSelect: (LocalD
             color = if (day.isToday) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurface,
           )
         }
-        // A dot marks a training day.
-        Box(
-          Modifier.padding(top = 4.dp)
-            .size(6.dp)
-            .clip(CircleShape)
-            .background(
-              if (day.workout != null) MaterialTheme.colorScheme.primary
-              else MaterialTheme.colorScheme.surface.copy(alpha = 0f)
-            )
-        )
+        // Dots: training day (primary), meals planned (tertiary).
+        Row(Modifier.padding(top = 4.dp), horizontalArrangement = Arrangement.spacedBy(3.dp)) {
+          Dot(visible = day.workout != null, color = MaterialTheme.colorScheme.primary)
+          Dot(visible = day.meals.meals.isNotEmpty(), color = MaterialTheme.colorScheme.tertiary)
+        }
       }
     }
   }
+}
+
+@Composable
+private fun Dot(visible: Boolean, color: androidx.compose.ui.graphics.Color) {
+  Box(Modifier.size(6.dp).clip(CircleShape).background(if (visible) color else color.copy(alpha = 0f)))
 }
 
 @Composable
@@ -170,6 +168,7 @@ private fun DayCard(
   selected: Boolean,
   onSelect: () -> Unit,
   onOpenWorkout: (String) -> Unit,
+  onOpenRecipe: (String) -> Unit,
 ) {
   Card(
     modifier = Modifier.fillMaxWidth().testTag("day_card_${day.date}"),
@@ -249,6 +248,38 @@ private fun DayCard(
           style = MaterialTheme.typography.bodyMedium,
           color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
+      }
+      if (day.meals.meals.isNotEmpty()) {
+        HorizontalDivider(Modifier.padding(vertical = 4.dp))
+        Row(verticalAlignment = Alignment.CenterVertically) {
+          Text(stringResource(R.string.home_meals), style = MaterialTheme.typography.labelLarge, modifier = Modifier.weight(1f))
+          Text(
+            formatKcal(day.meals.total.kcal) + if (day.meals.complete) "" else "*",
+            style = MaterialTheme.typography.labelLarge,
+            color = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.testTag("day_kcal_${day.date}"),
+          )
+        }
+        day.meals.meals.forEach { m ->
+          Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier =
+              Modifier.fillMaxWidth()
+                .clip(RoundedCornerShape(8.dp))
+                .clickable { onOpenRecipe(m.recipeId) }
+                .padding(vertical = 6.dp)
+                .testTag("day_meal_${day.date}_${m.recipeName}"),
+          ) {
+            Text(
+              slotLabel(m.slot),
+              style = MaterialTheme.typography.labelMedium,
+              color = MaterialTheme.colorScheme.onSurfaceVariant,
+              modifier = Modifier.width(76.dp),
+            )
+            Text(m.recipeName, style = MaterialTheme.typography.bodyMedium, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f))
+            Text(formatKcal(m.macros.kcal), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+          }
+        }
       }
     }
   }

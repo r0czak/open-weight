@@ -8,6 +8,7 @@ import androidx.room.TypeConverters
 import androidx.room.migration.AutoMigrationSpec
 import com.openweight.app.core.database.dao.ExerciseDao
 import com.openweight.app.core.database.dao.IngredientDao
+import com.openweight.app.core.database.dao.MealPlanDao
 import com.openweight.app.core.database.dao.RecipeDao
 import com.openweight.app.core.database.dao.TrainingBlockDao
 import com.openweight.app.core.database.dao.WorkoutDao
@@ -72,6 +73,8 @@ abstract class OpenWeightDatabase : RoomDatabase() {
   abstract fun ingredientDao(): IngredientDao
 
   abstract fun recipeDao(): RecipeDao
+
+  abstract fun mealPlanDao(): MealPlanDao
 
   /** v2: a set's target became a rep range (`reps` → `repsMin`, plus optional `repsMax`). */
   @RenameColumn(tableName = "set_plan", fromColumnName = "reps", toColumnName = "repsMin")

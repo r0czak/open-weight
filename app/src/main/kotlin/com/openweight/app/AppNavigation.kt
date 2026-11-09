@@ -17,6 +17,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -27,7 +28,15 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
+import com.openweight.app.core.model.MealSlot
+import com.openweight.app.core.ui.formatDayShort
 import com.openweight.app.diet.DietHomeScreen
+import com.openweight.app.diet.calendar.MealPickerRoute
+import com.openweight.app.diet.calendar.MealTarget
+import com.openweight.app.diet.plans.DietPlanEditRoute
+import com.openweight.app.diet.plans.DietPlanListRoute
+import java.time.DayOfWeek
+import java.time.format.TextStyle
 import com.openweight.app.diet.ingredients.IngredientEditRoute
 import com.openweight.app.diet.ingredients.IngredientListRoute
 import com.openweight.app.diet.recipes.IngredientPickerRoute
@@ -72,6 +81,19 @@ import kotlinx.serialization.Serializable
 @Serializable data class IngredientPicker(val recipeId: String) : NavKey
 
 @Serializable data object IngredientList : NavKey
+
+/** Pick a recipe for a calendar day ([epochDay]) or a diet plan's weekday ([planId] + [dayOfWeek]). */
+@Serializable
+data class MealPicker(
+  val slot: String,
+  val epochDay: Long? = null,
+  val planId: String? = null,
+  val dayOfWeek: String? = null,
+) : NavKey
+
+@Serializable data object DietPlanList : NavKey
+
+@Serializable data class DietPlanEdit(val planId: String) : NavKey
 
 /** [ingredientId] null = a new ingredient. */
 @Serializable data class IngredientEdit(val ingredientId: String?) : NavKey
@@ -158,7 +180,10 @@ fun OpenWeightAppUi(modifier: Modifier = Modifier) {
         entryProvider =
           entryProvider {
             entry<HomeHome> {
-            HomeRoute(onOpenWorkout = { id, date -> backStack.add(WorkoutOverview(id, date.toEpochDay())) })
+            HomeRoute(
+              onOpenWorkout = { id, date -> backStack.add(WorkoutOverview(id, date.toEpochDay())) },
+              onOpenRecipe = { backStack.add(RecipeView(it)) },
+            )
           }
           entry<WorkoutOverview> { key ->
             WorkoutOverviewRoute(
@@ -207,6 +232,32 @@ fun OpenWeightAppUi(modifier: Modifier = Modifier) {
               onOpenRecipe = { backStack.add(RecipeView(it)) },
               onCreateRecipe = { backStack.add(RecipeEdit(null)) },
               onOpenIngredients = { backStack.add(IngredientList) },
+              onAddMeal = { date, slot -> backStack.add(MealPicker(slot.name, epochDay = date.toEpochDay())) },
+              onOpenPlans = { backStack.add(DietPlanList) },
+            )
+          }
+          entry<MealPicker> { key ->
+            val target =
+              if (key.planId != null) MealTarget.Plan(key.planId, DayOfWeek.valueOf(key.dayOfWeek!!))
+              else MealTarget.Day(LocalDate.ofEpochDay(key.epochDay!!))
+            MealPickerRoute(
+              target = target,
+              initialSlot = MealSlot.valueOf(key.slot),
+              title =
+                when (target) {
+                  is MealTarget.Day -> stringResource(R.string.meal_add_title, target.date.formatDayShort())
+                  is MealTarget.Plan -> stringResource(R.string.meal_add_title, target.day.getDisplayName(TextStyle.FULL_STANDALONE, LocalConfiguration.current.locales[0]))
+                },
+              onDone = back,
+            )
+          }
+          entry<DietPlanList> { DietPlanListRoute(onBack = back, onOpen = { backStack.add(DietPlanEdit(it)) }) }
+          entry<DietPlanEdit> { key ->
+            DietPlanEditRoute(
+              planId = key.planId,
+              onBack = back,
+              onAddMeal = { day -> backStack.add(MealPicker(MealSlot.BREAKFAST.name, planId = key.planId, dayOfWeek = day.name)) },
+              onOpenRecipe = { backStack.add(RecipeView(it)) },
             )
           }
           entry<RecipeView> { key ->

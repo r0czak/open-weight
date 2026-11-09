@@ -219,7 +219,6 @@
     <string name="home_previous_week">Previous week</string>
     <string name="home_next_week">Next week</string>
     <string name="home_no_block">No training block</string>
-    <string name="home_meals_hint">Meals will show on each day here once the meal calendar is ready (Diet tab).</string>
     <string name="workout_edit">Edit workout</string>
     <string name="workout_start">Start workout</string>
     <string name="workout_start_soon">Live training (timers, logging your sets) comes in the next update.</string>
@@ -302,5 +301,64 @@
     <plurals name="recipe_in_use">
         <item quantity="one">This recipe is planned on %d meal. Remove it there first.</item>
         <item quantity="other">This recipe is planned on %d meals. Remove it there first.</item>
+    </plurals>
+    <!-- Meal calendar and diet plans -->
+    <string name="home_meals">Meals</string>
+    <string name="slot_breakfast">Breakfast</string>
+    <string name="slot_lunch">Lunch</string>
+    <string name="slot_dinner">Dinner</string>
+    <string name="slot_snack">Snack</string>
+    <string name="per_serving_kcal">%1$s / serving</string>
+    <string name="meal_picker_no_recipes">Create recipes in Meals &amp; recipes first.</string>
+    <string name="meal_add_title">Add a meal · %1$s</string>
+    <string name="meal_open_recipe">Open recipe</string>
+    <string name="meal_remove">Remove</string>
+    <string name="meal_copy_day">Copy this day to…</string>
+    <string name="meal_copy_day_to">Copy to</string>
+    <string name="meal_copy_day_title">Copy %1$s to %2$s</string>
+    <string name="meal_copy_week">Copy this week to next week</string>
+    <string name="meal_copy_week_title">Copy this week\'s meals to next week</string>
+    <string name="meal_add_or_replace">Add these meals to what is already planned there, or replace it?</string>
+    <string name="meal_replace">Replace</string>
+    <string name="meal_clear_day">Clear day</string>
+    <string name="meal_clear_day_title">Remove every meal on %1$s?</string>
+    <string name="day_totals">%1$s · protein %2$s · carbs %3$s · fat %4$s</string>
+    <string name="calendar_previous_month">Previous month</string>
+    <string name="calendar_next_month">Next month</string>
+    <string name="diet_plans">Diet plans</string>
+    <string name="diet_plans_hint">Repeating weeks of meals you can put on the calendar</string>
+    <string name="plan_new">New diet plan</string>
+    <string name="plan_name_hint">e.g. Lean bulk 2,850 kcal</string>
+    <string name="plan_empty">No diet plans yet.</string>
+    <string name="plan_empty_hint">A diet plan is a week of meals that repeats. Apply it to fill the calendar.</string>
+    <string name="plan_avg_per_day">avg %1$s per day</string>
+    <string name="plan_edit_details">Edit name and notes</string>
+    <string name="plan_apply">Apply to calendar</string>
+    <string name="plan_apply_button">Apply</string>
+    <string name="plan_apply_hint">Puts this week of meals on every matching weekday in the dates you pick.</string>
+    <string name="plan_busy_days">Days that already have meals</string>
+    <string name="plan_mode_skip">Leave them as they are</string>
+    <string name="plan_mode_replace">Replace their meals</string>
+    <string name="plan_delete_title">Delete diet plan?</string>
+    <string name="plan_delete_text">\"%1$s\" will be deleted. Meals it already put on the calendar stay there.</string>
+    <plurals name="plan_meals_per_week">
+        <item quantity="one">%d meal a week</item>
+        <item quantity="other">%d meals a week</item>
+    </plurals>
+    <plurals name="plan_applied">
+        <item quantity="one">Filled %d day.</item>
+        <item quantity="other">Filled %d days.</item>
+    </plurals>
+    <plurals name="plan_applied_skipped">
+        <item quantity="one">%d day already had meals and was left as it was.</item>
+        <item quantity="other">%d days already had meals and were left as they were.</item>
+    </plurals>
+    <plurals name="meals_copied">
+        <item quantity="one">Copied %d meal.</item>
+        <item quantity="other">Copied %d meals.</item>
+    </plurals>
+    <plurals name="servings_decimal">
+        <item quantity="one">%s serving</item>
+        <item quantity="other">%s servings</item>
     </plurals>
 </resources>

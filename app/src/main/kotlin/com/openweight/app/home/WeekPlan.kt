@@ -1,5 +1,6 @@
 package com.openweight.app.home
 
+import com.openweight.app.diet.data.DayMeals
 import com.openweight.app.workout.blocks.PlannedDay
 import com.openweight.app.workout.blocks.ScheduleResolver
 import com.openweight.app.workout.blocks.ScheduledBlock
@@ -11,7 +12,7 @@ import java.time.temporal.TemporalAdjusters
 /** A workout as the week view shows it. */
 data class DayWorkout(val id: String, val name: String, val exerciseCount: Int)
 
-/** One day of the Home week view. Meals join here once the meal calendar exists. */
+/** One day of the Home week view: its workout and its meals. */
 data class WeekDay(
   val date: LocalDate,
   val isToday: Boolean,
@@ -19,6 +20,7 @@ data class WeekDay(
   val block: PlannedDay.InBlock?,
   /** Null on a rest day or outside every block. */
   val workout: DayWorkout?,
+  val meals: DayMeals = DayMeals(date, emptyList()),
 )
 
 object WeekPlan {
@@ -30,8 +32,10 @@ object WeekPlan {
     today: LocalDate,
     blocks: List<ScheduledBlock>,
     workouts: List<WorkoutSummary>,
+    meals: List<DayMeals> = emptyList(),
   ): List<WeekDay> {
     val byId = workouts.associateBy { it.id }
+    val mealsByDate = meals.associateBy { it.date }
     return ScheduleResolver.plannedDays(blocks, monday, 7).map { planned ->
       val inBlock = planned as? PlannedDay.InBlock
       WeekDay(
@@ -40,6 +44,7 @@ object WeekPlan {
         block = inBlock,
         workout =
           inBlock?.workoutId?.let { id -> byId[id]?.let { DayWorkout(it.id, it.name, it.exerciseCount) } },
+        meals = mealsByDate[planned.date] ?: DayMeals(planned.date, emptyList()),
       )
     }
   }
