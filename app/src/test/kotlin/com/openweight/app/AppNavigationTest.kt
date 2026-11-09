@@ -50,9 +50,10 @@ class AppNavigationTest {
     composeRule.onNodeWithText("Meals & recipes").assertIsDisplayed()
     composeRule.onNodeWithText("Calendar").assertIsDisplayed()
     composeRule.onNodeWithText("Shopping list").performClick()
-    composeRule
-      .onNodeWithText("Your shopping list will be built from the meals on your calendar.")
-      .assertIsDisplayed()
+    // The list loads from the database first.
+    composeRule.waitUntil(5_000) {
+      runCatching { composeRule.onNodeWithText("Make a shopping list from the meals on your calendar.").assertIsDisplayed() }.isSuccess
+    }
   }
 
   @Test
