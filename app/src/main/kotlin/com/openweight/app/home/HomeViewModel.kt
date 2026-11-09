@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.openweight.app.core.TimeAndIds
+import com.openweight.app.diet.data.MealPlanRepository
 import com.openweight.app.workout.blocks.TrainingBlockRepository
 import com.openweight.app.workout.data.WorkoutRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -11,7 +12,9 @@ import java.time.LocalDate
 import javax.inject.Inject
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
@@ -26,12 +29,14 @@ data class HomeState(
     get() = monday == WeekPlan.mondayOf(today)
 }
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel
 class HomeViewModel
 @Inject
 constructor(
   blocks: TrainingBlockRepository,
   workouts: WorkoutRepository,
+  meals: MealPlanRepository,
   clock: TimeAndIds,
   private val saved: SavedStateHandle,
 ) : ViewModel() {
@@ -41,19 +46,26 @@ constructor(
   private val mondayFlow = saved.getStateFlow(KEY_MONDAY, WeekPlan.mondayOf(today).toEpochDay())
   private val selectedFlow = saved.getStateFlow(KEY_SELECTED, today.toEpochDay())
 
+  private val weekMeals =
+    mondayFlow.flatMapLatest { epoch ->
+      val monday = LocalDate.ofEpochDay(epoch)
+      meals.days(monday, monday.plusDays(6))
+    }
+
   val state: StateFlow<HomeState> =
     combine(
         mondayFlow.map(LocalDate::ofEpochDay),
         selectedFlow.map(LocalDate::ofEpochDay),
         blocks.scheduledBlocks(),
         workouts.workouts(),
-      ) { monday, selected, scheduled, all ->
+        weekMeals,
+      ) { monday, selected, scheduled, all, dayMeals ->
         HomeState(
           loading = false,
           today = today,
           monday = monday,
           selected = selected,
-          days = WeekPlan.days(monday, today, scheduled, all),
+          days = WeekPlan.days(monday, today, scheduled, all, dayMeals),
         )
       }
       .stateIn(

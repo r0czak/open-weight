@@ -11,7 +11,9 @@ import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -22,7 +24,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.openweight.app.R
 import com.openweight.app.core.ui.EmptyState
 import com.openweight.app.core.ui.ScreenScaffold
+import com.openweight.app.core.model.MealSlot
+import com.openweight.app.diet.calendar.CalendarPanel
 import com.openweight.app.diet.recipes.RecipesPanel
+import java.time.LocalDate
 import com.openweight.app.core.ui.theme.OpenWeightTheme
 
 /** The three diet panels from the spec. */
@@ -38,11 +43,15 @@ fun DietHomeScreen(
   onOpenRecipe: (String) -> Unit = {},
   onCreateRecipe: () -> Unit = {},
   onOpenIngredients: () -> Unit = {},
+  onAddMeal: (LocalDate, MealSlot) -> Unit = { _, _ -> },
+  onOpenPlans: () -> Unit = {},
 ) {
   var selected by rememberSaveable { mutableIntStateOf(0) }
+  val snackbar = remember { SnackbarHostState() }
   ScreenScaffold(
     title = stringResource(R.string.tab_diet),
     modifier = modifier,
+    snackbarHostState = snackbar,
     floatingActionButton = {
       if (DietPanel.entries[selected] == DietPanel.RECIPES) {
         FloatingActionButton(onClick = onCreateRecipe, modifier = Modifier.testTag("add_recipe")) {
@@ -55,6 +64,7 @@ fun DietHomeScreen(
       PrimaryTabRow(selectedTabIndex = selected) {
         DietPanel.entries.forEachIndexed { index, panel ->
           Tab(
+            modifier = Modifier.testTag("panel_${panel.name}"),
             selected = selected == index,
             onClick = { selected = index },
             text = { Text(stringResource(panel.title)) },
@@ -62,13 +72,15 @@ fun DietHomeScreen(
         }
       }
       val panel = DietPanel.entries[selected]
-      if (panel == DietPanel.RECIPES) {
-        RecipesPanel(onOpenRecipe = onOpenRecipe, onOpenIngredients = onOpenIngredients)
-      } else {
-        EmptyState(
-          message = stringResource(panel.emptyMessage),
-          hint = stringResource(R.string.coming_soon),
-        )
+      when (panel) {
+        DietPanel.RECIPES -> RecipesPanel(onOpenRecipe = onOpenRecipe, onOpenIngredients = onOpenIngredients)
+        DietPanel.CALENDAR ->
+          CalendarPanel(snackbar = snackbar, onAddMeal = onAddMeal, onOpenRecipe = onOpenRecipe, onOpenPlans = onOpenPlans)
+        DietPanel.SHOPPING ->
+          EmptyState(
+            message = stringResource(panel.emptyMessage),
+            hint = stringResource(R.string.coming_soon),
+          )
       }
     }
   }

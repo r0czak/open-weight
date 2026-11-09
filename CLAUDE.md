@@ -16,7 +16,8 @@ Offline-first Android app for planning workouts (training blocks, workouts, exer
 - `workout/`, `diet/`, `settings/` (later: `transfer/`, `progress/`) — one package per feature: screens, ViewModels, domain rules, repositories
 - `workout/blocks/` — training blocks; `Schedule.kt` holds the schedule rule (date → block → weekday's workout; overlapping blocks: the later start wins)
 - `diet/` — ingredients and recipes; `data/Nutrition.kt` holds the calories/macros rule (per 100 g or ml, pieces via grams per piece, uncountable lines listed, never silently dropped)
-- `home/` — Home tab (opens first): Mon–Sun week view; `WeekPlan.kt` builds each day from the schedule rule
+- `diet/calendar/`, `diet/plans/` — meal calendar and diet plans; rules in `diet/data/MealPlanRepository.kt` (copy day/week, apply a plan: skip or replace busy days)
+- `home/` — Home tab (opens first): Mon–Sun week view; `WeekPlan.kt` builds each day (workout + meals)
 - `AppNavigation.kt` — bottom tabs (Home, Workout, Diet, Settings), each with its own Navigation 3 back stack
 - `transfer/` — Open Weight file format (`TransferFormat.kt`) and `ImportService`
 - `app/schemas/` — exported Room schemas, committed; a version bump needs a migration + test (`MigrationTest`)
@@ -30,6 +31,7 @@ Offline-first Android app for planning workouts (training blocks, workouts, exer
 - Editing rules (limits, in-use checks, ordering) live in repositories, not in the UI; screens call them.
 - Compose UI tests on Robolectric: wait for screens to settle (navigation animates), and use
   `performTextReplacement` in dialogs (`performTextInput` focuses the field and the cursor blink keeps Compose busy).
+  Texts inside a clickable card merge into it: find their tags with `useUnmergedTree = true`.
 - Design docs (product spec, data model, import/export format, delivery plan) are the source of truth for behaviour; update them when a decision changes.
 
 ## Commands
