@@ -98,7 +98,7 @@ class ShoppingFlowTest {
     // Tick oats; buy a whole 2 l of milk.
     scrollTo("shop_Oats")
     // The "List updated" snackbar can cover the row on this small screen: click through semantics.
-    compose.onNodeWithTag("shop_check_Oats", useUnmergedTree = true).performSemanticsAction(SemanticsActions.OnClick)
+    compose.onNodeWithTag("shop_Oats").performSemanticsAction(SemanticsActions.OnClick)
     progress("Ticked: 1/2")
     scrollTo("shop_Milk")
     compose.onNodeWithTag("shop_edit_Milk", useUnmergedTree = true).performSemanticsAction(SemanticsActions.OnClick)
@@ -126,7 +126,7 @@ class ShoppingFlowTest {
     progress("Ticked: 1/3")
     scrollTo("shop_Oats")
     assertQty("Oats", "640 g")
-    compose.onNodeWithTag("shop_check_Oats", useUnmergedTree = true).assertIsOn()
+    compose.onNodeWithTag("shop_Oats").assertIsOn()
     scrollTo("shop_Milk")
     assertQty("Milk", "2 l")
   }

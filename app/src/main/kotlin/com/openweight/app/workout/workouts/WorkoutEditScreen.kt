@@ -40,6 +40,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardCapitalization
@@ -134,11 +137,13 @@ fun WorkoutEditRoute(
     },
     floatingActionButton = {
       if (loaded != null) {
+        val label = stringResource(R.string.workout_add_exercise)
         ExtendedFloatingActionButton(
           onClick = onAddExercise,
           icon = { Icon(Icons.Filled.Add, contentDescription = null) },
-          text = { Text(stringResource(R.string.workout_add_exercise)) },
-          modifier = Modifier.testTag("add_exercise_to_workout"),
+          text = { Text(label) },
+          // The text sits in an expand animation that can keep it out of the accessibility tree.
+          modifier = Modifier.semantics { contentDescription = label }.testTag("add_exercise_to_workout"),
         )
       }
     },
@@ -187,6 +192,7 @@ private fun WorkoutContent(
 ) {
   var editingSet by remember { mutableStateOf<Pair<WorkoutEntry, PlannedSet>?>(null) }
   var editingNotes by remember { mutableStateOf<WorkoutEntry?>(null) }
+  var removing by remember { mutableStateOf<WorkoutEntry?>(null) }
 
   LazyColumn(
     modifier = Modifier.fillMaxSize().padding(padding),
@@ -223,11 +229,30 @@ private fun WorkoutContent(
         onAddSet = { viewModel.addSet(entry.id) },
         onMove = { delta -> viewModel.moveEntry(entry.id, delta) },
         onNotes = { editingNotes = entry },
-        onRemove = { viewModel.removeEntry(entry.id) },
+        onRemove = { removing = entry },
       )
     }
   }
 
+  removing?.let { entry ->
+    AlertDialog(
+      onDismissRequest = { removing = null },
+      title = { Text(stringResource(R.string.entry_remove_title, entry.exerciseName)) },
+      text = { Text(pluralStringResource(R.plurals.entry_remove_text, entry.sets.size, entry.sets.size)) },
+      confirmButton = {
+        TextButton(
+          onClick = {
+            removing = null
+            viewModel.removeEntry(entry.id)
+          },
+          modifier = Modifier.testTag("confirm_remove_entry"),
+        ) {
+          Text(stringResource(R.string.entry_remove_confirm))
+        }
+      },
+      dismissButton = { TextButton(onClick = { removing = null }) { Text(stringResource(R.string.action_cancel)) } },
+    )
+  }
   editingSet?.let { (entry, set) ->
     EditSetDialog(
       set = set,
@@ -302,8 +327,8 @@ private fun EntryCard(
           modifier = Modifier.weight(1f),
         )
         Box {
-          IconButton(onClick = { menu = true }) {
-            Icon(Icons.Filled.MoreVert, stringResource(R.string.action_more))
+          IconButton(onClick = { menu = true }, modifier = Modifier.testTag("entry_menu_$index")) {
+            Icon(Icons.Filled.MoreVert, stringResource(R.string.entry_options, entry.exerciseName))
           }
           DropdownMenu(expanded = menu, onDismissRequest = { menu = false }) {
             if (index > 0) {

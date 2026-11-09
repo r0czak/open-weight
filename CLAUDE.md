@@ -13,7 +13,8 @@ Offline-first Android app for planning workouts (training blocks, workouts, exer
 
 ## Layout (`app/src/main/kotlin/com/openweight/app/`)
 - `core/` — `database/` (Room entities, converters, `OpenWeightDatabase`), `di/`, `model/`, `ui/` (theme, shared composables)
-- `workout/`, `diet/`, `settings/`, `transfer/` (later: `progress/`) — one package per feature: screens, ViewModels, domain rules, repositories
+- `workout/`, `diet/`, `settings/`, `transfer/` (later: `progress/`); `assets/starter-exercises.openweight.json` holds the
+  40 common exercises (`StarterExercises`), imported like any file — one package per feature: screens, ViewModels, domain rules, repositories
 - `workout/blocks/` — training blocks; `Schedule.kt` holds the schedule rule (date → block → weekday's workout; overlapping blocks: the later start wins)
 - `diet/` — ingredients and recipes; `data/Nutrition.kt` holds the calories/macros rule (per 100 g or ml, pieces via grams per piece, uncountable lines listed, never silently dropped)
 - `diet/shopping/` — shopping list panel; rules in `diet/data/ShoppingListBuilder.kt` (sum per ingredient and unit kind, scaled to servings, rounded up for the shop) and `ShoppingRepository.kt` (update keeps manual items, ticks and hand-edited amounts)
@@ -37,6 +38,9 @@ Offline-first Android app for planning workouts (training blocks, workouts, exer
 - Compose UI tests on Robolectric: wait for screens to settle (navigation animates), and use
   `performTextReplacement` in dialogs (`performTextInput` focuses the field and the cursor blink keeps Compose busy).
   Texts inside a clickable card merge into it: find their tags with `useUnmergedTree = true`.
+- Accessibility: everything you can tap needs a label TalkBack reads (its text, or a content description);
+  `a11y/AccessibilityTest` walks every screen with data and fails otherwise. A row with a checkbox is
+  `toggleable` as a whole (the `Checkbox` gets `onCheckedChange = null`).
 - Design docs (product spec, data model, import/export format, delivery plan) are the source of truth for behaviour; update them when a decision changes.
 
 ## Commands

@@ -63,7 +63,7 @@
     <string name="exercise_edit">Edit exercise</string>
     <string name="exercise_search">Search exercises</string>
     <string name="exercise_empty">No exercises yet.</string>
-    <string name="exercise_empty_hint">Add one with the + button, or import a plan in Settings.</string>
+    <string name="exercise_empty_hint">Start with common exercises, add your own with the + button, or import a plan in Settings.</string>
     <string name="exercise_create_named">Create \"%1$s\"</string>
     <string name="error_exercise_exists">An exercise with this name already exists</string>
     <string name="exercise_delete_title">Delete exercise?</string>
@@ -459,4 +459,28 @@
     <string name="kind_ingredients">Ingredients</string>
     <string name="kind_meals">Calendar meals</string>
     <string name="kind_shopping_lists">Shopping lists</string>
+
+    <!-- Polish -->
+    <plurals name="starter_button">
+        <item quantity="one">Add %d common exercise</item>
+        <item quantity="other">Add %d common exercises</item>
+    </plurals>
+    <string name="workout_search">Search workouts</string>
+    <string name="starter_menu">Add common exercises</string>
+    <plurals name="starter_added">
+        <item quantity="one">Added %d exercise.</item>
+        <item quantity="other">Added %d exercises.</item>
+    </plurals>
+    <plurals name="starter_kept">
+        <item quantity="one">%d you already had was left as it is.</item>
+        <item quantity="other">%d you already had were left as they are.</item>
+    </plurals>
+    <string name="entry_options">Options for %s</string>
+    <string name="entry_remove_title">Remove %s from this workout?</string>
+    <plurals name="entry_remove_text">
+        <item quantity="one">Its %d set is removed with it. The exercise stays in your library.</item>
+        <item quantity="other">Its %d sets are removed with it. The exercise stays in your library.</item>
+    </plurals>
+    <string name="entry_remove_confirm">Remove</string>
+    <string name="starter_none_new">You already have all the common exercises.</string>
 </resources>

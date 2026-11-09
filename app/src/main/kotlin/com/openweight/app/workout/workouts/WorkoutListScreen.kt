@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.openweight.app.R
+import com.openweight.app.workout.exercise.SearchField
 import com.openweight.app.core.ui.EmptyState
 import com.openweight.app.core.ui.ScreenScaffold
 import com.openweight.app.workout.data.WorkoutSummary
@@ -83,14 +84,16 @@ fun WorkoutListRoute(
       }
     },
   ) { padding ->
-    Box(Modifier.fillMaxSize().padding(padding)) {
+    Column(Modifier.fillMaxSize().padding(padding)) {
+      if (state.totalCount > 0) SearchField(state.query, viewModel::onQueryChange, placeholder = stringResource(R.string.workout_search))
       when {
         state.loading -> Unit
-        state.items.isEmpty() ->
+        state.totalCount == 0 ->
           EmptyState(
             stringResource(R.string.workout_empty),
             hint = stringResource(R.string.workout_empty_hint),
           )
+        state.items.isEmpty() -> EmptyState(stringResource(R.string.search_no_results, state.query))
         else ->
           LazyColumn(contentPadding = PaddingValues(bottom = 88.dp)) {
             items(state.items, key = { it.id }) { item ->

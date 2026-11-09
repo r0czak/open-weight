@@ -5,7 +5,10 @@ import androidx.lifecycle.viewModelScope
 import com.openweight.app.workout.data.ExerciseListItem
 import com.openweight.app.workout.data.WorkoutRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import com.openweight.app.transfer.KindResult
+import com.openweight.app.workout.data.StarterExercises
 import javax.inject.Inject
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -21,7 +24,7 @@ data class ExerciseListState(
 )
 
 @HiltViewModel
-class ExerciseListViewModel @Inject constructor(repository: WorkoutRepository) : ViewModel() {
+class ExerciseListViewModel @Inject constructor(repository: WorkoutRepository, private val starter: StarterExercises) : ViewModel() {
   private val query = MutableStateFlow("")
 
   val state: StateFlow<ExerciseListState> =
@@ -32,6 +35,11 @@ class ExerciseListViewModel @Inject constructor(repository: WorkoutRepository) :
 
   fun onQueryChange(value: String) {
     query.value = value
+  }
+
+  /** Adds the common exercises the library doesn't have yet. */
+  fun addStarter(done: (KindResult) -> Unit) {
+    viewModelScope.launch { done(starter.add()) }
   }
 }
 
