@@ -5,6 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.openweight.app.core.model.ThemeMode
 import com.openweight.app.core.model.WeightUnit
+import com.openweight.app.diet.household.HouseholdMember
+import com.openweight.app.diet.household.HouseholdRepository
 import com.openweight.app.transfer.ImportSession
 import com.openweight.app.transfer.TransferFiles
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,7 +25,24 @@ constructor(
   private val repository: SettingsRepository,
   private val importSession: ImportSession,
   private val files: TransferFiles,
+  private val household: HouseholdRepository,
 ) : ViewModel() {
+
+  val members: StateFlow<List<HouseholdMember>> =
+    household.members().stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
+
+  /** Saves a member; a duplicate name is reported through [onError]. */
+  fun saveMember(id: String?, name: String, portion: Double, byDefault: Boolean, onError: (String?) -> Unit) {
+    viewModelScope.launch {
+      try {
+        household.save(id, name, portion, byDefault)
+      } catch (e: IllegalArgumentException) {
+        onError(e.message)
+      }
+    }
+  }
+
+  fun deleteMember(id: String) = viewModelScope.launch { household.delete(id) }
 
   /** Null until the stored settings have been read, so the UI never flashes the wrong theme. */
   val settings: StateFlow<Settings?> =

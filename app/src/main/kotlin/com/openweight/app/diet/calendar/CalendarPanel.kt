@@ -65,6 +65,8 @@ import com.openweight.app.core.ui.pickerMillisToDate
 import com.openweight.app.core.ui.toPickerMillis
 import com.openweight.app.diet.data.DayMeals
 import com.openweight.app.settings.SettingsRepository
+import com.openweight.app.diet.household.HouseholdMember
+import com.openweight.app.diet.household.HouseholdRepository
 import com.openweight.app.diet.data.Macros
 import com.openweight.app.diet.data.MealPlanRepository
 import com.openweight.app.diet.data.PlannedMeal
@@ -94,6 +96,7 @@ data class CalendarState(
   val days: List<DayMeals> = emptyList(),
   val kcalTarget: Int? = null,
   val proteinTarget: Int? = null,
+  val household: List<HouseholdMember> = emptyList(),
 ) {
   val selectedDay: DayMeals
     get() = days.firstOrNull { it.date == selected } ?: DayMeals(selected, emptyList())
@@ -107,6 +110,7 @@ constructor(
   private val meals: MealPlanRepository,
   private val todayNow: Today,
   settings: SettingsRepository,
+  private val household: HouseholdRepository,
   private val saved: SavedStateHandle,
 ) : ViewModel() {
   private val today: LocalDate
@@ -120,8 +124,8 @@ constructor(
       .flatMapLatest { selected ->
         val month = YearMonth.from(selected)
         // Follows the date, so the "today" mark moves when a new day begins.
-        combine(meals.days(month.atDay(1), month.atEndOfMonth()), todayNow.date, settings.settings) { days, today, s ->
-          CalendarState(today, month, selected, days, s.kcalTarget, s.proteinTarget)
+        combine(meals.days(month.atDay(1), month.atEndOfMonth()), todayNow.date, settings.settings, household.members()) { days, today, s, people ->
+          CalendarState(today, month, selected, days, s.kcalTarget, s.proteinTarget, people)
         }
       }
       .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), CalendarState(today, YearMonth.from(today), today))
@@ -131,6 +135,8 @@ constructor(
   }
 
   fun setEaten(id: String, eaten: Boolean) = viewModelScope.launch { meals.setEaten(id, eaten) }
+
+  fun setMembers(mealId: String, ids: Set<String>) = viewModelScope.launch { household.setMealMembers(mealId, ids) }
 
   /** Another month opens on its first day; the current month opens on today. */
   fun showMonth(month: YearMonth) = select(if (month == YearMonth.from(today)) today else month.atDay(1))
@@ -235,6 +241,9 @@ fun CalendarPanel(
       onRemove = { editing = null; viewModel.remove(m.id) },
       onOpenRecipe = { editing = null; onOpenRecipe(m.recipeId) },
       onSwap = { editing = null; onSwapMeal(m.id, m.date, m.slot) },
+      household = state.household,
+      initialMembers = m.members.map { it.id }.toSet(),
+      onMembers = { viewModel.setMembers(m.id, it) },
     )
   }
   if (copyingDay) {
@@ -342,7 +351,8 @@ fun MealRow(m: PlannedMeal, onClick: () -> Unit, modifier: Modifier = Modifier) 
     Column(Modifier.weight(1f)) {
       Text(m.recipeName, maxLines = 1, overflow = TextOverflow.Ellipsis)
       Text(
-        androidx.compose.ui.res.pluralStringResource(R.plurals.servings_decimal, if (m.servings == 1.0) 1 else 2, formatNumber(m.servings)),
+        androidx.compose.ui.res.pluralStringResource(R.plurals.servings_decimal, if (m.servings == 1.0) 1 else 2, formatNumber(m.servings)) +
+          if (m.members.isEmpty()) "" else " · " + stringResource(R.string.household_with, m.members.joinToString { it.name }),
         style = MaterialTheme.typography.bodySmall,
         color = MaterialTheme.colorScheme.onSurfaceVariant,
       )

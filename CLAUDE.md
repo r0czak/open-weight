@@ -23,6 +23,8 @@ Offline-first Android app for planning workouts (training blocks, workouts, exer
 - `progress/` — body weight: `BodyWeightRepository` (one weigh-in per day, 20–400 kg, not in the future) and `WeightRules.trend` (weekly
   averages Mon–Sun; change = latest week vs two weeks before)
 - `diet/` — ingredients and recipes; `data/Nutrition.kt` holds the calories/macros rule (per 100 g or ml, pieces via grams per piece, uncountable lines listed, never silently dropped)
+- `diet/household/` — people you cook for (`HouseholdRepository`: name, portion 0.1–3 of yours, eats new/planned meals by default). A calendar
+  meal lists who else eats it (`meal_member`); your totals count only your portion, the shopping list counts servings × (1 + their portions)
 - `diet/shopping/` — shopping list panel; rules in `diet/data/ShoppingListBuilder.kt` (sum per ingredient and unit kind, scaled to servings, rounded up for the shop) and `ShoppingRepository.kt` (update keeps manual items, ticks and hand-edited amounts)
 - `diet/calendar/`, `diet/plans/` — meal calendar and diet plans; rules in `diet/data/MealPlanRepository.kt` (copy day/week, apply a plan: skip or replace busy days;
   eaten marks, swapping a meal's recipe for one day; copies are never eaten). `LiveDiet.kt`: the eaten toggle and the eaten / left line (targets in Settings)

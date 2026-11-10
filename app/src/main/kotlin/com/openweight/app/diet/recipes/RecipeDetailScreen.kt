@@ -44,6 +44,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
 import com.openweight.app.R
+import kotlinx.coroutines.flow.combine
+import com.openweight.app.diet.formatNumber
+import com.openweight.app.diet.household.HouseholdRepository
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.material3.FilterChip
 import com.openweight.app.core.ui.ScreenScaffold
 import com.openweight.app.diet.data.DietRepository
 import com.openweight.app.diet.data.Macros
@@ -62,7 +67,6 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -81,22 +85,24 @@ sealed interface RecipeViewState {
 
   data object Gone : RecipeViewState
 
-  data class Loaded(val recipe: RecipeDetail) : RecipeViewState
+  /** [householdFactor]: 1 + the portions of everyone who eats by default; 1 with no household. */
+  data class Loaded(val recipe: RecipeDetail, val householdFactor: Double = 1.0) : RecipeViewState
 }
 
 @HiltViewModel(assistedFactory = RecipeDetailViewModel.Factory::class)
 class RecipeDetailViewModel
 @AssistedInject
-constructor(private val repository: DietRepository, @Assisted private val recipeId: String) : ViewModel() {
+constructor(private val repository: DietRepository, household: HouseholdRepository, @Assisted private val recipeId: String) : ViewModel() {
   @AssistedFactory
   interface Factory {
     fun create(recipeId: String): RecipeDetailViewModel
   }
 
   val state: StateFlow<RecipeViewState> =
-    repository
-      .recipe(recipeId)
-      .map { if (it == null) RecipeViewState.Gone else RecipeViewState.Loaded(it) }
+    combine(repository.recipe(recipeId), household.members()) { r, people ->
+        if (r == null) RecipeViewState.Gone
+        else RecipeViewState.Loaded(r, 1 + people.filter { it.eatsByDefault }.sumOf { it.portion })
+      }
       .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), RecipeViewState.Loading)
 
   private val _events = Channel<RecipeEvent>(Channel.BUFFERED)
@@ -140,6 +146,9 @@ fun RecipeDetailRoute(
     }
   }
   val recipe = (state as? RecipeViewState.Loaded)?.recipe
+  val householdFactor = (state as? RecipeViewState.Loaded)?.householdFactor ?: 1.0
+  var forHousehold by rememberSaveable { mutableStateOf(false) }
+  val scale = if (forHousehold) householdFactor else 1.0
 
   ScreenScaffold(
     title = recipe?.name.orEmpty(),
@@ -160,7 +169,7 @@ fun RecipeDetailRoute(
   ) { padding ->
     if (recipe == null) return@ScreenScaffold
     LazyColumn(
-      modifier = Modifier.fillMaxSize().padding(padding),
+      modifier = Modifier.fillMaxSize().padding(padding).testTag("recipe_view"),
       contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 32.dp),
       verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
@@ -174,13 +183,23 @@ fun RecipeDetailRoute(
       }
       if (recipe.items.isNotEmpty()) item { MacrosCard(recipe) }
       item { SectionTitle(stringResource(R.string.recipe_ingredients)) }
+      if (householdFactor > 1.0) {
+        item {
+          FilterChip(
+            selected = forHousehold,
+            onClick = { forHousehold = !forHousehold },
+            label = { Text(stringResource(R.string.household_cook_for, formatNumber(householdFactor))) },
+            modifier = Modifier.testTag("cook_for_household"),
+          )
+        }
+      }
       if (recipe.items.isEmpty()) {
         item { Text(stringResource(R.string.recipe_no_ingredients), color = MaterialTheme.colorScheme.onSurfaceVariant) }
       }
       items(recipe.items, key = { it.id }) { item ->
         Row(Modifier.fillMaxWidth().padding(vertical = 4.dp), verticalAlignment = Alignment.CenterVertically) {
           Text(item.name, modifier = Modifier.weight(1f))
-          Text(formatQuantity(item.quantity, item.unit), fontWeight = FontWeight.SemiBold)
+          Text(formatQuantity(item.quantity * scale, item.unit), fontWeight = FontWeight.SemiBold, modifier = Modifier.testTag("qty_${item.name}"))
           Text(
             item.macros?.let { formatKcal(it.kcal) } ?: "—",
             style = MaterialTheme.typography.bodySmall,

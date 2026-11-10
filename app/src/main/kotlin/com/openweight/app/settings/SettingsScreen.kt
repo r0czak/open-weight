@@ -45,6 +45,9 @@ import com.openweight.app.R
 import com.openweight.app.core.model.ThemeMode
 import com.openweight.app.core.model.WeightUnit
 import com.openweight.app.core.ui.ScreenScaffold
+import com.openweight.app.diet.household.HouseholdMember
+import com.openweight.app.diet.household.MemberDialog
+import com.openweight.app.diet.household.formatPortion
 import com.openweight.app.core.ui.formatMedium
 import com.openweight.app.transfer.ExportRequest
 import com.openweight.app.transfer.ui.ExportDialog
@@ -58,6 +61,10 @@ fun SettingsRoute(onOpenExport: () -> Unit, modifier: Modifier = Modifier, viewM
   val lastAutoBackup by viewModel.lastAutoBackup.collectAsStateWithLifecycle()
   var backingUp by remember { mutableStateOf(false) }
   var editingTargets by remember { mutableStateOf(false) }
+  val members by viewModel.members.collectAsStateWithLifecycle()
+  var editingMember by remember { mutableStateOf<HouseholdMember?>(null) }
+  var addingMember by remember { mutableStateOf(false) }
+  var memberError by remember { mutableStateOf<String?>(null) }
   var confirmUndo by remember { mutableStateOf(false) }
   val pickFile =
     rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
@@ -69,6 +76,9 @@ fun SettingsRoute(onOpenExport: () -> Unit, modifier: Modifier = Modifier, viewM
     onThemeModeChange = viewModel::setThemeMode,
     onRestAlertsChange = viewModel::setRestAlerts,
     onEditTargets = { editingTargets = true },
+    members = members,
+    onEditMember = { editingMember = it },
+    onAddMember = { addingMember = true },
     // Any file: some apps label .json files oddly, and the importer checks the content anyway.
     onImport = { pickFile.launch(arrayOf("*/*")) },
     onBackup = { backingUp = true },
@@ -78,6 +88,26 @@ fun SettingsRoute(onOpenExport: () -> Unit, modifier: Modifier = Modifier, viewM
     modifier = modifier,
   )
   if (backingUp) ExportDialog(ExportRequest.Everything, onDismiss = { backingUp = false })
+  if (addingMember || editingMember != null) {
+    val member = editingMember
+    MemberDialog(
+      member = member,
+      onSave = { name, portion, byDefault ->
+        addingMember = false
+        editingMember = null
+        viewModel.saveMember(member?.id, name, portion, byDefault) { memberError = it }
+      },
+      onDelete = member?.let { m -> { editingMember = null; viewModel.deleteMember(m.id) } },
+      onDismiss = { addingMember = false; editingMember = null },
+    )
+  }
+  memberError?.let { message ->
+    AlertDialog(
+      onDismissRequest = { memberError = null },
+      text = { Text(message) },
+      confirmButton = { TextButton(onClick = { memberError = null }) { Text(stringResource(R.string.action_ok)) } },
+    )
+  }
   if (editingTargets) {
     TargetsDialog(
       settings ?: Settings(),
@@ -108,6 +138,9 @@ fun SettingsScreen(
   modifier: Modifier = Modifier,
   onRestAlertsChange: (Boolean) -> Unit = {},
   onEditTargets: () -> Unit = {},
+  members: List<HouseholdMember> = emptyList(),
+  onEditMember: (HouseholdMember) -> Unit = {},
+  onAddMember: () -> Unit = {},
   onImport: () -> Unit = {},
   onBackup: () -> Unit = {},
   onExport: () -> Unit = {},
@@ -172,6 +205,29 @@ fun SettingsScreen(
             }
           )
         },
+      )
+
+      Text(
+        stringResource(R.string.household_hint),
+        style = MaterialTheme.typography.bodySmall,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+        modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
+      )
+      members.forEach { m ->
+        ListItem(
+          modifier = Modifier.clickable { onEditMember(m) }.testTag("member_${m.name}"),
+          headlineContent = { Text(m.name) },
+          supportingContent = {
+            Text(
+              stringResource(R.string.household_member_line, formatPortion(m.portion)) +
+                if (m.eatsByDefault) "" else " · " + stringResource(R.string.household_not_by_default)
+            )
+          },
+        )
+      }
+      ListItem(
+        modifier = Modifier.clickable(onClick = onAddMember).testTag("add_member"),
+        headlineContent = { Text(stringResource(R.string.household_add)) },
       )
 
       HorizontalDivider(Modifier.padding(top = 8.dp))

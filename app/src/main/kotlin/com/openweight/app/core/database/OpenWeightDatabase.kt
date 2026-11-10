@@ -8,6 +8,7 @@ import androidx.room.TypeConverters
 import androidx.room.migration.AutoMigrationSpec
 import com.openweight.app.core.database.dao.BodyWeightDao
 import com.openweight.app.core.database.dao.ExerciseDao
+import com.openweight.app.core.database.dao.HouseholdDao
 import com.openweight.app.core.database.dao.IngredientDao
 import com.openweight.app.core.database.dao.MealPlanDao
 import com.openweight.app.core.database.dao.RecipeDao
@@ -18,6 +19,8 @@ import com.openweight.app.core.database.dao.TrainingBlockDao
 import com.openweight.app.core.database.dao.WorkoutDao
 import com.openweight.app.core.database.entity.BlockScheduleDayEntity
 import com.openweight.app.core.database.entity.BodyWeightEntity
+import com.openweight.app.core.database.entity.HouseholdMemberEntity
+import com.openweight.app.core.database.entity.MealMemberEntity
 import com.openweight.app.core.database.entity.BlockWorkoutEntity
 import com.openweight.app.core.database.entity.DietPlanEntity
 import com.openweight.app.core.database.entity.DietPlanMealEntity
@@ -40,7 +43,7 @@ import com.openweight.app.core.database.entity.WorkoutExerciseEntity
  * every version bump needs a migration and a test that upgrades from the previous version.
  */
 @Database(
-  version = 6,
+  version = 7,
   exportSchema = true,
   autoMigrations =
     [
@@ -53,6 +56,8 @@ import com.openweight.app.core.database.entity.WorkoutExerciseEntity
       AutoMigration(from = 4, to = 5),
       // v6: meal_entry.eatenAt (nullable), for live diet.
       AutoMigration(from = 5, to = 6),
+      // v7: household members and who eats each calendar meal.
+      AutoMigration(from = 6, to = 7),
     ],
   entities =
     [
@@ -77,6 +82,8 @@ import com.openweight.app.core.database.entity.WorkoutExerciseEntity
       WorkoutSessionEntity::class,
       SessionSetEntity::class,
       BodyWeightEntity::class,
+      HouseholdMemberEntity::class,
+      MealMemberEntity::class,
     ],
 )
 @TypeConverters(Converters::class)
@@ -100,6 +107,8 @@ abstract class OpenWeightDatabase : RoomDatabase() {
   abstract fun sessionDao(): SessionDao
 
   abstract fun bodyWeightDao(): BodyWeightDao
+
+  abstract fun householdDao(): HouseholdDao
 
   /** v2: a set's target became a rep range (`reps` → `repsMin`, plus optional `repsMax`). */
   @RenameColumn(tableName = "set_plan", fromColumnName = "reps", toColumnName = "repsMin")
