@@ -19,6 +19,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import java.time.Instant
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlinx.coroutines.flow.MutableStateFlow
 
 /**
  * The "rest is over" alert, for when the phone is locked or another app is open. An alarm fires at
@@ -27,6 +28,9 @@ import javax.inject.Singleton
  */
 @Singleton
 class RestAlerts @Inject constructor(@param:ApplicationContext private val context: Context) {
+  /** The end (epoch ms) of the rest the user skipped: no alert for it, from any screen. */
+  val skippedRest = MutableStateFlow<Long?>(null)
+
   private val alarms: AlarmManager
     get() = context.getSystemService(AlarmManager::class.java)
 

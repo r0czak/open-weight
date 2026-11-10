@@ -145,10 +145,11 @@ constructor(
     }
   }
 
-  /** Marks a meal as eaten (or back to planned). */
+  /** Marks a meal as eaten (or back to planned). A meal on a future day can't be eaten yet. */
   suspend fun setEaten(mealId: String, eaten: Boolean) {
     db.withTransaction {
       val m = dao.getMeal(mealId) ?: return@withTransaction
+      if (eaten && m.date.isAfter(clock.today())) return@withTransaction
       val now = clock.now()
       dao.updateMeal(m.copy(eatenAt = if (eaten) m.eatenAt ?: now else null, updatedAt = now))
     }

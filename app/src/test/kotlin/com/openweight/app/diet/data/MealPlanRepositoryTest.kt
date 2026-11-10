@@ -157,6 +157,7 @@ class MealPlanRepositoryTest {
 
   @Test
   fun eatenMarks_swaps_andCopies() = runTest {
+    val mon = this@MealPlanRepositoryTest.mon.minusWeeks(1) // a past Monday: the test clock's today is Sun 8 Nov
     val breakfast = meals.addMeal(mon, MealSlot.BREAKFAST, oats, 1.0)
     val dinner = meals.addMeal(mon, MealSlot.DINNER, chicken, 1.0)
 
@@ -178,6 +179,11 @@ class MealPlanRepositoryTest {
     assertTrue(meals.days(mon.plusDays(1), mon.plusDays(1)).first().single().meals.none { it.eaten })
     meals.setEaten(dinner, false)
     assertTrue(meals.days(mon, mon).first().single().meals.none { it.eaten })
+
+    // A meal on a future day can't be eaten yet.
+    val later = meals.addMeal(this@MealPlanRepositoryTest.mon, MealSlot.LUNCH, oats, 1.0) // Mon 9 Nov: tomorrow
+    meals.setEaten(later, true)
+    assertTrue(meals.days(this@MealPlanRepositoryTest.mon, this@MealPlanRepositoryTest.mon).first().single().meals.none { it.eaten })
   }
 }
 

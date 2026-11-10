@@ -17,6 +17,7 @@ class ProgressTest {
     assertNull(Progress.lastTime(listOf(set(60.0, 10), set(60.0, 9)), WeightUnit.KG)!!.stepUpKg) // one short
     assertNull(Progress.lastTime(listOf(set(60.0, 10), set(60.0, 10, done = false)), WeightUnit.KG)!!.stepUpKg) // one skipped
     assertNull(Progress.lastTime(listOf(set(null, 12)), WeightUnit.KG)!!.stepUpKg) // bodyweight
+    assertNull(Progress.lastTime(listOf(set(1999.0, 10)), WeightUnit.KG)!!.stepUpKg) // past the app's limit
     // No range: the single target counts as the top. Pounds step by 5 lb.
     assertEquals(100.0 + WeightUnit.LB.toKg(5.0), Progress.lastTime(listOf(set(100.0, 5, min = 5, max = null)), WeightUnit.LB)!!.stepUpKg!!, 1e-9)
   }

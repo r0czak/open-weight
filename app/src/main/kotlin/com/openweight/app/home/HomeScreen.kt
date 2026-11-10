@@ -334,7 +334,7 @@ private fun DayCard(
         DayProgress(day.meals, kcalTarget, proteinTarget, tag = "day_progress_${day.date}")
         day.meals.meals.forEach { m ->
           Row(verticalAlignment = Alignment.CenterVertically) {
-          EatenToggle(m, onToggle = { onEaten(m.id, it) }, tag = "day_eaten_${day.date}_${m.recipeName}")
+          EatenToggle(m, day.today, onToggle = { onEaten(m.id, it) }, tag = "day_eaten_${day.date}_${m.recipeName}")
           Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier =

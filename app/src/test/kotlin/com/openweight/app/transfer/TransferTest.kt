@@ -36,7 +36,8 @@ class TransferTest {
   private class Phone(prefix: String) {
     val db: OpenWeightDatabase = inMemoryDatabase()
     val clock =
-      object : TimeAndIds by FakeTimeAndIds() {
+      // Today is Tue 10 Nov, so Monday's breakfast can be ticked as eaten.
+      object : TimeAndIds by FakeTimeAndIds(today = LocalDate.of(2026, 11, 10)) {
         private var n = 0
 
         override fun newId() = "$prefix-${++n}"
@@ -133,7 +134,7 @@ class TransferTest {
   @Test
   fun fullBackup_restoresEverything_onAnEmptyPhone() = runTest {
     val backup = a.export(ExportRequest.Everything)
-    assertEquals("openweight-backup-2026-11-08.json", backup.fileName)
+    assertEquals("openweight-backup-2026-11-10.json", backup.fileName)
 
     val result = b.import(backup)
 
@@ -343,6 +344,19 @@ class TransferTest {
     assertEquals(listOf("Push A"), b.sessions.history().first().map { it.workoutName })
     assertEquals(listOf(81.0, 80.2), b.weights.entries().first().map { it.weightKg })
     assertEquals(listOf("Anna"), b.household.members().first().map { it.name })
+  }
+
+  @Test
+  fun aWeighInMovedToAnotherDay_neverMakesTwoOnOneDay() = runTest {
+    b.import(a.export(ExportRequest.Progress))
+    // Phone A's 8 Nov weigh-in, edited to 2 Nov in the file: 2 Nov is already there, so that's the match.
+    val file = a.export(ExportRequest.Progress).file.let { f ->
+      f.copy(data = f.data.copy(bodyWeights = f.data.bodyWeights.filter { it.date == "2026-11-08" }.map { it.copy(date = "2026-11-02", weightKg = 79.0) }))
+    }
+
+    b.importer.import(file, ImportOptions(choice = ConflictChoice.REPLACE))
+
+    assertEquals(listOf("2026-11-02" to 79.0, "2026-11-08" to 80.2), b.weights.entries().first().map { it.date.toString() to it.weightKg })
   }
 
   @Test
