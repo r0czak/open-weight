@@ -1,7 +1,6 @@
 package com.openweight.app.progress.strength
 
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -35,7 +34,8 @@ enum class BodySide { FRONT, BACK }
  */
 @Composable
 fun BodyFigure(side: BodySide, muscles: Map<Muscle, MuscleScore>, modifier: Modifier = Modifier) {
-  val body = if (isSystemInDarkTheme()) Color(0xFF3A3F47) else Color(0xFFDCE1E7)
+  // From the app's theme (which may differ from the system's light/dark setting).
+  val body = MaterialTheme.colorScheme.surfaceContainerHighest
   val untrained = MaterialTheme.colorScheme.outlineVariant
   val line = MaterialTheme.colorScheme.surface
   Canvas(modifier.aspectRatio(WIDTH / HEIGHT)) {

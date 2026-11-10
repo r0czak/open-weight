@@ -9,7 +9,16 @@ import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performScrollToNode
+import androidx.compose.ui.test.assert
+import androidx.compose.ui.test.hasAnyDescendant
+import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.onNodeWithText
+import android.os.Looper
+import com.openweight.app.core.model.ThemeMode
+import com.openweight.app.core.model.WeightUnit
+import org.robolectric.Shadows.shadowOf
 import com.openweight.app.MainActivity
 import com.openweight.app.core.TimeAndIds
 import com.openweight.app.progress.strength.StrengthStandard
@@ -109,11 +118,66 @@ class PowerLevelFlowTest {
     compose.onNodeWithTag("power_level").performScrollToNode(hasTestTag("lift_Barbell back squat"))
     screenshot("power-level-lifts")
     compose.onNodeWithTag("power_level").performScrollToNode(hasTestTag("power_unscored"))
+  }
 
-    // Women's standards: the same lifts reach higher tiers.
-    runBlocking { settings.setStrengthStandard(StrengthStandard.WOMEN) }
+  /** The lift row's merged text (badge, name, tier line, next goal). */
+  private fun liftRow(name: String) = compose.onNodeWithTag("lift_$name")
+
+  private fun scrollToLift(name: String) = compose.onNodeWithTag("power_level").performScrollToNode(hasTestTag("lift_$name"))
+
+  /** The node says [text], itself or in a child (a card doesn't merge its texts; a clickable row does). */
+  private fun says(text: String) = hasText(text, substring = true) or hasAnyDescendant(hasText(text, substring = true))
+
+  private fun waitForText(tag: String, text: String) =
+    compose.waitUntil(5_000) { runCatching { compose.onNodeWithTag(tag).assert(says(text)) }.isSuccess }
+
+  @Test
+  fun choosingWomensStandards_inSettings_raisesTheTiersShown() {
+    runBlocking { bodyWeights.log(clock.today(), 80.0) }
+    openPowerLevel()
+    waitForTag("power_overall")
+    // Bench 90 kg × 5 ≈ 105 kg = 1.31 × 80 kg: Advanced for men (1.25–1.6).
+    scrollToLift("Barbell bench press")
+    liftRow("Barbell bench press").assert(says("Advanced · 90 kg × 5"))
     compose.onNodeWithTag("power_level").performScrollToNode(hasTestTag("power_overall"))
-    screenshot("power-level-women")
+    compose.onNodeWithTag("power_overall").assert(says("men's standards"))
+
+    compose.onNodeWithTag("tab_SETTINGS").performClick()
+    waitForTag("rest_alerts")
+    compose.onNodeWithText("Women").performScrollTo().performClick()
+    compose.waitUntil(5_000) {
+      shadowOf(Looper.getMainLooper()).idle()
+      runBlocking { settings.settings.first().strengthStandard == StrengthStandard.WOMEN }
+    }
+
+    // Back on Workout, the power level follows the setting: women's bench thresholds are 0.6 × the men's,
+    // so 1.31 × body weight is past where World class starts (1.2).
+    compose.onNodeWithTag("tab_WORKOUT").performClick()
+    waitForText("power_overall", "women's standards")
+    scrollToLift("Barbell bench press")
+    liftRow("Barbell bench press").assert(says("World class · 90 kg × 5"))
+    liftRow("Barbell bench press").assert(says("Top tier reached"))
+  }
+
+  @Test
+  fun inPounds_bestSetsEstimatesAndGoals_showInPounds() {
+    runBlocking {
+      bodyWeights.log(clock.today(), 80.0)
+      settings.setWeightUnit(WeightUnit.LB)
+      settings.setThemeMode(ThemeMode.DARK)
+    }
+    openPowerLevel()
+    waitForTag("power_overall")
+    compose.onNodeWithTag("power_overall").assert(says("against 176.4 lb body weight"))
+    screenshot("power-level-dark")
+    scrollToLift("Barbell bench press")
+    // 90 kg = 198.4 lb; its estimate, 105 kg, is 231 lb; Elite starts at 1.6 × 80 kg = 128 kg = 282 lb.
+    liftRow("Barbell bench press").assert(says("198.4 lb × 5 ≈ 231 lb 1RM (1.31× body weight)"))
+    liftRow("Barbell bench press").assert(says("Next: Elite at a 282 lb 1RM"))
+    // Body-weight lifts give their goal in reps, whatever the unit: pull-ups 10 reps = 1.33 ×, Advanced at 1.4 × → 12 reps.
+    scrollToLift("Pull-up")
+    liftRow("Pull-up").assert(says("Bodyweight × 10"))
+    liftRow("Pull-up").assert(says("Next: Advanced at 12 reps"))
   }
 
   /** Saves the screen for a look (build/screenshots); a no-op where images can't be captured. */
