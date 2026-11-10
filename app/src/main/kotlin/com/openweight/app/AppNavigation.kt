@@ -53,6 +53,7 @@ import com.openweight.app.workout.session.SessionDetailRoute
 import com.openweight.app.workout.workouts.WorkoutOverviewRoute
 import java.time.LocalDate
 import com.openweight.app.progress.BodyWeightRoute
+import com.openweight.app.progress.strength.PowerLevelRoute
 import com.openweight.app.settings.SettingsRoute
 import com.openweight.app.transfer.ui.ExportRoute
 import com.openweight.app.transfer.ui.ImportRoute
@@ -122,6 +123,8 @@ data class MealPicker(
 @Serializable data object History : NavKey
 
 @Serializable data object BodyWeight : NavKey
+
+@Serializable data object PowerLevel : NavKey
 
 @Serializable data class SessionDetail(val sessionId: String) : NavKey
 
@@ -251,7 +254,11 @@ fun OpenWeightAppUi(modifier: Modifier = Modifier, importOpens: StateFlow<Int>? 
               onOpenExercises = { backStack.add(ExerciseList) },
               onOpenHistory = { backStack.add(History) },
               onOpenWeight = { backStack.add(BodyWeight) },
+              onOpenPowerLevel = { backStack.add(PowerLevel) },
             )
+          }
+          entry<PowerLevel> {
+            PowerLevelRoute(onBack = back, onOpenWeight = { backStack.add(BodyWeight) }, onOpenExercise = { backStack.add(ExerciseHistory(it)) })
           }
           entry<History> { HistoryRoute(onBack = back, onOpen = { backStack.add(SessionDetail(it)) }) }
           entry<SessionDetail> { key ->

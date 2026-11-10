@@ -44,6 +44,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.openweight.app.R
 import com.openweight.app.core.model.ThemeMode
 import com.openweight.app.core.model.WeightUnit
+import com.openweight.app.progress.strength.StrengthStandard
 import com.openweight.app.core.ui.ScreenScaffold
 import com.openweight.app.diet.household.HouseholdMember
 import com.openweight.app.diet.household.MemberDialog
@@ -75,6 +76,7 @@ fun SettingsRoute(onOpenExport: () -> Unit, modifier: Modifier = Modifier, viewM
     onWeightUnitChange = viewModel::setWeightUnit,
     onThemeModeChange = viewModel::setThemeMode,
     onRestAlertsChange = viewModel::setRestAlerts,
+    onStrengthStandardChange = viewModel::setStrengthStandard,
     onEditTargets = { editingTargets = true },
     members = members,
     onEditMember = { editingMember = it },
@@ -137,6 +139,7 @@ fun SettingsScreen(
   onThemeModeChange: (ThemeMode) -> Unit,
   modifier: Modifier = Modifier,
   onRestAlertsChange: (Boolean) -> Unit = {},
+  onStrengthStandardChange: (StrengthStandard) -> Unit = {},
   onEditTargets: () -> Unit = {},
   members: List<HouseholdMember> = emptyList(),
   onEditMember: (HouseholdMember) -> Unit = {},
@@ -188,6 +191,22 @@ fun SettingsScreen(
         headlineContent = { Text(stringResource(R.string.settings_rest_alerts)) },
         supportingContent = { Text(stringResource(R.string.settings_rest_alerts_hint)) },
         trailingContent = { Switch(checked = settings.restAlerts, onCheckedChange = null) },
+      )
+      Text(
+        stringResource(R.string.strength_standard),
+        style = MaterialTheme.typography.bodyLarge,
+        modifier = Modifier.padding(horizontal = 16.dp),
+      )
+      ChoiceRow(
+        options = StrengthStandard.entries,
+        selected = settings.strengthStandard,
+        label = {
+          when (it) {
+            StrengthStandard.MEN -> stringResource(R.string.strength_standard_men_option)
+            StrengthStandard.WOMEN -> stringResource(R.string.strength_standard_women_option)
+          }
+        },
+        onSelect = onStrengthStandardChange,
       )
 
       SectionTitle(stringResource(R.string.settings_diet))

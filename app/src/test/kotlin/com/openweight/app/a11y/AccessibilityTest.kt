@@ -137,6 +137,8 @@ class AccessibilityTest {
     tap("tab_WORKOUT"); tap("tab_WORKOUT")
     tap("open_weight"); check("Body weight", ready = "weight_input")
     tap("tab_WORKOUT"); tap("tab_WORKOUT") // back to the tab's first screen
+    tap("open_power_level"); check("Power level", ready = "power_body")
+    tap("tab_WORKOUT"); tap("tab_WORKOUT")
 
     tap("open_exercises"); check("Exercises", ready = "Ab wheel")
     tapText("Ab wheel"); check("Exercise", ready = "exercise_name")

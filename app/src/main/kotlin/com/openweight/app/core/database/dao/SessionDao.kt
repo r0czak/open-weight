@@ -83,6 +83,16 @@ interface SessionDao {
   )
   fun observeExerciseSets(exerciseId: String): Flow<List<ExerciseSetRow>>
 
+  /** Every done set of the sessions finished for a date from [from] on, for the power level. */
+  @Query(
+    """
+    SELECT s.*, ws.plannedDate AS plannedDate, ws.finishedAt AS finishedAt
+    FROM session_set s JOIN workout_session ws ON ws.id = s.sessionId
+    WHERE ws.finishedAt IS NOT NULL AND s.done = 1 AND ws.plannedDate >= :from
+    """
+  )
+  fun observeDoneSetsSince(from: LocalDate): Flow<List<ExerciseSetRow>>
+
   /** Every set (done or not) of [exerciseId] in the most recent finished session that did any of it. */
   @Query(
     """

@@ -62,6 +62,10 @@ constructor(
     viewModelScope.launch { repository.setTargets(kcal, protein) }
   }
 
+  fun setStrengthStandard(standard: com.openweight.app.progress.strength.StrengthStandard) {
+    viewModelScope.launch { repository.setStrengthStandard(standard) }
+  }
+
   fun setRestAlerts(on: Boolean) {
     viewModelScope.launch { repository.setRestAlerts(on) }
   }
