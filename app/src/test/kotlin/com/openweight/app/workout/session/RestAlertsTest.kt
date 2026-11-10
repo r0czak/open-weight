@@ -6,6 +6,7 @@ import android.app.Application
 import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
+import android.os.Looper
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
@@ -69,7 +70,15 @@ class RestAlertsTest {
     compose.waitUntil(5_000) { compose.onAllNodesWithTag("session_progress").fetchSemanticsNodes().isNotEmpty() }
   }
 
-  private fun waitForAlarm(present: Boolean) = compose.waitUntil(5_000) { (alarms.peekNextScheduledAlarm() != null) == present }
+  /**
+   * The view model sets the alarm on the main thread after the database reports the change, so
+   * let the main thread run between checks (waitUntil alone may not).
+   */
+  private fun waitForAlarm(present: Boolean) =
+    compose.waitUntil(5_000) {
+      shadowOf(Looper.getMainLooper()).idle()
+      (alarms.peekNextScheduledAlarm() != null) == present
+    }
 
   @Test
   fun confirmingASet_schedulesTheAlert_atTheEndOfItsRest_andSkipCancelsIt() {
@@ -95,6 +104,7 @@ class RestAlertsTest {
     compose.onNodeWithTag("session_check_0_1", useUnmergedTree = true).performClick()
     compose.waitUntil(5_000) { runBlocking { sessions.open().first()!!.doneCount == 1 } }
     compose.waitForIdle()
+    shadowOf(Looper.getMainLooper()).idle()
     assertNull(alarms.peekNextScheduledAlarm())
   }
 
