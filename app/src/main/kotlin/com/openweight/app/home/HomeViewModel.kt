@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.openweight.app.core.Today
 import com.openweight.app.diet.data.MealPlanRepository
+import com.openweight.app.settings.SettingsRepository
 import com.openweight.app.workout.blocks.TrainingBlockRepository
 import com.openweight.app.workout.data.WorkoutRepository
 import com.openweight.app.workout.session.Session
@@ -30,6 +31,8 @@ data class HomeState(
   val days: List<WeekDay> = emptyList(),
   /** The training session in progress, to resume. */
   val openSession: Session? = null,
+  val kcalTarget: Int? = null,
+  val proteinTarget: Int? = null,
 ) {
   val isCurrentWeek: Boolean
     get() = monday == WeekPlan.mondayOf(today)
@@ -42,8 +45,9 @@ class HomeViewModel
 constructor(
   blocks: TrainingBlockRepository,
   workouts: WorkoutRepository,
-  meals: MealPlanRepository,
   sessions: SessionRepository,
+  private val meals: MealPlanRepository,
+  settings: SettingsRepository,
   private val todayNow: Today,
   private val saved: SavedStateHandle,
 ) : ViewModel() {
@@ -84,13 +88,15 @@ constructor(
 
   private val training = combine(weekDone, sessions.open()) { done, open -> done to open }
 
+  private val mealsAndTargets = combine(weekMeals, settings.settings) { m, s -> Triple(m, s.kcalTarget, s.proteinTarget) }
+
   val state: StateFlow<HomeState> =
     combine(
         shown,
         combine(blocks.scheduledBlocks(), workouts.workouts()) { scheduled, all -> scheduled to all },
-        weekMeals,
+        mealsAndTargets,
         training,
-      ) { (today, monday, selected), (scheduled, all), dayMeals, (done, open) ->
+      ) { (today, monday, selected), (scheduled, all), (dayMeals, kcalTarget, proteinTarget), (done, open) ->
         HomeState(
           loading = false,
           today = today,
@@ -98,6 +104,8 @@ constructor(
           selected = selected,
           days = WeekPlan.days(monday, today, scheduled, all, dayMeals, done),
           openSession = open,
+          kcalTarget = kcalTarget,
+          proteinTarget = proteinTarget,
         )
       }
       .stateIn(
@@ -105,6 +113,8 @@ constructor(
         SharingStarted.WhileSubscribed(5_000),
         HomeState(today = today, monday = WeekPlan.mondayOf(today), selected = today),
       )
+
+  fun setEaten(mealId: String, eaten: Boolean) = viewModelScope.launch { meals.setEaten(mealId, eaten) }
 
   fun select(date: LocalDate) {
     saved[KEY_SELECTED] = date.toEpochDay()

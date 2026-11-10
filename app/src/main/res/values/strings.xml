@@ -576,4 +576,30 @@
     <string name="weight_change_up">Up %s over 2 weeks.</string>
     <string name="weight_change_down">Down %s over 2 weeks.</string>
     <string name="weight_chart_description">Weekly average weight, from %1$s to %2$s</string>
+
+    <!-- Live diet -->
+    <string name="meal_eaten_label">%s eaten</string>
+    <string name="meal_swap">Swap recipe</string>
+    <string name="meal_swap_title">Swap a meal on %s</string>
+    <string name="day_eaten_kcal">Eaten %1$s of %2$s</string>
+    <string name="day_eaten_protein">protein %1$s of %2$s</string>
+    <string name="day_left_kcal">%s left to target</string>
+    <string name="day_over_kcal">%s over target</string>
+    <string name="day_left_protein">%s protein to go</string>
+    <string name="settings_diet">Diet</string>
+    <string name="settings_targets">Daily targets</string>
+    <string name="settings_targets_none">Not set. Days show what\'s left once you set them.</string>
+    <string name="settings_targets_value">%1$s · %2$s protein</string>
+    <string name="settings_targets_kcal_only">%s</string>
+    <string name="targets_kcal">Calories (kcal)</string>
+    <string name="targets_protein">Protein (g)</string>
+    <string name="targets_hint">Leave a field empty for no target.</string>
+    <string name="targets_error">Calories %1$d–%2$d, protein %3$d–%4$d g.</string>
+    <string name="week_eaten_title">Eaten this week</string>
+    <string name="week_eaten">%1$s and %2$s protein a day on average</string>
+    <plurals name="week_eaten_days">
+        <item quantity="one">Over %d day with meals ticked as eaten.</item>
+        <item quantity="other">Over %d days with meals ticked as eaten.</item>
+    </plurals>
+    <string name="week_eaten_target">Target: %s a day.</string>
 </resources>

@@ -141,6 +141,8 @@ data class MealEntryEntity(
   val dietPlanId: String? = null,
   val createdAt: Instant,
   val updatedAt: Instant,
+  /** When it was marked as eaten; null while it's only planned (v6). */
+  val eatenAt: Instant? = null,
 )
 
 @Entity(tableName = "shopping_list")

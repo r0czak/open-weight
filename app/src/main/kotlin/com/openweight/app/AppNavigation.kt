@@ -105,6 +105,8 @@ data class MealPicker(
   val epochDay: Long? = null,
   val planId: String? = null,
   val dayOfWeek: String? = null,
+  /** Set when swapping that calendar meal's recipe. */
+  val swapMealId: String? = null,
 ) : NavKey
 
 @Serializable data object DietPlanList : NavKey
@@ -296,19 +298,24 @@ fun OpenWeightAppUi(modifier: Modifier = Modifier, importOpens: StateFlow<Int>? 
               onCreateRecipe = { backStack.add(RecipeEdit(null)) },
               onOpenIngredients = { backStack.add(IngredientList) },
               onAddMeal = { date, slot -> backStack.add(MealPicker(slot.name, epochDay = date.toEpochDay())) },
+              onSwapMeal = { id, date, slot -> backStack.add(MealPicker(slot.name, epochDay = date.toEpochDay(), swapMealId = id)) },
               onOpenPlans = { backStack.add(DietPlanList) },
             )
           }
           entry<MealPicker> { key ->
             val target =
-              if (key.planId != null) MealTarget.Plan(key.planId, DayOfWeek.valueOf(key.dayOfWeek!!))
-              else MealTarget.Day(LocalDate.ofEpochDay(key.epochDay!!))
+              when {
+                key.planId != null -> MealTarget.Plan(key.planId, DayOfWeek.valueOf(key.dayOfWeek!!))
+                key.swapMealId != null -> MealTarget.Swap(key.swapMealId, LocalDate.ofEpochDay(key.epochDay!!))
+                else -> MealTarget.Day(LocalDate.ofEpochDay(key.epochDay!!))
+              }
             MealPickerRoute(
               target = target,
               initialSlot = MealSlot.valueOf(key.slot),
               title =
                 when (target) {
                   is MealTarget.Day -> stringResource(R.string.meal_add_title, target.date.formatDayShort())
+                  is MealTarget.Swap -> stringResource(R.string.meal_swap_title, target.date.formatDayShort())
                   is MealTarget.Plan -> stringResource(R.string.meal_add_title, target.day.getDisplayName(TextStyle.FULL_STANDALONE, LocalConfiguration.current.locales[0]))
                 },
               onDone = back,

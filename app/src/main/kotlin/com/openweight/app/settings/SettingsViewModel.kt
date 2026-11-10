@@ -39,6 +39,10 @@ constructor(
     viewModelScope.launch { repository.setWeightUnit(unit) }
   }
 
+  fun setTargets(kcal: Int?, protein: Int?) {
+    viewModelScope.launch { repository.setTargets(kcal, protein) }
+  }
+
   fun setRestAlerts(on: Boolean) {
     viewModelScope.launch { repository.setRestAlerts(on) }
   }

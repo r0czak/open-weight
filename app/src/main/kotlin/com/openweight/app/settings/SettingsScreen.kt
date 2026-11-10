@@ -23,6 +23,11 @@ import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import com.openweight.app.diet.formatKcal
+import com.openweight.app.diet.formatGrams
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -52,6 +57,7 @@ fun SettingsRoute(onOpenExport: () -> Unit, modifier: Modifier = Modifier, viewM
   val settings by viewModel.settings.collectAsStateWithLifecycle()
   val lastAutoBackup by viewModel.lastAutoBackup.collectAsStateWithLifecycle()
   var backingUp by remember { mutableStateOf(false) }
+  var editingTargets by remember { mutableStateOf(false) }
   var confirmUndo by remember { mutableStateOf(false) }
   val pickFile =
     rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
@@ -62,6 +68,7 @@ fun SettingsRoute(onOpenExport: () -> Unit, modifier: Modifier = Modifier, viewM
     onWeightUnitChange = viewModel::setWeightUnit,
     onThemeModeChange = viewModel::setThemeMode,
     onRestAlertsChange = viewModel::setRestAlerts,
+    onEditTargets = { editingTargets = true },
     // Any file: some apps label .json files oddly, and the importer checks the content anyway.
     onImport = { pickFile.launch(arrayOf("*/*")) },
     onBackup = { backingUp = true },
@@ -71,6 +78,13 @@ fun SettingsRoute(onOpenExport: () -> Unit, modifier: Modifier = Modifier, viewM
     modifier = modifier,
   )
   if (backingUp) ExportDialog(ExportRequest.Everything, onDismiss = { backingUp = false })
+  if (editingTargets) {
+    TargetsDialog(
+      settings ?: Settings(),
+      onSave = { kcal, protein -> editingTargets = false; viewModel.setTargets(kcal, protein) },
+      onDismiss = { editingTargets = false },
+    )
+  }
   if (confirmUndo) {
     AlertDialog(
       onDismissRequest = { confirmUndo = false },
@@ -93,6 +107,7 @@ fun SettingsScreen(
   onThemeModeChange: (ThemeMode) -> Unit,
   modifier: Modifier = Modifier,
   onRestAlertsChange: (Boolean) -> Unit = {},
+  onEditTargets: () -> Unit = {},
   onImport: () -> Unit = {},
   onBackup: () -> Unit = {},
   onExport: () -> Unit = {},
@@ -140,6 +155,23 @@ fun SettingsScreen(
         headlineContent = { Text(stringResource(R.string.settings_rest_alerts)) },
         supportingContent = { Text(stringResource(R.string.settings_rest_alerts_hint)) },
         trailingContent = { Switch(checked = settings.restAlerts, onCheckedChange = null) },
+      )
+
+      SectionTitle(stringResource(R.string.settings_diet))
+      ListItem(
+        modifier = Modifier.clickable(onClick = onEditTargets).testTag("targets"),
+        headlineContent = { Text(stringResource(R.string.settings_targets)) },
+        supportingContent = {
+          Text(
+            when {
+              settings.kcalTarget != null && settings.proteinTarget != null ->
+                stringResource(R.string.settings_targets_value, formatKcal(settings.kcalTarget.toDouble()), formatGrams(settings.proteinTarget.toDouble()))
+              settings.kcalTarget != null -> stringResource(R.string.settings_targets_kcal_only, formatKcal(settings.kcalTarget.toDouble()))
+              settings.proteinTarget != null -> formatGrams(settings.proteinTarget.toDouble())
+              else -> stringResource(R.string.settings_targets_none)
+            }
+          )
+        },
       )
 
       HorizontalDivider(Modifier.padding(top = 8.dp))
@@ -216,3 +248,65 @@ private fun Context.versionName(): String =
 private fun SettingsScreenPreview() {
   OpenWeightTheme { SettingsScreen(Settings(), {}, {}) }
 }
+
+/** Daily calorie and protein targets; an empty field means no target. */
+@Composable
+private fun TargetsDialog(settings: Settings, onSave: (kcal: Int?, protein: Int?) -> Unit, onDismiss: () -> Unit) {
+  var kcal by remember { mutableStateOf(settings.kcalTarget?.toString().orEmpty()) }
+  var protein by remember { mutableStateOf(settings.proteinTarget?.toString().orEmpty()) }
+  var error by remember { mutableStateOf(false) }
+  AlertDialog(
+    onDismissRequest = onDismiss,
+    title = { Text(stringResource(R.string.settings_targets)) },
+    text = {
+      Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        OutlinedTextField(
+          value = kcal,
+          onValueChange = { kcal = it; error = false },
+          label = { Text(stringResource(R.string.targets_kcal)) },
+          singleLine = true,
+          isError = error,
+          keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+          modifier = Modifier.fillMaxWidth().testTag("target_kcal"),
+        )
+        OutlinedTextField(
+          value = protein,
+          onValueChange = { protein = it; error = false },
+          label = { Text(stringResource(R.string.targets_protein)) },
+          singleLine = true,
+          isError = error,
+          keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+          modifier = Modifier.fillMaxWidth().testTag("target_protein"),
+        )
+        Text(
+          if (error) {
+            stringResource(
+              R.string.targets_error,
+              SettingsRepository.KCAL_RANGE.first,
+              SettingsRepository.KCAL_RANGE.last,
+              SettingsRepository.PROTEIN_RANGE.first,
+              SettingsRepository.PROTEIN_RANGE.last,
+            )
+          } else stringResource(R.string.targets_hint),
+          style = MaterialTheme.typography.bodySmall,
+          color = if (error) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+      }
+    },
+    confirmButton = {
+      TextButton(
+        onClick = {
+          val k = kcal.trim().takeIf { it.isNotEmpty() }?.let { it.toIntOrNull() ?: -1 }
+          val p = protein.trim().takeIf { it.isNotEmpty() }?.let { it.toIntOrNull() ?: -1 }
+          error = (k != null && k !in SettingsRepository.KCAL_RANGE) || (p != null && p !in SettingsRepository.PROTEIN_RANGE)
+          if (!error) onSave(k, p)
+        },
+        modifier = Modifier.testTag("targets_save"),
+      ) {
+        Text(stringResource(R.string.action_save))
+      }
+    },
+    dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.action_cancel)) } },
+  )
+}
+

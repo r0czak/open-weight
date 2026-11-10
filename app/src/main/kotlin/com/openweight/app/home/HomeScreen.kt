@@ -52,6 +52,8 @@ import com.openweight.app.R
 import com.openweight.app.core.ui.ScreenScaffold
 import com.openweight.app.core.ui.formatDateRange
 import com.openweight.app.core.ui.formatDayShort
+import com.openweight.app.diet.calendar.DayProgress
+import com.openweight.app.diet.calendar.EatenToggle
 import com.openweight.app.diet.calendar.slotLabel
 import com.openweight.app.diet.formatKcal
 import java.time.LocalDate
@@ -136,6 +138,9 @@ fun HomeRoute(
             onSelect = { viewModel.select(day.date) },
             onOpenWorkout = { onOpenWorkout(it, day.date) },
             onOpenRecipe = onOpenRecipe,
+            onEaten = viewModel::setEaten,
+            kcalTarget = state.kcalTarget,
+            proteinTarget = state.proteinTarget,
           )
         }
       }
@@ -203,6 +208,9 @@ private fun DayCard(
   onSelect: () -> Unit,
   onOpenWorkout: (String) -> Unit,
   onOpenRecipe: (String) -> Unit,
+  onEaten: (mealId: String, eaten: Boolean) -> Unit = { _, _ -> },
+  kcalTarget: Int? = null,
+  proteinTarget: Int? = null,
 ) {
   Card(
     modifier = Modifier.fillMaxWidth().testTag("day_card_${day.date}"),
@@ -323,11 +331,14 @@ private fun DayCard(
             modifier = Modifier.testTag("day_kcal_${day.date}"),
           )
         }
+        DayProgress(day.meals, kcalTarget, proteinTarget, tag = "day_progress_${day.date}")
         day.meals.meals.forEach { m ->
+          Row(verticalAlignment = Alignment.CenterVertically) {
+          EatenToggle(m, onToggle = { onEaten(m.id, it) }, tag = "day_eaten_${day.date}_${m.recipeName}")
           Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier =
-              Modifier.fillMaxWidth()
+              Modifier.weight(1f)
                 .clip(RoundedCornerShape(8.dp))
                 .clickable { onOpenRecipe(m.recipeId) }
                 .padding(vertical = 6.dp)
@@ -341,6 +352,7 @@ private fun DayCard(
             )
             Text(m.recipeName, style = MaterialTheme.typography.bodyMedium, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f))
             Text(formatKcal(m.macros.kcal), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+          }
           }
         }
       }

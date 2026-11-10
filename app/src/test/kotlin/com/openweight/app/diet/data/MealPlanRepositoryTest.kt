@@ -154,4 +154,30 @@ class MealPlanRepositoryTest {
       runBlocking { meals.applyPlan(meals.createPlan("Q"), mon, mon.plusYears(2), ApplyMode.REPLACE) }
     }
   }
+
+  @Test
+  fun eatenMarks_swaps_andCopies() = runTest {
+    val breakfast = meals.addMeal(mon, MealSlot.BREAKFAST, oats, 1.0)
+    val dinner = meals.addMeal(mon, MealSlot.DINNER, chicken, 1.0)
+
+    meals.setEaten(breakfast, true)
+    var day = meals.days(mon, mon).first().single()
+    assertEquals(listOf(true, false), day.meals.map { it.eaten })
+    assertEquals(303.2, day.eaten.kcal, 0.1)
+    assertEquals(543.2, day.total.kcal, 0.1)
+
+    // Swapping takes the other recipe for that day only, not eaten yet; the plan link goes.
+    meals.swapRecipe(breakfast, chicken, 2.0)
+    day = meals.days(mon, mon).first().single()
+    assertEquals(listOf("Chicken" to false, "Chicken" to false), day.meals.map { it.recipeName to it.eaten })
+    assertEquals(480.0, day.meals.first().macros.kcal, 0.1)
+
+    // A copied day is planned, not eaten.
+    meals.setEaten(dinner, true)
+    meals.copyDay(mon, mon.plusDays(1), replace = false)
+    assertTrue(meals.days(mon.plusDays(1), mon.plusDays(1)).first().single().meals.none { it.eaten })
+    meals.setEaten(dinner, false)
+    assertTrue(meals.days(mon, mon).first().single().meals.none { it.eaten })
+  }
 }
+
