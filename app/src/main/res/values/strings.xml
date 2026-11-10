@@ -198,7 +198,6 @@
     <string name="home_no_block">No training block</string>
     <string name="workout_edit">Edit workout</string>
     <string name="workout_start">Start workout</string>
-    <string name="workout_start_soon">Live training (timers, logging your sets) comes in the next update.</string>
     <!-- Ingredients -->
     <string name="diet_ingredients">Ingredients</string>
     <string name="ingredient_new">New ingredient</string>
@@ -484,4 +483,45 @@
     </plurals>
     <string name="entry_remove_confirm">Remove</string>
     <string name="starter_none_new">You already have all the common exercises.</string>
+
+    <!-- Live training -->
+    <string name="workout_start_empty">Add an exercise with sets before you start.</string>
+    <string name="workout_resume">Resume session</string>
+    <string name="workout_other_session">A session of %s is in progress. Finish or discard it before starting another.</string>
+    <string name="workout_open_other_session">Open that session</string>
+    <string name="workout_train">Train this workout</string>
+    <string name="session_progress">Sets done: %1$d/%2$d</string>
+    <string name="session_finish">Finish</string>
+    <string name="session_finish_title">Finish the workout?</string>
+    <plurals name="session_finish_text">
+        <item quantity="one">%d set is not done. It is saved as skipped.</item>
+        <item quantity="other">%d sets are not done. They are saved as skipped.</item>
+    </plurals>
+    <string name="session_keep_going">Keep going</string>
+    <string name="session_discard">Discard session</string>
+    <string name="session_discard_title">Discard this session?</string>
+    <string name="session_discard_text">Everything logged in it is deleted. Your workout plan stays as it is.</string>
+    <string name="session_set_value">%1$s × %2$d</string>
+    <string name="session_set_target">Target: %s reps</string>
+    <string name="session_confirm_set">Mark set %1$d of %2$s as done</string>
+    <string name="session_undo_set">Set %1$d of %2$s is done. Mark as not done</string>
+    <string name="session_change_set">Change weight and reps</string>
+    <string name="session_set_title">Set %1$d · %2$s</string>
+    <string name="session_weight">Weight (%s)</string>
+    <string name="session_weight_hint">Leave the weight empty for bodyweight.</string>
+    <string name="session_set_done">Done</string>
+    <string name="session_rest">Rest %s</string>
+    <string name="session_rest_over">Rest is over</string>
+    <string name="session_rest_skip">Skip</string>
+    <string name="session_done_title">Workout done</string>
+    <plurals name="session_done_minutes">
+        <item quantity="one">%d minute</item>
+        <item quantity="other">%d minutes</item>
+    </plurals>
+    <string name="session_done_sets">Sets done: %1$d/%2$d</string>
+    <string name="session_done_volume">Total lifted: %s</string>
+    <string name="home_session_open">In progress: %s</string>
+    <string name="home_session_resume">Resume</string>
+    <string name="home_workout_done">Done</string>
+    <string name="home_also_done">Also done: %s</string>
 </resources>

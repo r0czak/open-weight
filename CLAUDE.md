@@ -16,6 +16,8 @@ Offline-first Android app for planning workouts (training blocks, workouts, exer
 - `workout/`, `diet/`, `settings/`, `transfer/` (later: `progress/`); `assets/starter-exercises.openweight.json` holds the
   40 common exercises (`StarterExercises`), imported like any file — one package per feature: screens, ViewModels, domain rules, repositories
 - `workout/blocks/` — training blocks; `Schedule.kt` holds the schedule rule (date → block → weekday's workout; overlapping blocks: the later start wins)
+- `workout/session/` — live training: `SessionRepository` (a session copies a workout's plan and is filled in set by set; one open at a time;
+  suggestions come from last time; rest ends at the last done set's time + its rest) and the live screen. Sessions keep names as text, so history survives deletes
 - `diet/` — ingredients and recipes; `data/Nutrition.kt` holds the calories/macros rule (per 100 g or ml, pieces via grams per piece, uncountable lines listed, never silently dropped)
 - `diet/shopping/` — shopping list panel; rules in `diet/data/ShoppingListBuilder.kt` (sum per ingredient and unit kind, scaled to servings, rounded up for the shop) and `ShoppingRepository.kt` (update keeps manual items, ticks and hand-edited amounts)
 - `diet/calendar/`, `diet/plans/` — meal calendar and diet plans; rules in `diet/data/MealPlanRepository.kt` (copy day/week, apply a plan: skip or replace busy days)

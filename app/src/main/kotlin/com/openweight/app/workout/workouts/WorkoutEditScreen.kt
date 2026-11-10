@@ -16,6 +16,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -69,6 +70,7 @@ fun WorkoutEditRoute(
   onBack: () -> Unit,
   onOpenWorkout: (String) -> Unit,
   onAddExercise: () -> Unit,
+  onTrain: () -> Unit = {},
   viewModel: WorkoutEditViewModel =
     hiltViewModel<WorkoutEditViewModel, WorkoutEditViewModel.Factory>(key = "workout-$workoutId") {
       it.create(workoutId)
@@ -104,6 +106,9 @@ fun WorkoutEditRoute(
     snackbarHostState = snackbar,
     actions = {
       if (loaded != null) {
+        IconButton(onClick = onTrain, modifier = Modifier.testTag("train_workout")) {
+          Icon(Icons.Filled.PlayArrow, stringResource(R.string.workout_train))
+        }
         Box {
           IconButton(onClick = { menu = true }, modifier = Modifier.testTag("workout_menu")) {
             Icon(Icons.Filled.MoreVert, stringResource(R.string.action_more))

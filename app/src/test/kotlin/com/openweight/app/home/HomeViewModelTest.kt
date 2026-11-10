@@ -10,6 +10,7 @@ import com.openweight.app.testing.FakeTimeAndIds
 import com.openweight.app.testing.inMemoryDatabase
 import com.openweight.app.workout.blocks.TrainingBlockRepository
 import com.openweight.app.workout.data.WorkoutRepository
+import com.openweight.app.workout.session.SessionRepository
 import java.time.LocalDate
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -47,6 +48,7 @@ class HomeViewModelTest {
         TrainingBlockRepository(db, clock),
         WorkoutRepository(db, clock),
         MealPlanRepository(db, DietRepository(db, clock), clock),
+        SessionRepository(db, clock),
         today,
         SavedStateHandle(),
       )

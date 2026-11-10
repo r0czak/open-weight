@@ -35,7 +35,7 @@ class OpenWeightDatabaseTest {
   }
 
   @Test
-  fun createsAllFifteenTables() {
+  fun createsAllTables() {
     val tables = mutableListOf<String>()
     sql
       .query(
@@ -49,6 +49,7 @@ class OpenWeightDatabaseTest {
         "exercise", "workout", "workout_exercise", "set_plan", "training_block",
         "block_workout", "block_schedule_day", "ingredient", "recipe", "recipe_ingredient",
         "diet_plan", "diet_plan_meal", "meal_entry", "shopping_list", "shopping_item",
+        "workout_session", "session_set",
       ),
       tables.toSet(),
     )

@@ -7,6 +7,8 @@ import com.openweight.app.core.Today
 import com.openweight.app.diet.data.MealPlanRepository
 import com.openweight.app.workout.blocks.TrainingBlockRepository
 import com.openweight.app.workout.data.WorkoutRepository
+import com.openweight.app.workout.session.Session
+import com.openweight.app.workout.session.SessionRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.LocalDate
 import javax.inject.Inject
@@ -26,6 +28,8 @@ data class HomeState(
   val monday: LocalDate,
   val selected: LocalDate,
   val days: List<WeekDay> = emptyList(),
+  /** The training session in progress, to resume. */
+  val openSession: Session? = null,
 ) {
   val isCurrentWeek: Boolean
     get() = monday == WeekPlan.mondayOf(today)
@@ -39,6 +43,7 @@ constructor(
   blocks: TrainingBlockRepository,
   workouts: WorkoutRepository,
   meals: MealPlanRepository,
+  sessions: SessionRepository,
   private val todayNow: Today,
   private val saved: SavedStateHandle,
 ) : ViewModel() {
@@ -71,14 +76,28 @@ constructor(
       Triple(today, monday, selected)
     }
 
+  private val weekDone =
+    mondayFlow.flatMapLatest { epoch ->
+      val monday = LocalDate.ofEpochDay(epoch)
+      sessions.done(monday, monday.plusDays(6))
+    }
+
+  private val training = combine(weekDone, sessions.open()) { done, open -> done to open }
+
   val state: StateFlow<HomeState> =
-    combine(shown, blocks.scheduledBlocks(), workouts.workouts(), weekMeals) { (today, monday, selected), scheduled, all, dayMeals ->
+    combine(
+        shown,
+        combine(blocks.scheduledBlocks(), workouts.workouts()) { scheduled, all -> scheduled to all },
+        weekMeals,
+        training,
+      ) { (today, monday, selected), (scheduled, all), dayMeals, (done, open) ->
         HomeState(
           loading = false,
           today = today,
           monday = monday,
           selected = selected,
-          days = WeekPlan.days(monday, today, scheduled, all, dayMeals),
+          days = WeekPlan.days(monday, today, scheduled, all, dayMeals, done),
+          openSession = open,
         )
       }
       .stateIn(

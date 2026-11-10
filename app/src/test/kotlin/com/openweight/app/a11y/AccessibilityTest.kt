@@ -112,7 +112,12 @@ class AccessibilityTest {
     tap("open_blocks"); check("Blocks", ready = "Winter Arc 1 · Intro")
     tapText("Winter Arc 1 · Intro"); check("Block", ready = "day_TUESDAY"); back(); back()
     tap("open_workouts"); check("Workouts", ready = "Push A · Intro")
-    tapText("Push A · Intro"); check("Workout editor", ready = "Leg press"); back(); back()
+    tapText("Push A · Intro"); check("Workout editor", ready = "Leg press")
+    tap("train_workout"); check("Workout overview", ready = "start_workout")
+    tap("start_workout"); check("Live session", ready = "session_progress")
+    tap("session_check_0_1"); check("Live session, resting", ready = "rest_bar")
+    tap("finish_session"); tap("confirm_finish"); check("Session summary", ready = "session_summary")
+    back(); back(); back(); back()
     tap("open_exercises"); check("Exercises", ready = "Ab wheel")
     tapText("Ab wheel"); check("Exercise", ready = "exercise_name"); back(); back()
 

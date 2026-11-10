@@ -46,6 +46,7 @@ import com.openweight.app.diet.recipes.IngredientPickerRoute
 import com.openweight.app.diet.recipes.RecipeDetailRoute
 import com.openweight.app.diet.recipes.RecipeEditRoute
 import com.openweight.app.home.HomeRoute
+import com.openweight.app.workout.session.LiveSessionRoute
 import com.openweight.app.workout.workouts.WorkoutOverviewRoute
 import java.time.LocalDate
 import com.openweight.app.settings.SettingsRoute
@@ -111,6 +112,9 @@ data class MealPicker(
 
 /** Read-only workout, as opened from a day on Home ([epochDay] = that day, if any). */
 @Serializable data class WorkoutOverview(val workoutId: String, val epochDay: Long? = null) : NavKey
+
+/** Live training: the session being trained, or its summary once finished. */
+@Serializable data class LiveSession(val sessionId: String) : NavKey
 
 @Serializable data class WorkoutEdit(val workoutId: String) : NavKey
 
@@ -211,14 +215,17 @@ fun OpenWeightAppUi(modifier: Modifier = Modifier, importOpens: StateFlow<Int>? 
             HomeRoute(
               onOpenWorkout = { id, date -> backStack.add(WorkoutOverview(id, date.toEpochDay())) },
               onOpenRecipe = { backStack.add(RecipeView(it)) },
+              onOpenSession = { backStack.add(LiveSession(it)) },
             )
           }
+          entry<LiveSession> { key -> LiveSessionRoute(sessionId = key.sessionId, onBack = back) }
           entry<WorkoutOverview> { key ->
             WorkoutOverviewRoute(
               workoutId = key.workoutId,
               date = key.epochDay?.let(LocalDate::ofEpochDay),
               onBack = back,
               onEdit = { backStack.add(WorkoutEdit(key.workoutId)) },
+              onOpenSession = { backStack.add(LiveSession(it)) },
             )
           }
           entry<WorkoutHome> {
@@ -244,6 +251,7 @@ fun OpenWeightAppUi(modifier: Modifier = Modifier, importOpens: StateFlow<Int>? 
                 backStack.add(WorkoutEdit(it))
               },
               onAddExercise = { backStack.add(ExercisePicker(key.workoutId)) },
+              onTrain = { backStack.add(WorkoutOverview(key.workoutId)) },
             )
           }
           entry<ExercisePicker> { key -> ExercisePickerRoute(workoutId = key.workoutId, onDone = back) }

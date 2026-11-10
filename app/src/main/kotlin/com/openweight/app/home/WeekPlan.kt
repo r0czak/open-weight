@@ -5,6 +5,7 @@ import com.openweight.app.workout.blocks.PlannedDay
 import com.openweight.app.workout.blocks.ScheduleResolver
 import com.openweight.app.workout.blocks.ScheduledBlock
 import com.openweight.app.workout.data.WorkoutSummary
+import com.openweight.app.workout.session.DoneWorkout
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.temporal.TemporalAdjusters
@@ -21,7 +22,17 @@ data class WeekDay(
   /** Null on a rest day or outside every block. */
   val workout: DayWorkout?,
   val meals: DayMeals = DayMeals(date, emptyList()),
-)
+  /** Sessions finished for this day. */
+  val done: List<DoneWorkout> = emptyList(),
+) {
+  /** The planned workout was trained. */
+  val workoutDone: Boolean
+    get() = workout != null && done.any { it.workoutId == workout.id }
+
+  /** Workouts trained for this day other than the planned one. */
+  val otherDone: List<DoneWorkout>
+    get() = done.filter { it.workoutId != workout?.id }
+}
 
 object WeekPlan {
   /** Weeks run Monday to Sunday. */
@@ -33,6 +44,7 @@ object WeekPlan {
     blocks: List<ScheduledBlock>,
     workouts: List<WorkoutSummary>,
     meals: List<DayMeals> = emptyList(),
+    done: Map<LocalDate, List<DoneWorkout>> = emptyMap(),
   ): List<WeekDay> {
     val byId = workouts.associateBy { it.id }
     val mealsByDate = meals.associateBy { it.date }
@@ -45,6 +57,7 @@ object WeekPlan {
         workout =
           inBlock?.workoutId?.let { id -> byId[id]?.let { DayWorkout(it.id, it.name, it.exerciseCount) } },
         meals = mealsByDate[planned.date] ?: DayMeals(planned.date, emptyList()),
+        done = done[planned.date].orEmpty(),
       )
     }
   }
