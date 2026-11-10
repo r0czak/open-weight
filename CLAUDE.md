@@ -22,6 +22,10 @@ Offline-first Android app for planning workouts (training blocks, workouts, exer
   `HistoryScreens.kt` the history, session and per-exercise screens; `RestAlerts` the rest-over alarm and notification
 - `progress/` — body weight: `BodyWeightRepository` (one weigh-in per day, 20–400 kg, not in the future) and `WeightRules.trend` (weekly
   averages Mon–Sun; change = latest week vs two weeks before)
+- `progress/strength/` — power level: `StrengthStandards` (lifts matched by name → family thresholds × factor, load kind,
+  muscles worked), `StrengthRules` (best set of 180 days → Epley 1RM / latest weigh-in → score 0–7, 7 tiers; muscle =
+  weighted average of its lifts; power level = average of muscles), `BodyMap.kt` (front/back figure, own drawing),
+  `PowerLevelScreen.kt`. Men's/women's standards are a setting (kept in backups)
 - `diet/` — ingredients and recipes; `data/Nutrition.kt` holds the calories/macros rule (per 100 g or ml, pieces via grams per piece, uncountable lines listed, never silently dropped)
 - `diet/household/` — people you cook for (`HouseholdRepository`: name, portion 0.1–3 of yours, eats new/planned meals by default). A calendar
   meal lists who else eats it (`meal_member`); your totals count only your portion, the shopping list counts servings × (1 + their portions)

@@ -4,6 +4,7 @@ import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.openweight.app.core.database.OpenWeightDatabase
+import com.openweight.app.progress.strength.StrengthStandard
 import com.openweight.app.settings.SettingsRepository
 import com.openweight.app.testing.FakeTimeAndIds
 import com.openweight.app.testing.inMemoryDatabase
@@ -83,6 +84,26 @@ class ImportSessionTest {
     val undo = again.step.value as ImportStep.Ready
     assertTrue(undo.isUndo)
     assertEquals(1, undo.preview.counts.getValue(RecordKind.EXERCISE).inFile)
+  }
+
+  @Test
+  fun strengthStandards_travelInABackup_andAnOlderFileLeavesThemAlone() = runTest {
+    val (session, settings) = session()
+    settings.setStrengthStandard(StrengthStandard.WOMEN)
+    val dto = session.currentSettings()
+    assertEquals("WOMEN", dto.strengthStandard)
+    val backup = ExportService(db, FakeTimeAndIds()) { "test" }.export(ExportRequest.Everything, dto).bytes
+
+    // Restored on a phone set to men's standards: the backup's choice comes back.
+    settings.setStrengthStandard(StrengthStandard.MEN)
+    session.openBytes(backup)
+    session.run(ImportOptions(replaceEverything = true))
+    assertEquals(StrengthStandard.WOMEN, settings.settings.first().strengthStandard)
+
+    // A file from before 1.7.0 has no strengthStandard: the setting stays as it is.
+    session.openBytes(file)
+    session.run(ImportOptions())
+    assertEquals(StrengthStandard.WOMEN, settings.settings.first().strengthStandard)
   }
 
   @Test

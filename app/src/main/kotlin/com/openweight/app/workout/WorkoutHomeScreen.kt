@@ -53,6 +53,7 @@ fun WorkoutHomeScreen(
   modifier: Modifier = Modifier,
   onOpenHistory: () -> Unit = {},
   onOpenWeight: () -> Unit = {},
+  onOpenPowerLevel: () -> Unit = {},
   viewModel: WorkoutHomeViewModel = hiltViewModel(),
 ) {
   val counts by viewModel.counts.collectAsStateWithLifecycle()
@@ -88,6 +89,12 @@ fun WorkoutHomeScreen(
         modifier = Modifier.clickable(onClick = onOpenWeight).testTag("open_weight"),
         headlineContent = { Text(stringResource(R.string.weight_title)) },
         supportingContent = { Text(stringResource(R.string.weight_hint)) },
+      )
+      HorizontalDivider()
+      ListItem(
+        modifier = Modifier.clickable(onClick = onOpenPowerLevel).testTag("open_power_level"),
+        headlineContent = { Text(stringResource(R.string.power_title)) },
+        supportingContent = { Text(stringResource(R.string.power_hint)) },
       )
     }
   }

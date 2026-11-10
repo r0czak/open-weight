@@ -202,7 +202,7 @@ data class ShoppingItemDto(
   val isQuantityEdited: Boolean = false,
 )
 
-/** [weightUnit] is KG or LB; [themeMode] is SYSTEM, LIGHT or DARK; targets per day. */
+/** [weightUnit] is KG or LB; [themeMode] is SYSTEM, LIGHT or DARK; targets per day; [strengthStandard] is MEN or WOMEN. */
 @Serializable
 data class SettingsDto(
   val weightUnit: String? = null,
@@ -210,6 +210,7 @@ data class SettingsDto(
   val restAlerts: Boolean? = null,
   val kcalTarget: Int? = null,
   val proteinTarget: Int? = null,
+  val strengthStandard: String? = null,
 )
 
 /**

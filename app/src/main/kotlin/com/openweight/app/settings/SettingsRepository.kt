@@ -8,6 +8,7 @@ import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.openweight.app.core.model.ThemeMode
 import com.openweight.app.core.model.WeightUnit
+import com.openweight.app.progress.strength.StrengthStandard
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.flow.Flow
@@ -21,6 +22,8 @@ data class Settings(
   /** Daily targets; null when not set. */
   val kcalTarget: Int? = null,
   val proteinTarget: Int? = null,
+  /** The standards lifts are measured against for the power level. */
+  val strengthStandard: StrengthStandard = StrengthStandard.MEN,
 )
 
 @Singleton
@@ -34,6 +37,7 @@ class SettingsRepository @Inject constructor(private val dataStore: DataStore<Pr
         restAlerts = prefs[REST_ALERTS] ?: true,
         kcalTarget = prefs[KCAL_TARGET],
         proteinTarget = prefs[PROTEIN_TARGET],
+        strengthStandard = prefs[STRENGTH_STANDARD].toEnumOr(StrengthStandard.MEN),
       )
     }
 
@@ -47,6 +51,10 @@ class SettingsRepository @Inject constructor(private val dataStore: DataStore<Pr
 
   suspend fun setRestAlerts(on: Boolean) {
     dataStore.edit { it[REST_ALERTS] = on }
+  }
+
+  suspend fun setStrengthStandard(standard: StrengthStandard) {
+    dataStore.edit { it[STRENGTH_STANDARD] = standard.name }
   }
 
   /** Sets or (null) clears the daily targets; values outside the limits are refused. */
@@ -64,6 +72,7 @@ class SettingsRepository @Inject constructor(private val dataStore: DataStore<Pr
     val PROTEIN_RANGE = 10..500
     private val KCAL_TARGET = intPreferencesKey("kcal_target")
     private val PROTEIN_TARGET = intPreferencesKey("protein_target")
+    private val STRENGTH_STANDARD = stringPreferencesKey("strength_standard")
     private val REST_ALERTS = booleanPreferencesKey("rest_alerts")
     private val WEIGHT_UNIT = stringPreferencesKey("weight_unit")
     private val THEME_MODE = stringPreferencesKey("theme_mode")

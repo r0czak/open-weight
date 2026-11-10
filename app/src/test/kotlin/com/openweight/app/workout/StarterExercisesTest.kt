@@ -66,7 +66,8 @@ class StarterExercisesTest {
     compose.onNodeWithTag("add_starter").performClick()
 
     waitUntilDisplayed("Added 40 exercises.")
-    compose.onNodeWithText("Barbell back squat").assertIsDisplayed()
+    // The message can show before the list has redrawn with the new rows.
+    waitUntilDisplayed("Barbell back squat")
   }
 
   @Test
