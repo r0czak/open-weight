@@ -602,4 +602,20 @@
         <item quantity="other">Over %d days with meals ticked as eaten.</item>
     </plurals>
     <string name="week_eaten_target">Target: %s a day.</string>
+
+    <!-- Household -->
+    <string name="household_hint">People you cook for. Your own numbers count only your portion; the shopping list and \"cook for the household\" count everyone.</string>
+    <string name="household_add">Add someone</string>
+    <string name="household_edit">Edit</string>
+    <string name="household_name">Name</string>
+    <string name="household_portion">Portion</string>
+    <string name="household_portion_hint">1 is your portion; 0.75 is three quarters of it.</string>
+    <string name="household_portion_error">Enter a portion from %1$s to %2$s.</string>
+    <string name="household_by_default">Eats new and planned meals</string>
+    <string name="household_member_line">%s of your portion</string>
+    <string name="household_not_by_default">only meals you add them to</string>
+    <string name="household_also_eating">Also eating</string>
+    <string name="household_chip">%1$s (%2$s)</string>
+    <string name="household_with">with %s</string>
+    <string name="household_cook_for">Cook for the household (×%s)</string>
 </resources>

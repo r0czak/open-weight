@@ -107,7 +107,25 @@ class MigrationTest {
     }
   }
 
+  @Test
+  fun v6ToV7_keepsMeals_andAddsTheHousehold() {
+    helper.createDatabase(DB7, 6).use { db ->
+      db.execSQL("INSERT INTO recipe (id, name, servings, prepMinutes, steps, tags, notes, createdAt, updatedAt) VALUES ('r1', 'Oats', 1, NULL, '', '', '', 0, 0)")
+      db.execSQL("INSERT INTO meal_entry (id, date, slot, recipeId, servings, dietPlanId, createdAt, updatedAt, eatenAt) VALUES ('m1', '2026-11-10', 'BREAKFAST', 'r1', 1.0, NULL, 0, 0, NULL)")
+    }
+
+    helper.runMigrationsAndValidate(DB7, 7, true).use { db ->
+      db.execSQL("INSERT INTO household_member VALUES ('h1', 'Anna', 0.75, 1, 0, 0)")
+      db.execSQL("INSERT INTO meal_member VALUES ('m1', 'h1', 0)")
+      db.query("SELECT COUNT(*) FROM meal_member").use {
+        assertTrue(it.moveToFirst())
+        assertEquals(1, it.getInt(0))
+      }
+    }
+  }
+
   private companion object {
+    const val DB7 = "migration-test-7.db"
     const val DB6 = "migration-test-6.db"
     const val DB5 = "migration-test-5.db"
     const val DB4 = "migration-test-4.db"

@@ -109,11 +109,14 @@ constructor(private val db: OpenWeightDatabase, private val clock: TimeAndIds) {
   private suspend fun mealsFor(from: LocalDate, to: LocalDate): List<MealForShopping> {
     val recipes = db.recipeDao()
     val cache = mutableMapOf<String, com.openweight.app.core.database.dao.RecipeRow?>()
+    // Everyone who eats a meal is shopped for: your servings times (1 + their portions).
+    val portions = db.householdDao().getMembers().associate { it.id to it.portion }
+    val eaters = db.householdDao().getMealMembers(from, to).groupBy({ it.mealId }, { portions[it.memberId] ?: 0.0 })
     return db.mealPlanDao().getMeals(from, to).mapNotNull { meal ->
       val row = cache.getOrPut(meal.recipeId) { recipes.get(meal.recipeId) } ?: return@mapNotNull null
       MealForShopping(
         recipeServings = row.recipe.servings,
-        servings = meal.servings,
+        servings = meal.servings * (1 + eaters[meal.id].orEmpty().sum()),
         lines = row.items.map { RecipeLine(it.ingredient.id, it.ingredient.name, it.ingredient.shopCategory, it.item.quantity, it.item.unit) },
       )
     }

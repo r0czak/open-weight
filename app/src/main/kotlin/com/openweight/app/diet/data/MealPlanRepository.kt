@@ -6,6 +6,9 @@ import com.openweight.app.core.database.OpenWeightDatabase
 import com.openweight.app.core.database.entity.DietPlanEntity
 import com.openweight.app.core.database.entity.DietPlanMealEntity
 import com.openweight.app.core.database.entity.MealEntryEntity
+import com.openweight.app.core.database.entity.MealMemberEntity
+import com.openweight.app.diet.household.HouseholdMember
+import com.openweight.app.diet.household.toModel
 import com.openweight.app.core.model.MealSlot
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -28,7 +31,13 @@ data class PlannedMeal(
   val complete: Boolean,
   val fromPlan: Boolean,
   val eaten: Boolean = false,
-)
+  /** Household members who also eat it (your portion is [servings]; [macros] count only yours). */
+  val members: List<HouseholdMember> = emptyList(),
+) {
+  /** Servings to cook: yours plus each member's portion of it. */
+  val householdServings: Double
+    get() = servings * (1 + members.sumOf { it.portion })
+}
 
 data class DayMeals(val date: LocalDate, val meals: List<PlannedMeal>) {
   val total: Macros
@@ -83,17 +92,32 @@ constructor(
   private val clock: TimeAndIds,
 ) {
   private val dao = db.mealPlanDao()
+  private val household = db.householdDao()
+
+  /** Members who eat new and planned meals unless told otherwise. */
+  private suspend fun defaultEaters(): List<String> = household.getMembers().filter { it.eatsByDefault }.map { it.id }
+
+  private suspend fun addEaters(mealIds: List<String>, memberIds: List<String>) {
+    if (memberIds.isEmpty() || mealIds.isEmpty()) return
+    val now = clock.now()
+    household.insertMealMembers(mealIds.flatMap { meal -> memberIds.map { MealMemberEntity(meal, it, now) } })
+  }
 
   // ---- Calendar ----
 
   /** Every date from [from] to [to], each with its meals (possibly none). */
   fun days(from: LocalDate, to: LocalDate): Flow<List<DayMeals>> =
-    combine(dao.observeMeals(from, to), diet.recipes()) { meals, recipes ->
+    combine(dao.observeMeals(from, to), diet.recipes(), household.observeMealMembers(from, to), household.observeMembers()) { meals, recipes, links, people ->
       val byId = recipes.associateBy { it.id }
+      val peopleById = people.associateBy { it.id }
+      val membersByMeal = links.groupBy({ it.mealId }, { peopleById[it.memberId]?.toModel() }).mapValues { (_, v) -> v.filterNotNull() }
       val planned =
         meals.mapNotNull { m ->
           val r = byId[m.recipeId] ?: return@mapNotNull null
-          PlannedMeal(m.id, m.date, m.slot, r.id, r.name, m.servings, r.nutrition.perServing * m.servings, r.nutrition.complete, m.dietPlanId != null, m.eatenAt != null)
+          PlannedMeal(
+            m.id, m.date, m.slot, r.id, r.name, m.servings, r.nutrition.perServing * m.servings, r.nutrition.complete,
+            m.dietPlanId != null, m.eatenAt != null, membersByMeal[m.id].orEmpty(),
+          )
         }
       val byDate = planned.groupBy { it.date }
       generateSequence(from) { it.plusDays(1) }
@@ -104,10 +128,13 @@ constructor(
 
   suspend fun addMeal(date: LocalDate, slot: MealSlot, recipeId: String, servings: Double): String {
     requireServings(servings)
-    val now = clock.now()
-    val id = clock.newId()
-    dao.insertMeals(listOf(MealEntryEntity(id, date, slot, recipeId, servings, null, now, now)))
-    return id
+    return db.withTransaction {
+      val now = clock.now()
+      val id = clock.newId()
+      dao.insertMeals(listOf(MealEntryEntity(id, date, slot, recipeId, servings, null, now, now)))
+      addEaters(listOf(id), defaultEaters())
+      id
+    }
   }
 
   suspend fun setServings(mealId: String, servings: Double) {
@@ -155,13 +182,14 @@ constructor(
     require(from != to) { "Pick a different day to copy to" }
     return db.withTransaction {
       val source = dao.getMeals(from, from.plusDays(days - 1))
+      val eaters = household.getMealMembers(from, from.plusDays(days - 1)).groupBy({ it.mealId }, { it.memberId })
       if (replace) dao.deleteMealsBetween(to, to.plusDays(days - 1))
       val now = clock.now()
       val shift = ChronoUnit.DAYS.between(from, to)
-      dao.insertMeals(
-        // A copy is planned, not eaten.
-        source.map { it.copy(id = clock.newId(), date = it.date.plusDays(shift), eatenAt = null, createdAt = now, updatedAt = now) }
-      )
+      // A copy is planned, not eaten, and eaten by the same people.
+      val copies = source.map { it to it.copy(id = clock.newId(), date = it.date.plusDays(shift), eatenAt = null, createdAt = now, updatedAt = now) }
+      dao.insertMeals(copies.map { it.second })
+      household.insertMealMembers(copies.flatMap { (old, new) -> eaters[old.id].orEmpty().map { MealMemberEntity(new.id, it, now) } })
       source.size
     }
   }
@@ -267,6 +295,7 @@ constructor(
         date = date.plusDays(1)
       }
       dao.insertMeals(toInsert)
+      addEaters(toInsert.map { it.id }, defaultEaters())
       ApplyResult(filled, skipped, toInsert.size)
     }
   }

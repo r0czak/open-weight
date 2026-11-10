@@ -37,6 +37,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
 import com.openweight.app.R
+import androidx.compose.material3.MaterialTheme
+import com.openweight.app.diet.household.formatPortion
+import com.openweight.app.diet.household.HouseholdMember
 import com.openweight.app.core.model.MealSlot
 import com.openweight.app.core.ui.EmptyState
 import com.openweight.app.core.ui.ScreenScaffold
@@ -202,8 +205,12 @@ fun ServingsDialog(
   onRemove: (() -> Unit)? = null,
   onOpenRecipe: (() -> Unit)? = null,
   onSwap: (() -> Unit)? = null,
+  household: List<HouseholdMember> = emptyList(),
+  initialMembers: Set<String> = emptySet(),
+  onMembers: ((Set<String>) -> Unit)? = null,
 ) {
   var text by remember { mutableStateOf(formatNumber(initial)) }
+  var members by remember { mutableStateOf(initialMembers) }
   val value = parseNumber(text)
   val valid = value != null && value > 0 && value <= MealPlanRepository.MAX_SERVINGS
   AlertDialog(
@@ -227,6 +234,19 @@ fun ServingsDialog(
         if (valid && kcalPerServing != null) {
           Text(formatKcal(kcalPerServing * value))
         }
+        if (onMembers != null && household.isNotEmpty()) {
+          Text(stringResource(R.string.household_also_eating), style = MaterialTheme.typography.labelLarge)
+          FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+            household.forEach { m ->
+              FilterChip(
+                selected = m.id in members,
+                onClick = { members = if (m.id in members) members - m.id else members + m.id },
+                label = { Text(stringResource(R.string.household_chip, m.name, formatPortion(m.portion))) },
+                modifier = Modifier.testTag("eater_${m.name}"),
+              )
+            }
+          }
+        }
         if (onOpenRecipe != null || onRemove != null || onSwap != null) {
           FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             onOpenRecipe?.let { TextButton(onClick = it, modifier = Modifier.testTag("open_meal_recipe")) { Text(stringResource(R.string.meal_open_recipe)) } }
@@ -237,7 +257,16 @@ fun ServingsDialog(
       }
     },
     confirmButton = {
-      TextButton(onClick = { if (valid) onConfirm(value) }, enabled = valid, modifier = Modifier.testTag("confirm_servings")) {
+      TextButton(
+        onClick = {
+          if (valid) {
+            if (onMembers != null && members != initialMembers) onMembers(members)
+            onConfirm(value)
+          }
+        },
+        enabled = valid,
+        modifier = Modifier.testTag("confirm_servings"),
+      ) {
         Text(stringResource(R.string.action_save))
       }
     },
