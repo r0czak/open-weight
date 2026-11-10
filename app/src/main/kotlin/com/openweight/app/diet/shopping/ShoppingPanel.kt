@@ -267,7 +267,7 @@ private fun ShoppingList(
         Text(
           category,
           style = MaterialTheme.typography.titleSmall,
-          color = MaterialTheme.colorScheme.primary,
+          color = MaterialTheme.colorScheme.onSurfaceVariant,
           modifier = Modifier.padding(start = 16.dp, top = 16.dp, bottom = 4.dp),
         )
       }

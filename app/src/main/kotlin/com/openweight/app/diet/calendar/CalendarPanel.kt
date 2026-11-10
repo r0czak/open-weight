@@ -60,6 +60,7 @@ import androidx.lifecycle.viewModelScope
 import com.openweight.app.R
 import com.openweight.app.core.Today
 import com.openweight.app.core.model.MealSlot
+import com.openweight.app.core.ui.MenuAccent
 import com.openweight.app.core.ui.ShortcutCard
 import com.openweight.app.core.ui.formatDayShort
 import com.openweight.app.core.ui.pickerMillisToDate
@@ -193,6 +194,7 @@ fun CalendarPanel(
         stringResource(R.string.diet_plans_hint),
         onClick = onOpenPlans,
         tag = "open_plans",
+        accent = MenuAccent.VIOLET,
       )
     }
     item { MonthGrid(state, onSelect = viewModel::select, onMonth = viewModel::showMonth) }
@@ -330,7 +332,7 @@ private fun SlotSection(
 ) {
   Column(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp)) {
     Row(verticalAlignment = Alignment.CenterVertically) {
-      Text(slotLabel(slot), style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.primary, modifier = Modifier.weight(1f))
+      Text(slotLabel(slot), style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.weight(1f))
       TextButton(onClick = onAdd, modifier = Modifier.testTag("add_${slot.name}")) {
         Icon(Icons.Filled.Add, contentDescription = null)
         Text(stringResource(R.string.action_add))

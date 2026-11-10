@@ -15,7 +15,6 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -46,6 +45,7 @@ import com.openweight.app.core.model.formatNumber
 import com.openweight.app.core.model.fromKg
 import com.openweight.app.core.model.label
 import com.openweight.app.core.model.toKg
+import com.openweight.app.core.ui.CardListItem
 import com.openweight.app.core.ui.EmptyState
 import com.openweight.app.core.ui.LineChart
 import com.openweight.app.core.ui.ScreenScaffold
@@ -127,17 +127,19 @@ fun BodyWeightRoute(onBack: () -> Unit, viewModel: BodyWeightViewModel = hiltVie
           Text(
             stringResource(R.string.weight_all),
             style = MaterialTheme.typography.titleSmall,
-            color = MaterialTheme.colorScheme.primary,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.padding(start = 16.dp, top = 16.dp, bottom = 4.dp),
           )
         }
-        items(state.entries.reversed(), key = { it.id }) { e ->
-          ListItem(
-            modifier = Modifier.clickable { editing = e }.testTag("weight_${e.date}"),
-            headlineContent = { Text(unit.format(e.weightKg)) },
-            supportingContent = { Text(e.date.formatDayShort()) },
-          )
-          HorizontalDivider()
+        val shown = state.entries.reversed()
+        items(shown, key = { it.id }) { e ->
+          CardListItem(shown.indexOf(e), shown.size) {
+            ListItem(
+              modifier = Modifier.clickable { editing = e }.testTag("weight_${e.date}"),
+              headlineContent = { Text(unit.format(e.weightKg)) },
+              supportingContent = { Text(e.date.formatDayShort()) },
+            )
+          }
         }
       }
     }

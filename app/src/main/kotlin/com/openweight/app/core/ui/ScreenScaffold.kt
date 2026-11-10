@@ -46,7 +46,15 @@ fun ScreenScaffold(
     modifier = modifier,
     topBar = {
       TopAppBar(
-        title = { Text(title, maxLines = 1, overflow = TextOverflow.Ellipsis) },
+        // A tab's first screen gets a big bold title; screens opened from it a smaller one beside "back".
+        title = {
+          Text(
+            title,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            style = if (onBack == null) MaterialTheme.typography.headlineMedium else MaterialTheme.typography.titleLarge,
+          )
+        },
         navigationIcon = {
           if (onBack != null) {
             IconButton(onClick = onBack) {

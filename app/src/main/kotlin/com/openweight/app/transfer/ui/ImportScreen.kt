@@ -332,7 +332,7 @@ private fun ResultContent(result: ImportResult, replacedEverything: Boolean, onD
 
 @Composable
 private fun SectionTitle(text: String) {
-  Text(text, style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.primary, modifier = Modifier.padding(start = 16.dp, top = 12.dp, bottom = 4.dp))
+  Text(text, style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(start = 16.dp, top = 12.dp, bottom = 4.dp))
 }
 
 @Composable

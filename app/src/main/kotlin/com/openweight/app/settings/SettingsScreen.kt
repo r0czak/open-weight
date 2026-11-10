@@ -159,7 +159,7 @@ fun SettingsScreen(
   ScreenScaffold(title = stringResource(R.string.tab_settings), modifier = modifier) { padding ->
     Column(Modifier.fillMaxSize().padding(padding).verticalScroll(rememberScrollState()).padding(bottom = 16.dp)) {
       MenuSection(stringResource(R.string.settings_general)) {
-        MenuRow(R.drawable.ic_menu_units, stringResource(R.string.settings_units), accent = MenuAccent.NEUTRAL)
+        MenuRow(R.drawable.ic_menu_units, stringResource(R.string.settings_units), accent = MenuAccent.TEAL)
         ChoiceRow(
           options = WeightUnit.entries,
           selected = settings.weightUnit,
@@ -172,7 +172,7 @@ fun SettingsScreen(
           onSelect = onWeightUnitChange,
         )
         MenuDivider()
-        MenuRow(R.drawable.ic_menu_theme, stringResource(R.string.settings_theme), accent = MenuAccent.NEUTRAL)
+        MenuRow(R.drawable.ic_menu_theme, stringResource(R.string.settings_theme), accent = MenuAccent.VIOLET)
         ChoiceRow(
           options = ThemeMode.entries,
           selected = settings.themeMode,
@@ -194,9 +194,10 @@ fun SettingsScreen(
           Modifier.toggleable(value = settings.restAlerts, role = Role.Switch, onValueChange = onRestAlertsChange).testTag("rest_alerts"),
           subtitle = stringResource(R.string.settings_rest_alerts_hint),
           trailing = { Switch(checked = settings.restAlerts, onCheckedChange = null) },
+          accent = MenuAccent.ORANGE,
         )
         MenuDivider()
-        MenuRow(R.drawable.ic_menu_power, stringResource(R.string.strength_standard), subtitle = stringResource(R.string.strength_standard_hint))
+        MenuRow(R.drawable.ic_menu_power, stringResource(R.string.strength_standard), subtitle = stringResource(R.string.strength_standard_hint), accent = MenuAccent.PINK)
         ChoiceRow(
           options = StrengthStandard.entries,
           selected = settings.strengthStandard,
@@ -223,7 +224,7 @@ fun SettingsScreen(
               settings.proteinTarget != null -> formatGrams(settings.proteinTarget.toDouble())
               else -> stringResource(R.string.settings_targets_none)
             },
-          accent = MenuAccent.TERTIARY,
+          accent = MenuAccent.GREEN,
           onClick = onEditTargets,
         )
       }
@@ -243,7 +244,7 @@ fun SettingsScreen(
             subtitle =
               stringResource(R.string.household_member_line, formatPortion(m.portion)) +
                 if (m.eatsByDefault) "" else " · " + stringResource(R.string.household_not_by_default),
-            accent = MenuAccent.TERTIARY,
+            accent = MenuAccent.BLUE,
             onClick = { onEditMember(m) },
           )
           MenuDivider()
@@ -252,7 +253,7 @@ fun SettingsScreen(
           R.drawable.ic_menu_person_add,
           stringResource(R.string.household_add),
           Modifier.testTag("add_member"),
-          accent = MenuAccent.TERTIARY,
+          accent = MenuAccent.BLUE,
           titleColor = MaterialTheme.colorScheme.primary,
           onClick = onAddMember,
           trailing = null,
@@ -265,7 +266,7 @@ fun SettingsScreen(
           stringResource(R.string.settings_backup),
           Modifier.testTag("backup"),
           subtitle = stringResource(R.string.settings_backup_hint),
-          accent = MenuAccent.PRIMARY,
+          accent = MenuAccent.BLUE,
           onClick = onBackup,
         )
         MenuDivider()
@@ -274,7 +275,7 @@ fun SettingsScreen(
           stringResource(R.string.settings_export),
           Modifier.testTag("export"),
           subtitle = stringResource(R.string.settings_export_hint),
-          accent = MenuAccent.PRIMARY,
+          accent = MenuAccent.TEAL,
           onClick = onExport,
         )
         MenuDivider()
@@ -283,7 +284,7 @@ fun SettingsScreen(
           stringResource(R.string.settings_import),
           Modifier.testTag("import_file"),
           subtitle = stringResource(R.string.settings_import_hint),
-          accent = MenuAccent.PRIMARY,
+          accent = MenuAccent.VIOLET,
           onClick = onImport,
         )
         if (lastAutoBackup != null) {
@@ -293,14 +294,14 @@ fun SettingsScreen(
             stringResource(R.string.settings_undo_restore),
             Modifier.testTag("undo_restore"),
             subtitle = stringResource(R.string.settings_undo_restore_hint, lastAutoBackup.atZone(ZoneId.systemDefault()).toLocalDate().formatMedium()),
-            accent = MenuAccent.PRIMARY,
+            accent = MenuAccent.ORANGE,
             onClick = onUndoRestore,
           )
         }
       }
 
       MenuSection(stringResource(R.string.settings_about)) {
-        MenuRow(R.drawable.ic_menu_info, stringResource(R.string.settings_version, version), subtitle = stringResource(R.string.settings_offline), accent = MenuAccent.NEUTRAL)
+        MenuRow(R.drawable.ic_menu_info, stringResource(R.string.settings_version, version), subtitle = stringResource(R.string.settings_offline), accent = MenuAccent.GREY)
       }
     }
   }

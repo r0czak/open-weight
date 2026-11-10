@@ -233,7 +233,7 @@ fun RecipeDetailRoute(
 
 @Composable
 private fun SectionTitle(text: String) {
-  Text(text, style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.primary)
+  Text(text, style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
 }
 
 /** Per serving first (what you eat), the whole recipe below. */

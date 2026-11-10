@@ -352,7 +352,7 @@ private fun androidx.compose.foundation.lazy.LazyListScope.section(
     Text(
       stringResource(title),
       style = MaterialTheme.typography.titleSmall,
-      color = MaterialTheme.colorScheme.primary,
+      color = MaterialTheme.colorScheme.onSurfaceVariant,
       modifier = Modifier.padding(start = 16.dp, top = 12.dp, bottom = 4.dp),
     )
   }

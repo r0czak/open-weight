@@ -7,6 +7,7 @@ import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import com.openweight.app.MainActivity
 import com.openweight.app.workout.data.SetValues
 import com.openweight.app.workout.data.WorkoutRepository
@@ -61,7 +62,8 @@ class HistoryFlowTest {
   fun history_session_andExerciseProgress() {
     compose.onNodeWithTag("tab_WORKOUT").performClick()
     waitForTag("open_history")
-    compose.onNodeWithTag("open_history").performClick()
+    // Below the fold on a small screen: scroll to it as a user would.
+    compose.onNodeWithTag("open_history").performScrollTo().performClick()
     waitForTag("history_list")
     compose.onNodeWithText("Thu 5 Nov", substring = true).assertIsDisplayed()
 

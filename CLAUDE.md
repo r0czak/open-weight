@@ -61,8 +61,11 @@ Offline-first Android app for planning workouts (training blocks, workouts, exer
 - Accessibility: everything you can tap needs a label TalkBack reads (its text, or a content description);
   `a11y/AccessibilityTest` walks every screen with data and fails otherwise. A row with a checkbox is
   `toggleable` as a whole (the `Checkbox` gets `onCheckedChange = null`).
-- Menus (Workout tab, Settings, shortcuts atop list screens) use `core/ui/Menu.kt` (`MenuSection`, `MenuRow`,
-  `ShortcutCard`) and the outlined `ic_menu_*` icons (one stroked path each, 2-unit strokes on a 24 grid, tinted where used).
+- Visual guide (inspired by banking apps like Revolut; our own colours and icons): grey page (black in dark) with white
+  (near-black) 24 dp cards, one vivid blue accent, bold tab titles, grey section headings, pills for buttons and tabs.
+  Menus use `core/ui/Menu.kt` (`MenuSection`, `MenuRow` with a coloured round icon, `ShortcutCard`, `PillTabs`);
+  lists join rows into one card with `CardListItem`. Icons are the outlined `ic_menu_*` set (one stroked path each,
+  2-unit strokes on a 24 grid, tinted where used).
 - Design docs (product spec, data model, import/export format, delivery plan) are the source of truth for behaviour; update them when a decision changes.
 
 ## Commands

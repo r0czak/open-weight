@@ -381,7 +381,7 @@ private fun BlockContent(
 
 @Composable
 private fun SectionTitle(text: String, modifier: Modifier = Modifier) {
-  Text(text, style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.primary, modifier = modifier)
+  Text(text, style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = modifier)
 }
 
 @Composable

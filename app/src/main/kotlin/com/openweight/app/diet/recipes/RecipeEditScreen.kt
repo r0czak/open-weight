@@ -251,7 +251,7 @@ fun RecipeEditRoute(
       }
 
       item {
-        Text(stringResource(R.string.recipe_ingredients), style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.primary)
+        Text(stringResource(R.string.recipe_ingredients), style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
       }
       val currentId = id
       if (currentId == null) {

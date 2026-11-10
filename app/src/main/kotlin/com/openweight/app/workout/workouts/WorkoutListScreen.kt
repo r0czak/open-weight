@@ -43,6 +43,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.openweight.app.R
 import com.openweight.app.workout.exercise.SearchField
+import com.openweight.app.core.ui.CardListItem
 import com.openweight.app.core.ui.EmptyState
 import com.openweight.app.core.ui.ScreenScaffold
 import com.openweight.app.workout.data.WorkoutSummary
@@ -97,13 +98,14 @@ fun WorkoutListRoute(
         else ->
           LazyColumn(contentPadding = PaddingValues(bottom = 88.dp)) {
             items(state.items, key = { it.id }) { item ->
-              WorkoutRow(
-                item = item,
-                onOpen = { onOpen(item.id) },
-                onDuplicate = { viewModel.duplicate(item.id) },
-                onDelete = { viewModel.delete(item.id) },
-              )
-              HorizontalDivider()
+              CardListItem(state.items.indexOf(item), state.items.size) {
+                WorkoutRow(
+                  item = item,
+                  onOpen = { onOpen(item.id) },
+                  onDuplicate = { viewModel.duplicate(item.id) },
+                  onDelete = { viewModel.delete(item.id) },
+                )
+              }
             }
           }
       }

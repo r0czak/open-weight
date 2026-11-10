@@ -67,6 +67,7 @@ fun WorkoutHomeScreen(
           Modifier.testTag("open_blocks"),
           subtitle = counts?.let { pluralStringResource(R.plurals.block_count, it.blocks, it.blocks) },
           onClick = onOpenBlocks,
+          accent = MenuAccent.BLUE,
         )
         MenuDivider()
         MenuRow(
@@ -75,6 +76,7 @@ fun WorkoutHomeScreen(
           Modifier.testTag("open_workouts"),
           subtitle = counts?.let { pluralStringResource(R.plurals.workout_count, it.workouts, it.workouts) },
           onClick = onOpenWorkouts,
+          accent = MenuAccent.VIOLET,
         )
         MenuDivider()
         MenuRow(
@@ -83,6 +85,7 @@ fun WorkoutHomeScreen(
           Modifier.testTag("open_exercises"),
           subtitle = counts?.let { pluralStringResource(R.plurals.exercise_count, it.exercises, it.exercises) },
           onClick = onOpenExercises,
+          accent = MenuAccent.TEAL,
         )
       }
       MenuSection(stringResource(R.string.workout_section_progress)) {
@@ -91,7 +94,7 @@ fun WorkoutHomeScreen(
           stringResource(R.string.history_title),
           Modifier.testTag("open_history"),
           subtitle = stringResource(R.string.history_hint),
-          accent = MenuAccent.TERTIARY,
+          accent = MenuAccent.ORANGE,
           onClick = onOpenHistory,
         )
         MenuDivider()
@@ -100,7 +103,7 @@ fun WorkoutHomeScreen(
           stringResource(R.string.weight_title),
           Modifier.testTag("open_weight"),
           subtitle = stringResource(R.string.weight_hint),
-          accent = MenuAccent.TERTIARY,
+          accent = MenuAccent.GREEN,
           onClick = onOpenWeight,
         )
         MenuDivider()
@@ -109,7 +112,7 @@ fun WorkoutHomeScreen(
           stringResource(R.string.power_title),
           Modifier.testTag("open_power_level"),
           subtitle = stringResource(R.string.power_hint),
-          accent = MenuAccent.TERTIARY,
+          accent = MenuAccent.PINK,
           onClick = onOpenPowerLevel,
         )
       }

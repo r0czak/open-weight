@@ -48,6 +48,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
 import com.openweight.app.R
 import com.openweight.app.core.model.QuantityUnit
+import com.openweight.app.core.ui.CardListItem
 import com.openweight.app.core.ui.EmptyState
 import com.openweight.app.core.ui.ScreenScaffold
 import com.openweight.app.diet.data.DietRepository
@@ -123,24 +124,25 @@ fun IngredientListRoute(
         else ->
           LazyColumn(contentPadding = PaddingValues(bottom = 88.dp)) {
             items(state.items, key = { it.id }) { item ->
-              ListItem(
-                modifier = Modifier.clickable { onOpen(item.id) },
-                headlineContent = { Text(item.name) },
-                supportingContent = {
-                  val parts = buildList {
-                    if (item.shopCategory.isNotBlank()) add(item.shopCategory)
-                    add(
-                      item.kcalPer100?.let { stringResource(R.string.ingredient_kcal_per_100, formatNumber(it), basisLabel(item.defaultUnit)) }
-                        ?: stringResource(R.string.ingredient_no_nutrition)
-                    )
-                  }
-                  Text(parts.joinToString(" · "))
-                },
-                trailingContent = {
-                  if (item.usageCount > 0) Text(pluralStringResource(R.plurals.used_in_recipes, item.usageCount, item.usageCount))
-                },
-              )
-              HorizontalDivider()
+              CardListItem(state.items.indexOf(item), state.items.size) {
+                ListItem(
+                  modifier = Modifier.clickable { onOpen(item.id) },
+                  headlineContent = { Text(item.name) },
+                  supportingContent = {
+                    val parts = buildList {
+                      if (item.shopCategory.isNotBlank()) add(item.shopCategory)
+                      add(
+                        item.kcalPer100?.let { stringResource(R.string.ingredient_kcal_per_100, formatNumber(it), basisLabel(item.defaultUnit)) }
+                          ?: stringResource(R.string.ingredient_no_nutrition)
+                      )
+                    }
+                    Text(parts.joinToString(" · "))
+                  },
+                  trailingContent = {
+                    if (item.usageCount > 0) Text(pluralStringResource(R.plurals.used_in_recipes, item.usageCount, item.usageCount))
+                  },
+                )
+              }
             }
           }
       }

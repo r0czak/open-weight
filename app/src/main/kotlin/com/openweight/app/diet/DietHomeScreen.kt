@@ -7,8 +7,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.PrimaryTabRow
-import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.material3.SnackbarHostState
@@ -23,6 +21,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.openweight.app.R
+import com.openweight.app.core.ui.PillTabs
 import com.openweight.app.core.ui.ScreenScaffold
 import com.openweight.app.core.model.MealSlot
 import com.openweight.app.diet.calendar.CalendarPanel
@@ -70,16 +69,12 @@ fun DietHomeScreen(
     },
   ) { padding ->
     Column(Modifier.fillMaxSize().padding(padding)) {
-      PrimaryTabRow(selectedTabIndex = selected) {
-        DietPanel.entries.forEachIndexed { index, panel ->
-          Tab(
-            modifier = Modifier.testTag("panel_${panel.name}"),
-            selected = selected == index,
-            onClick = { selected = index },
-            text = { Text(stringResource(panel.title)) },
-          )
-        }
-      }
+      PillTabs(
+        labels = DietPanel.entries.map { stringResource(it.title) },
+        selected = selected,
+        onSelect = { selected = it },
+        tags = DietPanel.entries.map { "panel_${it.name}" },
+      )
       when (DietPanel.entries[selected]) {
         DietPanel.RECIPES -> RecipesPanel(onOpenRecipe = onOpenRecipe, onOpenIngredients = onOpenIngredients)
         DietPanel.CALENDAR ->

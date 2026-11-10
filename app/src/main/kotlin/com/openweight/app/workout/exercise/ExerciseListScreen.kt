@@ -40,6 +40,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.openweight.app.R
+import com.openweight.app.core.ui.CardListItem
 import com.openweight.app.core.ui.EmptyState
 import com.openweight.app.core.ui.ScreenScaffold
 import com.openweight.app.workout.data.ExerciseListItem
@@ -125,20 +126,21 @@ fun SearchField(query: String, onChange: (String) -> Unit, placeholder: String? 
 private fun ExerciseList(items: List<ExerciseListItem>, onOpen: (String) -> Unit) {
   LazyColumn(contentPadding = PaddingValues(bottom = 88.dp)) {
     items(items, key = { it.id }) { item ->
-      ListItem(
-        modifier = Modifier.clickable { onOpen(item.id) },
-        headlineContent = { Text(item.name) },
-        supportingContent = {
-          val details = listOf(item.muscleGroup, item.equipment).filter { it.isNotBlank() }
-          if (details.isNotEmpty()) Text(details.joinToString(" · "))
-        },
-        trailingContent = {
-          if (item.usageCount > 0) {
-            Text(pluralStringResource(R.plurals.used_in_workouts, item.usageCount, item.usageCount))
-          }
-        },
-      )
-      HorizontalDivider()
+      CardListItem(items.indexOf(item), items.size) {
+        ListItem(
+          modifier = Modifier.clickable { onOpen(item.id) },
+          headlineContent = { Text(item.name) },
+          supportingContent = {
+            val details = listOf(item.muscleGroup, item.equipment).filter { it.isNotBlank() }
+            if (details.isNotEmpty()) Text(details.joinToString(" · "))
+          },
+          trailingContent = {
+            if (item.usageCount > 0) {
+              Text(pluralStringResource(R.plurals.used_in_workouts, item.usageCount, item.usageCount))
+            }
+          },
+        )
+      }
     }
   }
 }
