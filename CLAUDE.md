@@ -66,6 +66,9 @@ Offline-first Android app for planning workouts (training blocks, workouts, exer
   Menus use `core/ui/Menu.kt` (`MenuSection`, `MenuRow` with a coloured round icon, `ShortcutCard`, `PillTabs`);
   lists join rows into one card with `CardListItem`. Icons are the outlined `ic_menu_*` set (one stroked path each,
   2-unit strokes on a 24 grid, tinted where used).
+- Any UI change ships with screenshots: before and after of every screen it touches, in light and dark theme, sent to
+  the user and attached to the PR (or described in it). Take them on Robolectric with `@GraphicsMode(NATIVE)` and
+  `onRoot().captureToImage()` (see `PowerLevelFlowTest.screenshot`), at `qualifiers = "w411dp-h891dp-xxhdpi"`.
 - Design docs (product spec, data model, import/export format, delivery plan) are the source of truth for behaviour; update them when a decision changes.
 
 ## Commands
