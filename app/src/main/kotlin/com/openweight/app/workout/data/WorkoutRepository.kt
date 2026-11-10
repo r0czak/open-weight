@@ -227,12 +227,15 @@ constructor(private val db: OpenWeightDatabase, private val clock: TimeAndIds) {
 
   // ---- Sets ----
 
-  /** Adds one set to an exercise, copying the last set (or a default when there is none). */
+  /**
+   * Adds one set to an exercise, copying the last set (or a default when there is none). An
+   * exercise that already has [MAX_SETS] sets stays as it is.
+   */
   suspend fun addSet(entryId: String) {
     db.withTransaction {
       val entry = workoutDao.getEntry(entryId) ?: return@withTransaction
       val sets = workoutDao.getSets(entryId)
-      require(sets.size < MAX_SETS) { "At most $MAX_SETS sets per exercise" }
+      if (sets.size >= MAX_SETS) return@withTransaction
       val values =
         sets.lastOrNull()?.let { SetValues(it.repsMin, it.repsMax, it.weightKg, it.restSeconds) }
           ?: SetValues.DEFAULT

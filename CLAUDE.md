@@ -32,6 +32,11 @@ Offline-first Android app for planning workouts (training blocks, workouts, exer
 ## Rules
 - The app must stay fully offline: no `INTERNET` permission (`OfflineGuardTest` enforces it).
 - "Today" comes from `TimeAndIds.today()` (injectable), never `LocalDate.now()` directly.
+  Screens that mark or depend on today follow `core/Today` (a flow, refreshed whenever the app comes back to the
+  front), so they don't show yesterday after midnight; one-off defaults read `TimeAndIds.today()` when used.
+- Numbers typed by the user go through `parseNumber` (refuses `NaN`/`Infinity`); limits live in the model classes'
+  `init` checks (`SetValues`, `IngredientValues`, `RecipeInfo`), which the importer reuses.
+- A repository call a screen can reach must not throw for a state the screen allows: disable the control at the limit.
 - Every record has a UUID text `id` plus `createdAt`/`updatedAt` (import/export relies on them).
 - User-visible text goes in `res/values/strings.xml`.
 - Editing rules (limits, in-use checks, ordering) live in repositories, not in the UI; screens call them.

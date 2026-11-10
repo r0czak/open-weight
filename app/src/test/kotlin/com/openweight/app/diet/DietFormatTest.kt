@@ -32,4 +32,10 @@ class DietFormatTest {
     assertNull(parseNumber("abc"))
     assertNull(parseNumber(""))
   }
+
+  @Test
+  fun textThatJavaReadsAsANumberButIsNot_isRefused() {
+    // Double.parseDouble accepts all of these; stored, they would break every screen showing them.
+    listOf("NaN", "Infinity", "-Infinity", "1e999").forEach { assertNull(it, parseNumber(it)) }
+  }
 }

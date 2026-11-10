@@ -61,6 +61,7 @@ import com.openweight.app.transfer.ui.ExportDialog
 import com.openweight.app.workout.data.PlannedSet
 import com.openweight.app.workout.data.WorkoutDetail
 import com.openweight.app.workout.data.WorkoutEntry
+import com.openweight.app.workout.data.WorkoutRepository
 
 @Composable
 fun WorkoutEditRoute(
@@ -355,7 +356,7 @@ private fun EntryCard(
         HorizontalDivider(Modifier.padding(end = 12.dp))
         SetRow(i + 1, set, unit, onClick = { onSetClick(set) })
       }
-      TextButton(onClick = onAddSet) {
+      TextButton(onClick = onAddSet, enabled = entry.sets.size < WorkoutRepository.MAX_SETS, modifier = Modifier.testTag("add_set")) {
         Icon(Icons.Filled.Add, contentDescription = null)
         Text(stringResource(R.string.set_add))
       }

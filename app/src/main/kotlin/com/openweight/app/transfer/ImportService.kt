@@ -25,11 +25,14 @@ import com.openweight.app.diet.data.INGREDIENT_UNITS
 import com.openweight.app.diet.data.IngredientValues
 import com.openweight.app.diet.data.MealPlanRepository
 import com.openweight.app.diet.data.RecipeInfo
+import com.openweight.app.diet.data.ShoppingRepository
 import com.openweight.app.diet.data.validQuantity
 import com.openweight.app.workout.data.SetValues
+import com.openweight.app.workout.data.WorkoutRepository
 import java.time.DayOfWeek
 import java.time.Instant
 import java.time.LocalDate
+import java.time.temporal.ChronoUnit
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.serialization.SerializationException
@@ -142,7 +145,8 @@ constructor(private val db: OpenWeightDatabase, private val clock: TimeAndIds) {
     if (bytes.size > MAX_FILE_BYTES) throw ImportException("The file is over 20 MB.")
     val file =
       try {
-        TransferJson.decodeFromString(OpenWeightFile.serializer(), bytes.decodeToString())
+        // Some editors save JSON with a byte order mark in front; it isn't part of the file.
+        TransferJson.decodeFromString(OpenWeightFile.serializer(), bytes.decodeToString().removePrefix("\uFEFF"))
       } catch (e: SerializationException) {
         throw ImportException("This isn't an Open Weight file, or it is damaged.", e)
       } catch (e: IllegalArgumentException) {
@@ -482,6 +486,7 @@ constructor(private val db: OpenWeightDatabase, private val clock: TimeAndIds) {
       w.exercises.forEach { item ->
         if (!has(RecordKind.EXERCISE, exerciseIds, item.exerciseId)) fail("Workout \"${w.name}\" uses an exercise that isn't in the file.")
         if (item.sets.isEmpty()) fail("Workout \"${w.name}\" has an exercise with no sets.")
+        if (item.sets.size > WorkoutRepository.MAX_SETS) fail("Workout \"${w.name}\" has an exercise with more than ${WorkoutRepository.MAX_SETS} sets.")
         item.sets.forEach { s ->
           requireValid("Workout \"${w.name}\" has an invalid set") { SetValues(s.repsMin, s.repsMax, s.weightKg, s.restSeconds) }
         }
@@ -535,7 +540,11 @@ constructor(private val db: OpenWeightDatabase, private val clock: TimeAndIds) {
       meal("The meal on ${m.date}", m.slot, m.recipeId, m.servings)
     }
     data.shoppingLists.forEach { l ->
-      if (date(l.toDate, "A shopping list") < date(l.fromDate, "A shopping list")) fail("A shopping list ends before it starts.")
+      val from = date(l.fromDate, "A shopping list")
+      val to = date(l.toDate, "A shopping list")
+      if (to < from) fail("A shopping list ends before it starts.")
+      // "Update from the calendar" rebuilds the list for its dates, so they follow the same limit.
+      if (ChronoUnit.DAYS.between(from, to) >= ShoppingRepository.MAX_DAYS) fail("A shopping list covers more than ${ShoppingRepository.MAX_DAYS} days.")
       l.items.forEach { i ->
         if (i.name.isBlank()) fail("A shopping list item has no name.")
         if (i.quantity != null) {

@@ -121,6 +121,16 @@ class WorkoutRepositoryTest {
   }
 
   @Test
+  fun addSet_stopsAtTheLimit_withoutFailing() = runTest {
+    val w = repo.createWorkout("Push", "")
+    val entry = repo.addExercise(w, repo.saveExercise(null, "Dips", "", "", ""), WorkoutRepository.MAX_SETS, SetValues(8))
+
+    repo.addSet(entry)
+
+    assertEquals(WorkoutRepository.MAX_SETS, detail(w).entries.single().sets.size)
+  }
+
+  @Test
   fun updateSet_changesOneOrAllSets() = runTest {
     val w = repo.createWorkout("Push", "")
     repo.addExercise(w, repo.saveExercise(null, "Bench", "", "", ""), 3, SetValues(8))
@@ -199,5 +209,8 @@ class WorkoutRepositoryTest {
     assertThrows(IllegalArgumentException::class.java) { SetValues(10, 8) }
     assertThrows(IllegalArgumentException::class.java) { SetValues(8, weightKg = -1.0) }
     assertThrows(IllegalArgumentException::class.java) { SetValues(8, restSeconds = 4000) }
+    assertThrows(IllegalArgumentException::class.java) { SetValues(8, weightKg = Double.NaN) }
+    assertThrows(IllegalArgumentException::class.java) { SetValues(8, weightKg = Double.POSITIVE_INFINITY) }
+    assertThrows(IllegalArgumentException::class.java) { SetValues(8, weightKg = SetValues.MAX_WEIGHT_KG + 1) }
   }
 }

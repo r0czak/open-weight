@@ -142,6 +142,14 @@ class ImportServiceTest {
           exercises = """[{"id":"e","name":"E"}]""",
           workouts = """[{"id":"w","name":"W","exercises":[{"exerciseId":"e","sets":[{"repsMin":10,"repsMax":8}]}]}]""",
         ) to "invalid set",
+        file(
+          exercises = """[{"id":"e","name":"E"}]""",
+          workouts = """[{"id":"w","name":"W","exercises":[{"exerciseId":"e","sets":[{"repsMin":8,"weightKg":1e9}]}]}]""",
+        ) to "invalid set",
+        file(
+          exercises = """[{"id":"e","name":"E"}]""",
+          workouts = """[{"id":"w","name":"W","exercises":[{"exerciseId":"e","sets":${List(21) { """{"repsMin":8}""" }}}]}]""",
+        ) to "more than 20 sets",
         file(blocks = block(workoutIds = (1..11).map { "w$it" })) to "more than 10 workouts",
         file(
           workouts = """[{"id":"w1","name":"A"},{"id":"w2","name":"B"}]""",
@@ -160,6 +168,13 @@ class ImportServiceTest {
     }
     assertEquals(0, workouts.workouts().first().size)
     assertEquals(0, workouts.exercises().first().size)
+  }
+
+  @Test
+  fun fileSavedWithAByteOrderMark_imports() = runTest {
+    val json = "\uFEFF" + file(exercises = """[{"id":"e","name":"Curl"}]""")
+
+    assertEquals(1, importer.import(json.toByteArray())[RecordKind.EXERCISE].added)
   }
 
   @Test

@@ -129,7 +129,7 @@
     <string name="set_apply_all">Apply to all sets of this exercise</string>
     <string name="error_reps">Reps must be a whole number from 1 to 999.</string>
     <string name="error_reps_max">The top of the range must be at least the first number.</string>
-    <string name="error_weight">Weight must be a number, 0 or more.</string>
+    <string name="error_weight">Weight must be a number from 0 to 2000 kg.</string>
     <string name="error_rest">Rest must be between 0 and 3600 seconds.</string>
     <string name="error_sets">Sets must be between 1 and 20.</string>
 
@@ -216,7 +216,7 @@
     <string name="ingredient_grams_per_piece_hint">e.g. 60 for an egg, so recipes can use \"2 pcs\"</string>
     <string name="ingredient_create_hint">Add nutrition values later in Ingredients</string>
     <string name="error_ingredient_exists">An ingredient with this name already exists</string>
-    <string name="error_ingredient_numbers">Nutrition values must be numbers, 0 or more; grams per piece more than 0.</string>
+    <string name="error_ingredient_numbers">Nutrition values must be numbers from 0 to 10,000; grams per piece more than 0.</string>
     <string name="ingredient_delete_title">Delete ingredient?</string>
     <string name="ingredient_delete_text">\"%1$s\" will be removed from your ingredients.</string>
     <string name="ingredient_in_use_title">Ingredient in use</string>
@@ -359,6 +359,7 @@
     <string name="shopping_amount_optional">Amount (optional)</string>
     <string name="shopping_dates_title">Shop for meals on</string>
     <string name="dates_pick">Pick the first and last day</string>
+    <string name="error_dates_order">The end date must be on or after the start date.</string>
     <plurals name="dates_too_long">
         <item quantity="one">Choose up to %d day</item>
         <item quantity="other">Choose up to %d days</item>

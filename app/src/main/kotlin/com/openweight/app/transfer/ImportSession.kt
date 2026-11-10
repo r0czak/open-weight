@@ -1,5 +1,6 @@
 package com.openweight.app.transfer
 
+import android.database.SQLException
 import android.net.Uri
 import com.openweight.app.core.model.ThemeMode
 import com.openweight.app.core.model.WeightUnit
@@ -7,11 +8,13 @@ import com.openweight.app.settings.SettingsRepository
 import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.withContext
 
 sealed interface ImportStep {
   data object Reading : ImportStep
@@ -53,21 +56,28 @@ constructor(
   /** Opens the copy taken before the last "Replace everything". */
   suspend fun openUndo() = load(isUndo = true) { files.readAutoBackup() }
 
-  private suspend fun load(isUndo: Boolean = false, read: suspend () -> ByteArray) {
-    _step.value = ImportStep.Reading
-    _openCount.update { it + 1 }
-    _step.value =
-      try {
-        val file = importer.parse(read())
-        ImportStep.Ready(file, importer.preview(file), isUndo)
-      } catch (e: ImportException) {
-        ImportStep.Failed(e.message)
-      } catch (e: IOException) {
-        ImportStep.Failed(null)
-      } catch (e: SecurityException) {
-        ImportStep.Failed(null)
-      }
-  }
+  /**
+   * Runs to the end even when the caller goes away (the screen rotates, or the user leaves the
+   * preview): otherwise the step would stay on "Reading" for good.
+   */
+  private suspend fun load(isUndo: Boolean = false, read: suspend () -> ByteArray) =
+    withContext(NonCancellable) {
+      _step.value = ImportStep.Reading
+      _openCount.update { it + 1 }
+      _step.value =
+        try {
+          val file = importer.parse(read())
+          ImportStep.Ready(file, importer.preview(file), isUndo)
+        } catch (e: ImportException) {
+          ImportStep.Failed(e.message)
+        } catch (e: IOException) {
+          ImportStep.Failed(null)
+        } catch (e: SecurityException) {
+          ImportStep.Failed(null)
+        } catch (e: OutOfMemoryError) {
+          ImportStep.Failed(null)
+        }
+    }
 
   /**
    * Imports the opened file. "Replace everything" first saves the current data (and settings) to
@@ -75,20 +85,26 @@ constructor(
    */
   suspend fun run(options: ImportOptions) {
     val ready = _step.value as? ImportStep.Ready ?: return
-    _step.value = ImportStep.Running
-    _step.value =
-      try {
-        if (options.replaceEverything) {
-          files.saveAutoBackup(exporter.export(ExportRequest.Everything, currentSettings()).bytes)
+    // Not cancellable: leaving the screen mid-import must not stop between the data and its settings.
+    withContext(NonCancellable) {
+      _step.value = ImportStep.Running
+      _step.value =
+        try {
+          if (options.replaceEverything) {
+            files.saveAutoBackup(exporter.export(ExportRequest.Everything, currentSettings()).bytes)
+          }
+          val result = importer.import(ready.file, options)
+          result.settings?.let { apply(it) }
+          ImportStep.Done(result, options.replaceEverything)
+        } catch (e: ImportException) {
+          ImportStep.Failed(e.message)
+        } catch (e: IOException) {
+          ImportStep.Failed(null)
+        } catch (e: SQLException) {
+          // The database refused a record the checks let through; the transaction undid the rest.
+          ImportStep.Failed(null)
         }
-        val result = importer.import(ready.file, options)
-        result.settings?.let { apply(it) }
-        ImportStep.Done(result, options.replaceEverything)
-      } catch (e: ImportException) {
-        ImportStep.Failed(e.message)
-      } catch (e: IOException) {
-        ImportStep.Failed(null)
-      }
+    }
   }
 
   fun clear() {

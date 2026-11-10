@@ -33,5 +33,9 @@ fun formatGrams(grams: Double): String =
   if (grams < 10) "${BigDecimal(grams).setScale(1, RoundingMode.HALF_UP).stripTrailingZeros().toPlainString()} g"
   else "${grams.roundToInt()} g"
 
-/** Parses user input like "1,5" or " 200 ", or null when it isn't a number. */
-fun parseNumber(text: String): Double? = text.trim().replace(',', '.').takeIf { it.isNotEmpty() }?.toDoubleOrNull()
+/**
+ * Parses user input like "1,5" or " 200 ", or null when it isn't a number. "NaN" and "Infinity"
+ * (which a pasted text or a keyboard with letters can hold) are not numbers here.
+ */
+fun parseNumber(text: String): Double? =
+  text.trim().replace(',', '.').takeIf { it.isNotEmpty() }?.toDoubleOrNull()?.takeIf { it.isFinite() }

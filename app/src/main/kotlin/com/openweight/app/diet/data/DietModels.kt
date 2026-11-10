@@ -58,9 +58,17 @@ data class IngredientValues(
 ) {
   init {
     listOf(kcalPer100, proteinPer100, carbsPer100, fatPer100).forEach {
-      require(it == null || it >= 0) { "Nutrition values can't be negative" }
+      require(it == null || it in 0.0..MAX_PER_100) { "Nutrition values must be between 0 and ${MAX_PER_100.toInt()}" }
     }
-    require(gramsPerPiece == null || gramsPerPiece > 0) { "Grams per piece must be more than 0" }
+    require(gramsPerPiece == null || (gramsPerPiece > 0 && gramsPerPiece <= MAX_GRAMS_PER_PIECE)) {
+      "Grams per piece must be more than 0 and at most ${MAX_GRAMS_PER_PIECE.toInt()}"
+    }
+  }
+
+  companion object {
+    /** Nothing has more than 900 kcal or 100 g of a macro per 100 g; this only stops nonsense. */
+    const val MAX_PER_100 = 10_000.0
+    const val MAX_GRAMS_PER_PIECE = 100_000.0
   }
 }
 

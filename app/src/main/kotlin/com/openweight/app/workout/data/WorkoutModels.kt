@@ -63,7 +63,7 @@ data class SetValues(
   init {
     require(repsMin in 1..MAX_REPS) { "Reps must be between 1 and $MAX_REPS" }
     require(repsMax == null || repsMax in repsMin..MAX_REPS) { "Top of the rep range must be at least $repsMin" }
-    require(weightKg == null || weightKg >= 0) { "Weight can't be negative" }
+    require(weightKg == null || weightKg in 0.0..MAX_WEIGHT_KG) { "Weight must be between 0 and ${MAX_WEIGHT_KG.toInt()} kg" }
     require(restSeconds in 0..MAX_REST_SECONDS) { "Rest must be under ${MAX_REST_SECONDS / 60} minutes" }
   }
 
@@ -71,6 +71,7 @@ data class SetValues(
     const val DEFAULT_REST_SECONDS = 90
     const val MAX_REPS = 999
     const val MAX_REST_SECONDS = 60 * 60
+    const val MAX_WEIGHT_KG = 2000.0
     val DEFAULT = SetValues(repsMin = 8, repsMax = 12)
   }
 }

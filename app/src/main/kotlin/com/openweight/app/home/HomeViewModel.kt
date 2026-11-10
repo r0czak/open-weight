@@ -3,7 +3,7 @@ package com.openweight.app.home
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.openweight.app.core.TimeAndIds
+import com.openweight.app.core.Today
 import com.openweight.app.diet.data.MealPlanRepository
 import com.openweight.app.workout.blocks.TrainingBlockRepository
 import com.openweight.app.workout.data.WorkoutRepository
@@ -14,9 +14,11 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
 data class HomeState(
   val loading: Boolean = true,
@@ -37,14 +39,26 @@ constructor(
   blocks: TrainingBlockRepository,
   workouts: WorkoutRepository,
   meals: MealPlanRepository,
-  clock: TimeAndIds,
+  private val todayNow: Today,
   private val saved: SavedStateHandle,
 ) : ViewModel() {
-  private val today = clock.today()
+  private val today: LocalDate
+    get() = todayNow.date.value
 
   // The shown week and selected day survive rotation and switching tabs.
   private val mondayFlow = saved.getStateFlow(KEY_MONDAY, WeekPlan.mondayOf(today).toEpochDay())
   private val selectedFlow = saved.getStateFlow(KEY_SELECTED, today.toEpochDay())
+
+  init {
+    // A new day began while the app was open: a week view still on "today" moves to the new one.
+    viewModelScope.launch {
+      var previous = today
+      todayNow.date.drop(1).collect { now ->
+        if (selectedFlow.value == previous.toEpochDay()) thisWeek()
+        previous = now
+      }
+    }
+  }
 
   private val weekMeals =
     mondayFlow.flatMapLatest { epoch ->
@@ -52,14 +66,13 @@ constructor(
       meals.days(monday, monday.plusDays(6))
     }
 
+  private val shown =
+    combine(todayNow.date, mondayFlow.map(LocalDate::ofEpochDay), selectedFlow.map(LocalDate::ofEpochDay)) { today, monday, selected ->
+      Triple(today, monday, selected)
+    }
+
   val state: StateFlow<HomeState> =
-    combine(
-        mondayFlow.map(LocalDate::ofEpochDay),
-        selectedFlow.map(LocalDate::ofEpochDay),
-        blocks.scheduledBlocks(),
-        workouts.workouts(),
-        weekMeals,
-      ) { monday, selected, scheduled, all, dayMeals ->
+    combine(shown, blocks.scheduledBlocks(), workouts.workouts(), weekMeals) { (today, monday, selected), scheduled, all, dayMeals ->
         HomeState(
           loading = false,
           today = today,
