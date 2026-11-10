@@ -17,6 +17,8 @@ data class DayWorkout(val id: String, val name: String, val exerciseCount: Int)
 data class WeekDay(
   val date: LocalDate,
   val isToday: Boolean,
+  /** Today, for telling past days from future ones. */
+  val today: LocalDate = date,
   /** The block covering this day, with the week number in it; null outside every block. */
   val block: PlannedDay.InBlock?,
   /** Null on a rest day or outside every block. */
@@ -28,6 +30,10 @@ data class WeekDay(
   /** The planned workout was trained. */
   val workoutDone: Boolean
     get() = workout != null && done.any { it.workoutId == workout.id }
+
+  /** A past day whose planned workout was not trained. */
+  val workoutMissed: Boolean
+    get() = workout != null && !workoutDone && date < today
 
   /** Workouts trained for this day other than the planned one. */
   val otherDone: List<DoneWorkout>
@@ -53,6 +59,7 @@ object WeekPlan {
       WeekDay(
         date = planned.date,
         isToday = planned.date == today,
+        today = today,
         block = inBlock,
         workout =
           inBlock?.workoutId?.let { id -> byId[id]?.let { DayWorkout(it.id, it.name, it.exerciseCount) } },

@@ -531,4 +531,33 @@
     <string name="home_session_resume">Resume</string>
     <string name="home_workout_done">Done</string>
     <string name="home_also_done">Also done: %s</string>
+
+    <!-- History and progress -->
+    <plurals name="reps_only">
+        <item quantity="one">%d rep</item>
+        <item quantity="other">%d reps</item>
+    </plurals>
+    <string name="history_title">History</string>
+    <string name="history_hint">Every workout you finished</string>
+    <string name="history_empty">No finished workouts yet.</string>
+    <string name="history_empty_hint">Start one from Home or a workout\'s overview. Finished sessions show up here.</string>
+    <string name="history_delete">Delete from history</string>
+    <string name="history_delete_title">Delete this session?</string>
+    <string name="history_delete_text">Its sets are gone from your history and charts, and won\'t be suggested next time.</string>
+    <string name="history_exercise_link">%s: see progress</string>
+    <string name="history_set_line">Set %1$d: %2$s</string>
+    <string name="history_skipped">skipped</string>
+    <string name="exercise_history">Progress</string>
+    <string name="exercise_history_empty">No finished sessions with this exercise yet.</string>
+    <string name="exercise_best">Best set: %s</string>
+    <string name="exercise_chart_title">Heaviest set per session</string>
+    <plurals name="exercise_chart_description">
+        <item quantity="one">Heaviest set per session, from %2$s to %3$s over %1$d session</item>
+        <item quantity="other">Heaviest set per session, from %2$s to %3$s over %1$d sessions</item>
+    </plurals>
+    <string name="session_last_time">Last time: %s</string>
+    <string name="session_step_up">Every set reached the top of the range: try %s</string>
+    <string name="session_step_up_use">Use</string>
+    <string name="session_step_up_use_label">Use %1$s for the remaining sets of %2$s</string>
+    <string name="home_workout_missed">Missed</string>
 </resources>

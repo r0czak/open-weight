@@ -46,7 +46,10 @@ import com.openweight.app.diet.recipes.IngredientPickerRoute
 import com.openweight.app.diet.recipes.RecipeDetailRoute
 import com.openweight.app.diet.recipes.RecipeEditRoute
 import com.openweight.app.home.HomeRoute
+import com.openweight.app.workout.session.ExerciseHistoryRoute
+import com.openweight.app.workout.session.HistoryRoute
 import com.openweight.app.workout.session.LiveSessionRoute
+import com.openweight.app.workout.session.SessionDetailRoute
 import com.openweight.app.workout.workouts.WorkoutOverviewRoute
 import java.time.LocalDate
 import com.openweight.app.settings.SettingsRoute
@@ -112,6 +115,12 @@ data class MealPicker(
 
 /** Read-only workout, as opened from a day on Home ([epochDay] = that day, if any). */
 @Serializable data class WorkoutOverview(val workoutId: String, val epochDay: Long? = null) : NavKey
+
+@Serializable data object History : NavKey
+
+@Serializable data class SessionDetail(val sessionId: String) : NavKey
+
+@Serializable data class ExerciseHistory(val exerciseId: String) : NavKey
 
 /** Live training: the session being trained, or its summary once finished. */
 @Serializable data class LiveSession(val sessionId: String) : NavKey
@@ -233,8 +242,14 @@ fun OpenWeightAppUi(modifier: Modifier = Modifier, importOpens: StateFlow<Int>? 
               onOpenBlocks = { backStack.add(BlockList) },
               onOpenWorkouts = { backStack.add(WorkoutList) },
               onOpenExercises = { backStack.add(ExerciseList) },
+              onOpenHistory = { backStack.add(History) },
             )
           }
+          entry<History> { HistoryRoute(onBack = back, onOpen = { backStack.add(SessionDetail(it)) }) }
+          entry<SessionDetail> { key ->
+            SessionDetailRoute(sessionId = key.sessionId, onBack = back, onOpenExercise = { backStack.add(ExerciseHistory(it)) })
+          }
+          entry<ExerciseHistory> { key -> ExerciseHistoryRoute(exerciseId = key.exerciseId, onBack = back) }
           entry<BlockList> { BlockListRoute(onBack = back, onOpen = { backStack.add(BlockEdit(it)) }) }
           entry<BlockEdit> { key ->
             BlockEditRoute(blockId = key.blockId, onBack = back, onOpenWorkout = { backStack.add(WorkoutEdit(it)) })
@@ -262,7 +277,13 @@ fun OpenWeightAppUi(modifier: Modifier = Modifier, importOpens: StateFlow<Int>? 
               onCreate = { backStack.add(ExerciseEdit(null)) },
             )
           }
-          entry<ExerciseEdit> { key -> ExerciseEditRoute(exerciseId = key.exerciseId, onDone = back) }
+          entry<ExerciseEdit> { key ->
+            ExerciseEditRoute(
+              exerciseId = key.exerciseId,
+              onDone = back,
+              onOpenProgress = { key.exerciseId?.let { backStack.add(ExerciseHistory(it)) } },
+            )
+          }
             entry<DietHome> {
             DietHomeScreen(
               onOpenRecipe = { backStack.add(RecipeView(it)) },

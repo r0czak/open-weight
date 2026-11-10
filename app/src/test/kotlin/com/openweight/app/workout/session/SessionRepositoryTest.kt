@@ -158,4 +158,31 @@ class SessionRepositoryTest {
     val empty = workouts.createWorkout("Empty", "")
     assertThrows(IllegalArgumentException::class.java) { runBlocking { sessions.start(empty, null) } }
   }
+
+  @Test
+  fun history_lastTime_andStepUpWeight() = runTest {
+    val first = sessions.start(pushA, tuesday)
+    open().exercises[0].sets.forEach { sessions.confirmSet(it.id, 60.0, 10) }
+    sessions.finish(first)
+
+    val h = sessions.history().first().single()
+    assertEquals(listOf(3, 5), listOf(h.doneCount, h.setCount))
+    assertEquals(1800.0, h.volumeKg, 0.0)
+    val exercise = sessions.exerciseHistory(bench).first().single()
+    assertEquals(first to tuesday, exercise.sessionId to exercise.date)
+    assertEquals(listOf(10, 10, 10), exercise.sets.map { it.reps })
+
+    val second = sessions.start(pushA, tuesday.plusDays(2))
+    val last = sessions.lastTime(listOf(bench))
+    assertEquals(62.5, Progress.lastTime(last.getValue(bench), com.openweight.app.core.model.WeightUnit.KG)!!.stepUpKg!!, 0.0)
+    // "Use": the sets not done yet take the new weight; a done one keeps its own.
+    sessions.confirmSet(open().exercises[0].sets[0].id, 60.0, 10)
+    sessions.setWeightForRemaining(second, 0, 62.5)
+    assertEquals(listOf(60.0, 62.5, 62.5), open().exercises[0].sets.map { it.weightKg })
+
+    sessions.discard(second)
+    sessions.deleteFinished(first)
+    assertTrue(sessions.history().first().isEmpty())
+  }
 }
+

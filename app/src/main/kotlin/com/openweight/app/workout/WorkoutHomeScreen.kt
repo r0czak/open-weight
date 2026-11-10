@@ -51,6 +51,7 @@ fun WorkoutHomeScreen(
   onOpenWorkouts: () -> Unit,
   onOpenExercises: () -> Unit,
   modifier: Modifier = Modifier,
+  onOpenHistory: () -> Unit = {},
   viewModel: WorkoutHomeViewModel = hiltViewModel(),
 ) {
   val counts by viewModel.counts.collectAsStateWithLifecycle()
@@ -74,6 +75,12 @@ fun WorkoutHomeScreen(
         supportingContent = {
           Text(pluralStringResource(R.plurals.exercise_count, counts.exercises, counts.exercises))
         },
+      )
+      HorizontalDivider()
+      ListItem(
+        modifier = Modifier.clickable(onClick = onOpenHistory).testTag("open_history"),
+        headlineContent = { Text(stringResource(R.string.history_title)) },
+        supportingContent = { Text(stringResource(R.string.history_hint)) },
       )
     }
   }

@@ -25,6 +25,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
@@ -37,6 +38,7 @@ import com.openweight.app.core.ui.ScreenScaffold
 fun ExerciseEditRoute(
   exerciseId: String?,
   onDone: () -> Unit,
+  onOpenProgress: () -> Unit = {},
   viewModel: ExerciseEditViewModel =
     hiltViewModel<ExerciseEditViewModel, ExerciseEditViewModel.Factory>(
       key = "exercise-edit-$exerciseId"
@@ -54,6 +56,9 @@ fun ExerciseEditRoute(
     onBack = onDone,
     actions = {
       if (!state.isNew) {
+        IconButton(onClick = onOpenProgress, modifier = Modifier.testTag("exercise_progress")) {
+          Icon(painterResource(R.drawable.ic_progress), stringResource(R.string.exercise_history))
+        }
         IconButton(onClick = { confirmDelete = true }) {
           Icon(Icons.Filled.Delete, stringResource(R.string.action_delete))
         }

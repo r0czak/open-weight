@@ -68,6 +68,21 @@ data class Session(
   fun duration(now: Instant): Duration = Duration.between(startedAt, finishedAt ?: now)
 }
 
+/** A finished session in the history list. */
+data class SessionSummary(
+  val id: String,
+  val workoutName: String,
+  val plannedDate: LocalDate,
+  val startedAt: Instant,
+  val finishedAt: Instant,
+  val doneCount: Int,
+  val setCount: Int,
+  val volumeKg: Double,
+) {
+  val duration: Duration
+    get() = Duration.between(startedAt, finishedAt)
+}
+
 /** A workout that was trained, as Home's week view shows it. */
 data class DoneWorkout(val sessionId: String, val workoutId: String?, val workoutName: String)
 
@@ -94,6 +109,45 @@ constructor(private val db: OpenWeightDatabase, private val clock: TimeAndIds) {
     dao.observeFinished(from, to).map { list ->
       list.groupBy({ it.plannedDate }, { DoneWorkout(it.id, it.workoutId, it.workoutName) })
     }
+
+  /** Finished sessions, newest first. */
+  fun history(): Flow<List<SessionSummary>> =
+    dao.observeHistory().map { rows ->
+      rows.map {
+        val s = it.session
+        SessionSummary(s.id, s.workoutName, s.plannedDate, s.startedAt, s.finishedAt!!, it.doneCount, it.setCount, it.volumeKg)
+      }
+    }
+
+  /** Every finished session that trained [exerciseId], oldest first, with its done sets. */
+  fun exerciseHistory(exerciseId: String): Flow<List<ExerciseSession>> =
+    dao.observeExerciseSets(exerciseId).map { rows ->
+      rows.groupBy { it.set.sessionId }.values.map { group ->
+        val first = group.first()
+        ExerciseSession(first.set.sessionId, first.plannedDate, first.finishedAt, group.map { it.set.toLogged() })
+      }
+    }
+
+  /** The sets of the most recent finished session that trained each exercise. */
+  suspend fun lastTime(exerciseIds: Collection<String>): Map<String, List<LoggedSet>> =
+    exerciseIds.distinct().associateWith { id -> dao.lastSessionSets(id).map { it.toLogged() } }.filterValues { it.isNotEmpty() }
+
+  /** Puts [weightKg] on the exercise's sets that are not done yet (the step-up hint's "Use"). */
+  suspend fun setWeightForRemaining(sessionId: String, exercisePosition: Int, weightKg: Double) {
+    require(weightKg in 0.0..SetValues.MAX_WEIGHT_KG) { "Weight out of range" }
+    db.withTransaction {
+      dao.get(sessionId)?.takeIf { it.finishedAt == null } ?: return@withTransaction
+      val now = clock.now()
+      dao.getSets(sessionId).filter { it.exercisePosition == exercisePosition && !it.done }.forEach {
+        dao.updateSet(it.copy(weightKg = weightKg, updatedAt = now))
+      }
+    }
+  }
+
+  /** Deletes a finished session from the history (an open one is discarded instead). */
+  suspend fun deleteFinished(sessionId: String) {
+    db.withTransaction { dao.get(sessionId)?.takeIf { it.finishedAt != null }?.let { dao.deleteSession(it.id) } }
+  }
 
   /**
    * Starts training [workoutId] for [date] (the day it was planned on; today when started from the
@@ -240,3 +294,5 @@ private fun WorkoutSessionEntity.toModel(sets: List<SessionSetEntity>) =
           )
         },
   )
+
+private fun SessionSetEntity.toLogged() = LoggedSet(weightKg, reps, done, targetRepsMin, targetRepsMax)

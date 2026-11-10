@@ -1,13 +1,30 @@
 package com.openweight.app.core.database.dao
 
 import androidx.room.Dao
+import androidx.room.Embedded
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
 import com.openweight.app.core.database.entity.SessionSetEntity
 import com.openweight.app.core.database.entity.WorkoutSessionEntity
+import java.time.Instant
 import java.time.LocalDate
 import kotlinx.coroutines.flow.Flow
+
+/** A finished session with its totals, for the history list. */
+data class SessionSummaryRow(
+  @Embedded val session: WorkoutSessionEntity,
+  val doneCount: Int,
+  val setCount: Int,
+  val volumeKg: Double,
+)
+
+/** A done set with the session it belongs to, for one exercise's history. */
+data class ExerciseSetRow(
+  @Embedded val set: SessionSetEntity,
+  val plannedDate: LocalDate,
+  val finishedAt: Instant,
+)
 
 @Dao
 interface SessionDao {
@@ -44,6 +61,39 @@ interface SessionDao {
     """
   )
   suspend fun lastDoneSets(exerciseId: String): List<SessionSetEntity>
+
+  @Query(
+    """
+    SELECT ws.*,
+      (SELECT COUNT(*) FROM session_set s WHERE s.sessionId = ws.id AND s.done = 1) AS doneCount,
+      (SELECT COUNT(*) FROM session_set s WHERE s.sessionId = ws.id) AS setCount,
+      (SELECT COALESCE(SUM(COALESCE(s.weightKg, 0) * s.reps), 0) FROM session_set s WHERE s.sessionId = ws.id AND s.done = 1) AS volumeKg
+    FROM workout_session ws WHERE ws.finishedAt IS NOT NULL ORDER BY ws.finishedAt DESC
+    """
+  )
+  fun observeHistory(): Flow<List<SessionSummaryRow>>
+
+  @Query(
+    """
+    SELECT s.*, ws.plannedDate AS plannedDate, ws.finishedAt AS finishedAt
+    FROM session_set s JOIN workout_session ws ON ws.id = s.sessionId
+    WHERE ws.finishedAt IS NOT NULL AND s.exerciseId = :exerciseId AND s.done = 1
+    ORDER BY ws.finishedAt, s.setPosition
+    """
+  )
+  fun observeExerciseSets(exerciseId: String): Flow<List<ExerciseSetRow>>
+
+  /** Every set (done or not) of [exerciseId] in the most recent finished session that did any of it. */
+  @Query(
+    """
+    SELECT s.* FROM session_set s WHERE s.exerciseId = :exerciseId AND s.sessionId = (
+      SELECT ws.id FROM workout_session ws JOIN session_set x ON x.sessionId = ws.id
+      WHERE ws.finishedAt IS NOT NULL AND x.exerciseId = :exerciseId AND x.done = 1
+      ORDER BY ws.finishedAt DESC LIMIT 1)
+    ORDER BY s.exercisePosition, s.setPosition
+    """
+  )
+  suspend fun lastSessionSets(exerciseId: String): List<SessionSetEntity>
 
   @Insert suspend fun insertSession(session: WorkoutSessionEntity)
 
