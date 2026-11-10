@@ -651,10 +651,16 @@
     <string name="power_lift_tier">%1$s · %2$s</string>
     <string name="power_lift_weight">%1$s × %2$d</string>
     <string name="power_lift_bodyweight">Bodyweight × %d</string>
-    <string name="power_lift_reps">Best set: %d reps</string>
+    <plurals name="power_lift_reps">
+        <item quantity="one">Best set: %d rep</item>
+        <item quantity="other">Best set: %d reps</item>
+    </plurals>
     <string name="power_lift_detail">%1$s ≈ %2$s 1RM (%3$s× body weight)</string>
     <string name="power_next_1rm">Next: %1$s at a %2$s 1RM</string>
-    <string name="power_next_reps">Next: %1$s at %2$d reps</string>
+    <plurals name="power_next_reps">
+        <item quantity="one">Next: %1$s at %2$d rep</item>
+        <item quantity="other">Next: %1$s at %2$d reps</item>
+    </plurals>
     <string name="power_next_added">Next: %1$s at 1 rep with %2$s added</string>
     <string name="power_next_top">Top tier reached</string>
     <string name="power_unscored">Not scored (no standard for them): %s</string>

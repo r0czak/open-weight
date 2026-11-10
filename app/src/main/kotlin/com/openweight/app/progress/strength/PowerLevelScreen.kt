@@ -34,6 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -279,7 +280,7 @@ private fun LiftRow(lift: LiftScore, bodyWeightKg: Double, unit: WeightUnit, onO
   val id = lift.exerciseId
   val best =
     when {
-      lift.standard.load == Load.REPS -> stringResource(R.string.power_lift_reps, lift.reps)
+      lift.standard.load == Load.REPS -> pluralStringResource(R.plurals.power_lift_reps, lift.reps, lift.reps)
       lift.weightKg == null -> stringResource(R.string.power_lift_bodyweight, lift.reps)
       else -> stringResource(R.string.power_lift_weight, unit.format(lift.weightKg), lift.reps)
     }
@@ -291,7 +292,7 @@ private fun LiftRow(lift: LiftScore, bodyWeightKg: Double, unit: WeightUnit, onO
     when (val goal = lift.next) {
       null -> stringResource(R.string.power_next_top)
       is NextGoal.OneRepMax -> stringResource(R.string.power_next_1rm, nextTier!!.label(), unit.formatWhole(goal.kg))
-      is NextGoal.Reps -> stringResource(R.string.power_next_reps, nextTier!!.label(), goal.reps)
+      is NextGoal.Reps -> pluralStringResource(R.plurals.power_next_reps, goal.reps, nextTier!!.label(), goal.reps)
       is NextGoal.Added -> stringResource(R.string.power_next_added, nextTier!!.label(), unit.formatWhole(goal.kg))
     }
   ListItem(
