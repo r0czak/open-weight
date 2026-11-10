@@ -700,13 +700,14 @@ private class Existing(
 
   /** Same id; for exercises, ingredients and people also the same name (ignoring case); weigh-ins the same date. */
   fun match(kind: RecordKind, id: String, name: String): Pair<Rec, Boolean>? {
+    // One weigh-in per day: the date decides first, so a replace can never make two on one day.
+    if (kind == RecordKind.BODY_WEIGHT) weightDates[name]?.let { return it to (it.id != id) }
     byKind[kind]?.get(id)?.let { return it to false }
     val byName =
       when (kind) {
         RecordKind.EXERCISE -> exerciseNames
         RecordKind.INGREDIENT -> ingredientNames
         RecordKind.HOUSEHOLD_MEMBER -> memberNames
-        RecordKind.BODY_WEIGHT -> return weightDates[name]?.let { it to true }
         else -> return null
       }
     return byName[name.trim().lowercase()]?.let { it to true }

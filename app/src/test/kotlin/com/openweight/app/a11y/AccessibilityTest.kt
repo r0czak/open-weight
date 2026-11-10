@@ -26,6 +26,7 @@ import dagger.hilt.android.testing.HiltTestApplication
 import java.io.File
 import java.time.DayOfWeek
 import javax.inject.Inject
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -53,6 +54,11 @@ class AccessibilityTest {
   @Inject lateinit var meals: MealPlanRepository
   @Inject lateinit var shopping: ShoppingRepository
   @Inject lateinit var clock: TimeAndIds
+  @Inject lateinit var household: com.openweight.app.diet.household.HouseholdRepository
+  @Inject lateinit var settings: com.openweight.app.settings.SettingsRepository
+  @Inject lateinit var bodyWeights: com.openweight.app.progress.BodyWeightRepository
+  @Inject lateinit var workoutRepo: com.openweight.app.workout.data.WorkoutRepository
+  @Inject lateinit var sessionRepo: com.openweight.app.workout.session.SessionRepository
 
   private val winterArc = File("../plans/winter-arc.openweight.json").readBytes()
   private val problems = mutableListOf<String>()
@@ -70,6 +76,14 @@ class AccessibilityTest {
       meals.addMeal(clock.today(), MealSlot.BREAKFAST, porridge, 1.0)
       shopping.generate(clock.today(), clock.today().plusDays(6))
       shopping.addManual("Coffee", null, null, "Drinks")
+      // Progress and household, so their screens are walked with data.
+      household.save(null, "Anna", 0.75, eatsByDefault = true)
+      settings.setTargets(2900, 190)
+      bodyWeights.log(clock.today(), 80.5)
+      val pushA = workoutRepo.workouts().first().first { it.name == "Push A · Intro" }.id
+      val s = sessionRepo.start(pushA, clock.today())
+      sessionRepo.confirmSet(sessionRepo.open().first()!!.exercises[0].sets[0].id, 100.0, 10)
+      sessionRepo.finish(s)
     }
   }
 
@@ -119,6 +133,7 @@ class AccessibilityTest {
     tap("finish_session"); tap("confirm_finish"); check("Session summary", ready = "session_summary")
     back(); back(); back(); back()
     tap("open_history"); check("History", ready = "history_list")
+    tapText("Push A · Intro"); check("Finished session", ready = "session_detail"); back()
     tap("tab_WORKOUT"); tap("tab_WORKOUT")
     tap("open_weight"); check("Body weight", ready = "weight_input")
     tap("tab_WORKOUT"); tap("tab_WORKOUT") // back to the tab's first screen
@@ -136,7 +151,8 @@ class AccessibilityTest {
     tapText("Lean week"); check("Diet plan", ready = "Porridge"); back(); back()
     tap("panel_SHOPPING"); check("Shopping list", ready = "shop_Coffee")
 
-    tap("tab_SETTINGS"); check("Settings", ready = "import_file")
+    // Settings with targets and a household member (its dialogs never let Robolectric settle).
+    tap("tab_SETTINGS"); check("Settings", ready = "member_Anna")
     tap("export"); check("Export", ready = "export_list")
     tap("export_option_ITEMS"); check("Export items", ready = "Winter Arc 1 · Intro"); back()
     runBlocking { session.openBytes(winterArc) }

@@ -2,6 +2,7 @@ package com.openweight.app.workout.session
 
 import com.openweight.app.core.model.WeightUnit
 import com.openweight.app.core.model.toKg
+import com.openweight.app.workout.data.SetValues
 import java.time.Instant
 import java.time.LocalDate
 
@@ -39,6 +40,8 @@ object Progress {
     val earned = sets.all { it.done && it.weightKg != null && it.reps >= (it.targetRepsMax ?: it.targetRepsMin) }
     val step = if (unit == WeightUnit.KG) 2.5 else unit.toKg(5.0)
     val top = done.mapNotNull { it.weightKg }.maxOrNull()
-    return LastTime(done, if (earned && top != null) top + step else null)
+    // Never past the app's weight limit: "Use" would be refused.
+    val next = top?.plus(step)?.takeIf { it <= SetValues.MAX_WEIGHT_KG }
+    return LastTime(done, if (earned) next else null)
   }
 }

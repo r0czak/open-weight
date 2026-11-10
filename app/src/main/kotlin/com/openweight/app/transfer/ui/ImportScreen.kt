@@ -265,8 +265,8 @@ private fun MatchRow(match: ImportMatch, override: ConflictChoice?, onOverride: 
   val notes =
     listOfNotNull(
       kindLabel(match.kind),
-      match.date?.formatDayShort(),
-      if (match.byName) stringResource(R.string.import_same_name) else null,
+      match.date?.takeIf { match.kind != RecordKind.BODY_WEIGHT }?.formatDayShort(),
+      if (match.byName && match.kind != RecordKind.BODY_WEIGHT) stringResource(R.string.import_same_name) else null,
       when (match.fileIsNewer) {
         true -> stringResource(R.string.import_newer_in_file)
         false -> stringResource(R.string.import_newer_in_app)
@@ -275,7 +275,11 @@ private fun MatchRow(match: ImportMatch, override: ConflictChoice?, onOverride: 
     )
   ListItem(
     modifier = Modifier.testTag("import_match_${match.name}"),
-    headlineContent = { Text(match.name.ifBlank { kindLabel(match.kind) }) },
+    headlineContent = {
+      // A weigh-in's "name" is its date as stored: show it as a day.
+      val title = if (match.kind == RecordKind.BODY_WEIGHT) match.date?.formatDayShort() else match.name
+      Text(title?.ifBlank { null } ?: kindLabel(match.kind))
+    },
     supportingContent = { Text(notes.joinToString(" · ")) },
     trailingContent = {
       Box {

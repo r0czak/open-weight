@@ -61,6 +61,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
@@ -120,6 +121,7 @@ constructor(
   settings: SettingsRepository,
   private val clock: TimeAndIds,
   private val alerts: RestAlerts,
+  private val saved: SavedStateHandle,
   @Assisted private val sessionId: String,
 ) : ViewModel() {
   @AssistedFactory
@@ -127,9 +129,18 @@ constructor(
     fun create(sessionId: String): LiveSessionViewModel
   }
 
-  /** The end time (epoch ms) of a rest the user skipped. */
-  private val skippedRest = MutableStateFlow<Long?>(null)
-  val skipped: StateFlow<Long?> = skippedRest
+  /** Read once when the session opens: finishing this session must not turn it into "last time". */
+  private val lastTime = MutableStateFlow<Map<String, List<LoggedSet>>>(emptyMap())
+
+  /**
+   * The end (epoch ms) of a rest the user skipped. Shared through [RestAlerts], so a second screen
+   * on the same session agrees, and kept in [saved], so it survives Android stopping the app.
+   */
+  val skipped: StateFlow<Long?> = alerts.skippedRest
+
+  init {
+    if (alerts.skippedRest.value == null) saved.get<Long>(KEY_SKIPPED)?.let { alerts.skippedRest.value = it }
+  }
 
   /** The setting is on but Android won't show notifications yet: ask for the permission. */
   val wantsNotifications: StateFlow<Boolean> =
@@ -139,7 +150,7 @@ constructor(
     // Keeps the "rest is over" alarm in step with the session: set after each confirmed set,
     // gone when the rest is skipped, the set undone, or the session closed.
     viewModelScope.launch {
-      combine(sessions.session(sessionId), skippedRest, settings.settings.map { it.restAlerts }) { s, skipped, on -> Triple(s, skipped, on) }
+      combine(sessions.session(sessionId), alerts.skippedRest, settings.settings.map { it.restAlerts }) { s, skipped, on -> Triple(s, skipped, on) }
         .map { (s, skipped, on) ->
           val endsAt = s?.restEndsAt?.takeIf { on && it.toEpochMilli() != skipped && it.isAfter(clock.now()) }
           endsAt to s?.let(::nextLabel)
@@ -163,11 +174,13 @@ constructor(
     viewModelScope.launch { sessions.setWeightForRemaining(sessionId, exercisePosition, weightKg) }
 
   fun skipRest(endsAt: Instant) {
-    skippedRest.value = endsAt.toEpochMilli()
+    alerts.skippedRest.value = endsAt.toEpochMilli()
+    saved[KEY_SKIPPED] = endsAt.toEpochMilli()
   }
 
-  /** Read once when the session opens: finishing this session must not turn it into "last time". */
-  private val lastTime = MutableStateFlow<Map<String, List<LoggedSet>>>(emptyMap())
+  private companion object {
+    const val KEY_SKIPPED = "skipped_rest"
+  }
 
   val state: StateFlow<LiveSessionState> =
     combine(sessions.session(sessionId), settings.settings, lastTime) { s, set, last ->

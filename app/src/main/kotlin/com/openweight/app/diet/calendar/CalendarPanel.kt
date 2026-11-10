@@ -224,6 +224,7 @@ fun CalendarPanel(
           slot = slot,
           meals = day.meals.filter { it.slot == slot },
           onMeal = { editing = it },
+          today = state.today,
           onEaten = { m, eaten -> viewModel.setEaten(m.id, eaten) },
           onAdd = { onAddMeal(day.date, slot) },
         )
@@ -321,6 +322,7 @@ private fun SlotSection(
   slot: MealSlot,
   meals: List<PlannedMeal>,
   onMeal: (PlannedMeal) -> Unit,
+  today: LocalDate,
   onEaten: (PlannedMeal, Boolean) -> Unit,
   onAdd: () -> Unit,
 ) {
@@ -334,7 +336,7 @@ private fun SlotSection(
     }
     meals.forEach { m ->
       Row(verticalAlignment = Alignment.CenterVertically) {
-        EatenToggle(m, onToggle = { onEaten(m, it) }, tag = "eaten_${m.recipeName}")
+        EatenToggle(m, today, onToggle = { onEaten(m, it) }, tag = "eaten_${m.recipeName}")
         MealRow(m, onClick = { onMeal(m) }, modifier = Modifier.weight(1f))
       }
     }

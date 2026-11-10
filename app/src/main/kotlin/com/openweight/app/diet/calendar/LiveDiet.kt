@@ -26,10 +26,19 @@ import com.openweight.app.diet.data.DayMeals
 import com.openweight.app.diet.data.PlannedMeal
 import com.openweight.app.diet.formatGrams
 import com.openweight.app.diet.formatKcal
+import java.time.LocalDate
 
-/** A meal's "eaten" tick: its own tap target, read by TalkBack as "Porridge eaten, checkbox". */
+/**
+ * A meal's "eaten" tick: its own tap target, read by TalkBack as "Porridge eaten, checkbox". Only
+ * for today and earlier ([today]); a future meal can't have been eaten, and gets the same space
+ * so rows stay aligned.
+ */
 @Composable
-fun EatenToggle(meal: PlannedMeal, onToggle: (Boolean) -> Unit, tag: String, modifier: Modifier = Modifier) {
+fun EatenToggle(meal: PlannedMeal, today: LocalDate, onToggle: (Boolean) -> Unit, tag: String, modifier: Modifier = Modifier) {
+  if (meal.date.isAfter(today)) {
+    Box(modifier.minimumInteractiveComponentSize())
+    return
+  }
   val label = stringResource(R.string.meal_eaten_label, meal.recipeName)
   Box(
     contentAlignment = Alignment.Center,
