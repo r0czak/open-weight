@@ -64,6 +64,7 @@ import com.openweight.app.core.ui.formatDayShort
 import com.openweight.app.core.ui.pickerMillisToDate
 import com.openweight.app.core.ui.toPickerMillis
 import com.openweight.app.diet.data.DayMeals
+import com.openweight.app.settings.SettingsRepository
 import com.openweight.app.diet.data.Macros
 import com.openweight.app.diet.data.MealPlanRepository
 import com.openweight.app.diet.data.PlannedMeal
@@ -91,6 +92,8 @@ data class CalendarState(
   val selected: LocalDate,
   /** Every day of the shown month. */
   val days: List<DayMeals> = emptyList(),
+  val kcalTarget: Int? = null,
+  val proteinTarget: Int? = null,
 ) {
   val selectedDay: DayMeals
     get() = days.firstOrNull { it.date == selected } ?: DayMeals(selected, emptyList())
@@ -100,7 +103,12 @@ data class CalendarState(
 @HiltViewModel
 class CalendarViewModel
 @Inject
-constructor(private val meals: MealPlanRepository, private val todayNow: Today, private val saved: SavedStateHandle) : ViewModel() {
+constructor(
+  private val meals: MealPlanRepository,
+  private val todayNow: Today,
+  settings: SettingsRepository,
+  private val saved: SavedStateHandle,
+) : ViewModel() {
   private val today: LocalDate
     get() = todayNow.date.value
 
@@ -112,13 +120,17 @@ constructor(private val meals: MealPlanRepository, private val todayNow: Today, 
       .flatMapLatest { selected ->
         val month = YearMonth.from(selected)
         // Follows the date, so the "today" mark moves when a new day begins.
-        combine(meals.days(month.atDay(1), month.atEndOfMonth()), todayNow.date) { days, today -> CalendarState(today, month, selected, days) }
+        combine(meals.days(month.atDay(1), month.atEndOfMonth()), todayNow.date, settings.settings) { days, today, s ->
+          CalendarState(today, month, selected, days, s.kcalTarget, s.proteinTarget)
+        }
       }
       .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), CalendarState(today, YearMonth.from(today), today))
 
   fun select(date: LocalDate) {
     saved[KEY_SELECTED] = date.toEpochDay()
   }
+
+  fun setEaten(id: String, eaten: Boolean) = viewModelScope.launch { meals.setEaten(id, eaten) }
 
   /** Another month opens on its first day; the current month opens on today. */
   fun showMonth(month: YearMonth) = select(if (month == YearMonth.from(today)) today else month.atDay(1))
@@ -151,6 +163,7 @@ fun CalendarPanel(
   onAddMeal: (LocalDate, MealSlot) -> Unit,
   onOpenRecipe: (String) -> Unit,
   onOpenPlans: () -> Unit,
+  onSwapMeal: (mealId: String, date: LocalDate, slot: MealSlot) -> Unit = { _, _, _ -> },
   viewModel: CalendarViewModel = hiltViewModel(),
 ) {
   val state by viewModel.state.collectAsStateWithLifecycle()
@@ -182,7 +195,10 @@ fun CalendarPanel(
             day.date.formatDayShort() + if (day.date == state.today) " · " + stringResource(R.string.home_today) else "",
             style = MaterialTheme.typography.titleMedium,
           )
-          if (day.meals.isNotEmpty()) DayTotals(day.total, day.complete)
+          if (day.meals.isNotEmpty()) {
+            DayTotals(day.total, day.complete)
+            DayProgress(day, state.kcalTarget, state.proteinTarget, tag = "day_progress")
+          }
         }
         Box {
           IconButton(onClick = { menu = true }, modifier = Modifier.testTag("day_menu")) {
@@ -202,6 +218,7 @@ fun CalendarPanel(
           slot = slot,
           meals = day.meals.filter { it.slot == slot },
           onMeal = { editing = it },
+          onEaten = { m, eaten -> viewModel.setEaten(m.id, eaten) },
           onAdd = { onAddMeal(day.date, slot) },
         )
       }
@@ -217,6 +234,7 @@ fun CalendarPanel(
       onConfirm = { editing = null; viewModel.setServings(m.id, it) },
       onRemove = { editing = null; viewModel.remove(m.id) },
       onOpenRecipe = { editing = null; onOpenRecipe(m.recipeId) },
+      onSwap = { editing = null; onSwapMeal(m.id, m.date, m.slot) },
     )
   }
   if (copyingDay) {
@@ -290,7 +308,13 @@ fun DayTotals(total: Macros, complete: Boolean) {
 }
 
 @Composable
-private fun SlotSection(slot: MealSlot, meals: List<PlannedMeal>, onMeal: (PlannedMeal) -> Unit, onAdd: () -> Unit) {
+private fun SlotSection(
+  slot: MealSlot,
+  meals: List<PlannedMeal>,
+  onMeal: (PlannedMeal) -> Unit,
+  onEaten: (PlannedMeal, Boolean) -> Unit,
+  onAdd: () -> Unit,
+) {
   Column(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp)) {
     Row(verticalAlignment = Alignment.CenterVertically) {
       Text(slotLabel(slot), style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.primary, modifier = Modifier.weight(1f))
@@ -299,7 +323,12 @@ private fun SlotSection(slot: MealSlot, meals: List<PlannedMeal>, onMeal: (Plann
         Text(stringResource(R.string.action_add))
       }
     }
-    meals.forEach { m -> MealRow(m, onClick = { onMeal(m) }) }
+    meals.forEach { m ->
+      Row(verticalAlignment = Alignment.CenterVertically) {
+        EatenToggle(m, onToggle = { onEaten(m, it) }, tag = "eaten_${m.recipeName}")
+        MealRow(m, onClick = { onMeal(m) }, modifier = Modifier.weight(1f))
+      }
+    }
     HorizontalDivider(Modifier.padding(top = 4.dp))
   }
 }
@@ -307,7 +336,7 @@ private fun SlotSection(slot: MealSlot, meals: List<PlannedMeal>, onMeal: (Plann
 @Composable
 fun MealRow(m: PlannedMeal, onClick: () -> Unit, modifier: Modifier = Modifier) {
   Row(
-    Modifier.fillMaxWidth().clip(RoundedCornerShape(8.dp)).clickable(onClick = onClick).padding(vertical = 8.dp).then(modifier).testTag("meal_${m.recipeName}"),
+    modifier.fillMaxWidth().clip(RoundedCornerShape(8.dp)).clickable(onClick = onClick).padding(vertical = 8.dp).testTag("meal_${m.recipeName}"),
     verticalAlignment = Alignment.CenterVertically,
   ) {
     Column(Modifier.weight(1f)) {

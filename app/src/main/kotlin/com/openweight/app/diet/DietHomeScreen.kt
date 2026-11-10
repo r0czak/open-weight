@@ -45,6 +45,7 @@ fun DietHomeScreen(
   onCreateRecipe: () -> Unit = {},
   onOpenIngredients: () -> Unit = {},
   onAddMeal: (LocalDate, MealSlot) -> Unit = { _, _ -> },
+  onSwapMeal: (mealId: String, date: LocalDate, slot: MealSlot) -> Unit = { _, _, _ -> },
   onOpenPlans: () -> Unit = {},
 ) {
   var selected by rememberSaveable { mutableIntStateOf(0) }
@@ -82,7 +83,7 @@ fun DietHomeScreen(
       when (DietPanel.entries[selected]) {
         DietPanel.RECIPES -> RecipesPanel(onOpenRecipe = onOpenRecipe, onOpenIngredients = onOpenIngredients)
         DietPanel.CALENDAR ->
-          CalendarPanel(snackbar = snackbar, onAddMeal = onAddMeal, onOpenRecipe = onOpenRecipe, onOpenPlans = onOpenPlans)
+          CalendarPanel(snackbar = snackbar, onAddMeal = onAddMeal, onOpenRecipe = onOpenRecipe, onOpenPlans = onOpenPlans, onSwapMeal = onSwapMeal)
         DietPanel.SHOPPING -> ShoppingPanel(snackbar = snackbar, adding = addingShopItem, onAddingDone = { addingShopItem = false })
       }
     }

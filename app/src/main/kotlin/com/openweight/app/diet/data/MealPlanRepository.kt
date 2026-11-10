@@ -27,11 +27,19 @@ data class PlannedMeal(
   /** False when the recipe has lines that can't be counted. */
   val complete: Boolean,
   val fromPlan: Boolean,
+  val eaten: Boolean = false,
 )
 
 data class DayMeals(val date: LocalDate, val meals: List<PlannedMeal>) {
   val total: Macros
     get() = meals.fold(Macros.ZERO) { sum, m -> sum + m.macros }
+
+  /** The meals marked as eaten. */
+  val eaten: Macros
+    get() = meals.filter { it.eaten }.fold(Macros.ZERO) { sum, m -> sum + m.macros }
+
+  val anyEaten: Boolean
+    get() = meals.any { it.eaten }
 
   val complete: Boolean
     get() = meals.all { it.complete }
@@ -85,7 +93,7 @@ constructor(
       val planned =
         meals.mapNotNull { m ->
           val r = byId[m.recipeId] ?: return@mapNotNull null
-          PlannedMeal(m.id, m.date, m.slot, r.id, r.name, m.servings, r.nutrition.perServing * m.servings, r.nutrition.complete, m.dietPlanId != null)
+          PlannedMeal(m.id, m.date, m.slot, r.id, r.name, m.servings, r.nutrition.perServing * m.servings, r.nutrition.complete, m.dietPlanId != null, m.eatenAt != null)
         }
       val byDate = planned.groupBy { it.date }
       generateSequence(from) { it.plusDays(1) }
@@ -110,6 +118,28 @@ constructor(
     }
   }
 
+  /** Marks a meal as eaten (or back to planned). */
+  suspend fun setEaten(mealId: String, eaten: Boolean) {
+    db.withTransaction {
+      val m = dao.getMeal(mealId) ?: return@withTransaction
+      val now = clock.now()
+      dao.updateMeal(m.copy(eatenAt = if (eaten) m.eatenAt ?: now else null, updatedAt = now))
+    }
+  }
+
+  /**
+   * Puts another recipe in a meal's place for that day only, with [servings]. It is no longer the
+   * diet plan's meal, and counts as not eaten yet.
+   */
+  suspend fun swapRecipe(mealId: String, recipeId: String, servings: Double) {
+    requireServings(servings)
+    db.withTransaction {
+      val m = dao.getMeal(mealId) ?: return@withTransaction
+      requireNotNull(db.recipeDao().get(recipeId)) { "Recipe not found" }
+      dao.updateMeal(m.copy(recipeId = recipeId, servings = servings, dietPlanId = null, eatenAt = null, updatedAt = clock.now()))
+    }
+  }
+
   suspend fun removeMeal(mealId: String) = dao.deleteMeal(mealId)
 
   suspend fun clearDay(date: LocalDate) = dao.deleteMealsBetween(date, date)
@@ -129,7 +159,8 @@ constructor(
       val now = clock.now()
       val shift = ChronoUnit.DAYS.between(from, to)
       dao.insertMeals(
-        source.map { it.copy(id = clock.newId(), date = it.date.plusDays(shift), createdAt = now, updatedAt = now) }
+        // A copy is planned, not eaten.
+        source.map { it.copy(id = clock.newId(), date = it.date.plusDays(shift), eatenAt = null, createdAt = now, updatedAt = now) }
       )
       source.size
     }

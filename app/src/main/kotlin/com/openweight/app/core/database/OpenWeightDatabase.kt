@@ -40,7 +40,7 @@ import com.openweight.app.core.database.entity.WorkoutExerciseEntity
  * every version bump needs a migration and a test that upgrades from the previous version.
  */
 @Database(
-  version = 5,
+  version = 6,
   exportSchema = true,
   autoMigrations =
     [
@@ -51,6 +51,8 @@ import com.openweight.app.core.database.entity.WorkoutExerciseEntity
       AutoMigration(from = 3, to = 4),
       // v5: body weight.
       AutoMigration(from = 4, to = 5),
+      // v6: meal_entry.eatenAt (nullable), for live diet.
+      AutoMigration(from = 5, to = 6),
     ],
   entities =
     [

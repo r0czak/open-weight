@@ -30,6 +30,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -49,13 +50,20 @@ import com.openweight.app.core.ui.EmptyState
 import com.openweight.app.core.ui.LineChart
 import com.openweight.app.core.ui.ScreenScaffold
 import com.openweight.app.core.ui.formatDayShort
+import com.openweight.app.diet.data.DayMeals
+import com.openweight.app.diet.data.MealPlanRepository
+import com.openweight.app.diet.formatGrams
+import com.openweight.app.diet.formatKcal
 import com.openweight.app.diet.parseNumber
+import com.openweight.app.home.WeekPlan
 import com.openweight.app.settings.SettingsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.LocalDate
 import javax.inject.Inject
 import kotlin.math.abs
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
@@ -67,16 +75,28 @@ data class BodyWeightState(
   val entries: List<WeighIn> = emptyList(),
   val trend: WeightTrend = WeightTrend(emptyList(), null, null),
   val unit: WeightUnit = WeightUnit.KG,
+  /** This week's days so far that have meals ticked as eaten. */
+  val eatenDays: List<DayMeals> = emptyList(),
+  val kcalTarget: Int? = null,
+  val proteinTarget: Int? = null,
 ) {
   val todays: WeighIn?
     get() = entries.lastOrNull { it.date == today }
 }
 
 @HiltViewModel
-class BodyWeightViewModel @Inject constructor(private val repository: BodyWeightRepository, settings: SettingsRepository, today: Today) : ViewModel() {
+@OptIn(ExperimentalCoroutinesApi::class)
+class BodyWeightViewModel
+@Inject
+constructor(private val repository: BodyWeightRepository, meals: MealPlanRepository, settings: SettingsRepository, today: Today) : ViewModel() {
   val state: StateFlow<BodyWeightState> =
-    combine(repository.entries(), settings.settings, today.date) { entries, s, day ->
-        BodyWeightState(false, day, entries, WeightRules.trend(entries), s.weightUnit)
+    combine(
+        repository.entries(),
+        settings.settings,
+        today.date,
+        today.date.flatMapLatest { day -> meals.days(WeekPlan.mondayOf(day), day) },
+      ) { entries, s, day, week ->
+        BodyWeightState(false, day, entries, WeightRules.trend(entries), s.weightUnit, week.filter { it.anyEaten }, s.kcalTarget, s.proteinTarget)
       }
       .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), BodyWeightState(today = today.date.value))
 
@@ -99,6 +119,7 @@ fun BodyWeightRoute(onBack: () -> Unit, viewModel: BodyWeightViewModel = hiltVie
     ) {
       item { TodayEntry(state, onSave = { viewModel.log(state.today, it) }) }
       item { TrendCard(state.trend, unit) }
+      item { WeekEatenCard(state) }
       if (state.entries.isEmpty()) {
         item { EmptyState(stringResource(R.string.weight_empty), hint = stringResource(R.string.weight_empty_hint)) }
       } else {
@@ -203,6 +224,34 @@ private fun TrendCard(trend: WeightTrend, unit: WeightUnit) {
           description = stringResource(R.string.weight_chart_description, unit.format(values.first()), unit.format(values.last())),
           modifier = Modifier.padding(top = 8.dp),
         )
+      }
+    }
+  }
+}
+
+/** Average calories and protein over this week's days with eaten meals, next to the weight trend. */
+@Composable
+private fun WeekEatenCard(state: BodyWeightState) {
+  val days = state.eatenDays
+  if (days.isEmpty()) return
+  val kcal = days.map { it.eaten.kcal }.average()
+  val protein = days.map { it.eaten.protein }.average()
+  Card(
+    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+    modifier = Modifier.fillMaxWidth().padding(start = 16.dp, end = 16.dp, top = 12.dp).testTag("week_eaten"),
+  ) {
+    Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+      Text(stringResource(R.string.week_eaten_title), style = MaterialTheme.typography.titleMedium)
+      Text(stringResource(R.string.week_eaten, formatKcal(kcal), formatGrams(protein)), modifier = Modifier.testTag("week_eaten_text"))
+      Text(
+        pluralStringResource(R.plurals.week_eaten_days, days.size, days.size),
+        style = MaterialTheme.typography.bodySmall,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+      )
+      val target =
+        listOfNotNull(state.kcalTarget?.let { formatKcal(it.toDouble()) }, state.proteinTarget?.let { formatGrams(it.toDouble()) }).joinToString(" · ")
+      if (target.isNotEmpty()) {
+        Text(stringResource(R.string.week_eaten_target, target), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
       }
     }
   }

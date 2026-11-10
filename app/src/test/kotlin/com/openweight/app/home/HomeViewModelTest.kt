@@ -20,6 +20,13 @@ import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.After
+import org.junit.rules.TemporaryFolder
+import org.junit.Rule
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.CoroutineScope
+import com.openweight.app.settings.SettingsRepository
+import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -36,6 +43,9 @@ class HomeViewModelTest {
   private lateinit var clock: FakeTimeAndIds
   private lateinit var today: Today
   private lateinit var viewModel: HomeViewModel
+  private val settingsScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+
+  @get:Rule val tmp = TemporaryFolder()
 
   @Before
   fun setUp() {
@@ -47,8 +57,9 @@ class HomeViewModelTest {
       HomeViewModel(
         TrainingBlockRepository(db, clock),
         WorkoutRepository(db, clock),
-        MealPlanRepository(db, DietRepository(db, clock), clock),
         SessionRepository(db, clock),
+        MealPlanRepository(db, DietRepository(db, clock), clock),
+        SettingsRepository(PreferenceDataStoreFactory.create(scope = settingsScope) { tmp.newFile("settings.preferences_pb").also { it.delete() } }),
         today,
         SavedStateHandle(),
       )
@@ -57,6 +68,7 @@ class HomeViewModelTest {
   @After
   fun tearDown() {
     db.close()
+    settingsScope.cancel()
     Dispatchers.resetMain()
   }
 

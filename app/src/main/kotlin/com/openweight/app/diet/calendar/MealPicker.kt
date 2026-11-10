@@ -3,6 +3,7 @@ package com.openweight.app.diet.calendar
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -65,6 +66,9 @@ sealed interface MealTarget {
   data class Day(val date: LocalDate) : MealTarget
 
   data class Plan(val planId: String, val day: DayOfWeek) : MealTarget
+
+  /** Another recipe in a calendar meal's place, for that day only. */
+  data class Swap(val mealId: String, val date: LocalDate) : MealTarget
 }
 
 @Composable
@@ -123,6 +127,7 @@ constructor(
       when (target) {
         is MealTarget.Day -> meals.addMeal(target.date, slot, recipe.id, servings)
         is MealTarget.Plan -> meals.addPlanMeal(target.planId, target.day, slot, recipe.id, servings)
+        is MealTarget.Swap -> meals.swapRecipe(target.mealId, recipe.id, servings)
       }
       local.update { it.copy(chosen = null, done = true) }
     }
@@ -196,6 +201,7 @@ fun ServingsDialog(
   onConfirm: (Double) -> Unit,
   onRemove: (() -> Unit)? = null,
   onOpenRecipe: (() -> Unit)? = null,
+  onSwap: (() -> Unit)? = null,
 ) {
   var text by remember { mutableStateOf(formatNumber(initial)) }
   val value = parseNumber(text)
@@ -221,9 +227,10 @@ fun ServingsDialog(
         if (valid && kcalPerServing != null) {
           Text(formatKcal(kcalPerServing * value))
         }
-        if (onOpenRecipe != null || onRemove != null) {
-          Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        if (onOpenRecipe != null || onRemove != null || onSwap != null) {
+          FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             onOpenRecipe?.let { TextButton(onClick = it, modifier = Modifier.testTag("open_meal_recipe")) { Text(stringResource(R.string.meal_open_recipe)) } }
+            onSwap?.let { TextButton(onClick = it, modifier = Modifier.testTag("swap_meal")) { Text(stringResource(R.string.meal_swap)) } }
             onRemove?.let { TextButton(onClick = it, modifier = Modifier.testTag("remove_meal")) { Text(stringResource(R.string.meal_remove)) } }
           }
         }

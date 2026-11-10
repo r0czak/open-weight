@@ -4,6 +4,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.openweight.app.core.model.ThemeMode
 import com.openweight.app.core.model.WeightUnit
@@ -17,6 +18,9 @@ data class Settings(
   val themeMode: ThemeMode = ThemeMode.SYSTEM,
   /** A notification when rest ends during live training. */
   val restAlerts: Boolean = true,
+  /** Daily targets; null when not set. */
+  val kcalTarget: Int? = null,
+  val proteinTarget: Int? = null,
 )
 
 @Singleton
@@ -28,6 +32,8 @@ class SettingsRepository @Inject constructor(private val dataStore: DataStore<Pr
         weightUnit = prefs[WEIGHT_UNIT].toEnumOr(WeightUnit.KG),
         themeMode = prefs[THEME_MODE].toEnumOr(ThemeMode.SYSTEM),
         restAlerts = prefs[REST_ALERTS] ?: true,
+        kcalTarget = prefs[KCAL_TARGET],
+        proteinTarget = prefs[PROTEIN_TARGET],
       )
     }
 
@@ -43,10 +49,24 @@ class SettingsRepository @Inject constructor(private val dataStore: DataStore<Pr
     dataStore.edit { it[REST_ALERTS] = on }
   }
 
-  private companion object {
-    val REST_ALERTS = booleanPreferencesKey("rest_alerts")
-    val WEIGHT_UNIT = stringPreferencesKey("weight_unit")
-    val THEME_MODE = stringPreferencesKey("theme_mode")
+  /** Sets or (null) clears the daily targets; values outside the limits are refused. */
+  suspend fun setTargets(kcal: Int?, protein: Int?) {
+    require(kcal == null || kcal in KCAL_RANGE) { "Calories out of range" }
+    require(protein == null || protein in PROTEIN_RANGE) { "Protein out of range" }
+    dataStore.edit {
+      if (kcal == null) it.remove(KCAL_TARGET) else it[KCAL_TARGET] = kcal
+      if (protein == null) it.remove(PROTEIN_TARGET) else it[PROTEIN_TARGET] = protein
+    }
+  }
+
+  companion object {
+    val KCAL_RANGE = 500..10_000
+    val PROTEIN_RANGE = 10..500
+    private val KCAL_TARGET = intPreferencesKey("kcal_target")
+    private val PROTEIN_TARGET = intPreferencesKey("protein_target")
+    private val REST_ALERTS = booleanPreferencesKey("rest_alerts")
+    private val WEIGHT_UNIT = stringPreferencesKey("weight_unit")
+    private val THEME_MODE = stringPreferencesKey("theme_mode")
   }
 }
 

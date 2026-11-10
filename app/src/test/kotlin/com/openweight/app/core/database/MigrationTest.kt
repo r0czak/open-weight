@@ -91,7 +91,24 @@ class MigrationTest {
     }
   }
 
+  @Test
+  fun v5ToV6_keepsMeals_asNotEaten() {
+    helper.createDatabase(DB6, 5).use { db ->
+      db.execSQL("INSERT INTO recipe (id, name, servings, prepMinutes, steps, tags, notes, createdAt, updatedAt) VALUES ('r1', 'Oats', 1, NULL, '', '', '', 0, 0)")
+      db.execSQL("INSERT INTO meal_entry (id, date, slot, recipeId, servings, dietPlanId, createdAt, updatedAt) VALUES ('m1', '2026-11-10', 'BREAKFAST', 'r1', 1.0, NULL, 0, 0)")
+    }
+
+    helper.runMigrationsAndValidate(DB6, 6, true).use { db ->
+      db.query("SELECT servings, eatenAt FROM meal_entry WHERE id = 'm1'").use {
+        assertTrue(it.moveToFirst())
+        assertEquals(1.0, it.getDouble(0), 0.0)
+        assertTrue(it.isNull(1))
+      }
+    }
+  }
+
   private companion object {
+    const val DB6 = "migration-test-6.db"
     const val DB5 = "migration-test-5.db"
     const val DB4 = "migration-test-4.db"
     const val DB3 = "migration-test-3.db"

@@ -24,7 +24,8 @@ Offline-first Android app for planning workouts (training blocks, workouts, exer
   averages Mon–Sun; change = latest week vs two weeks before)
 - `diet/` — ingredients and recipes; `data/Nutrition.kt` holds the calories/macros rule (per 100 g or ml, pieces via grams per piece, uncountable lines listed, never silently dropped)
 - `diet/shopping/` — shopping list panel; rules in `diet/data/ShoppingListBuilder.kt` (sum per ingredient and unit kind, scaled to servings, rounded up for the shop) and `ShoppingRepository.kt` (update keeps manual items, ticks and hand-edited amounts)
-- `diet/calendar/`, `diet/plans/` — meal calendar and diet plans; rules in `diet/data/MealPlanRepository.kt` (copy day/week, apply a plan: skip or replace busy days)
+- `diet/calendar/`, `diet/plans/` — meal calendar and diet plans; rules in `diet/data/MealPlanRepository.kt` (copy day/week, apply a plan: skip or replace busy days;
+  eaten marks, swapping a meal's recipe for one day; copies are never eaten). `LiveDiet.kt`: the eaten toggle and the eaten / left line (targets in Settings)
 - `home/` — Home tab (opens first): Mon–Sun week view; `WeekPlan.kt` builds each day (workout + meals)
 - `AppNavigation.kt` — bottom tabs (Home, Workout, Diet, Settings), each with its own Navigation 3 back stack
 - `transfer/` — Open Weight file format (`TransferFormat.kt`); `ExportService` (scopes: everything, workout, diet, picked items, date range;
