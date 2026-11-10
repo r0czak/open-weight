@@ -60,6 +60,7 @@ import androidx.lifecycle.viewModelScope
 import com.openweight.app.R
 import com.openweight.app.core.Today
 import com.openweight.app.core.model.MealSlot
+import com.openweight.app.core.ui.ShortcutCard
 import com.openweight.app.core.ui.formatDayShort
 import com.openweight.app.core.ui.pickerMillisToDate
 import com.openweight.app.core.ui.toPickerMillis
@@ -186,12 +187,13 @@ fun CalendarPanel(
 
   LazyColumn(Modifier.fillMaxSize().testTag("calendar"), contentPadding = PaddingValues(bottom = 24.dp)) {
     item {
-      ListItem(
-        modifier = Modifier.clickable(onClick = onOpenPlans).testTag("open_plans"),
-        headlineContent = { Text(stringResource(R.string.diet_plans)) },
-        supportingContent = { Text(stringResource(R.string.diet_plans_hint)) },
+      ShortcutCard(
+        R.drawable.ic_menu_plans,
+        stringResource(R.string.diet_plans),
+        stringResource(R.string.diet_plans_hint),
+        onClick = onOpenPlans,
+        tag = "open_plans",
       )
-      HorizontalDivider()
     }
     item { MonthGrid(state, onSelect = viewModel::select, onMonth = viewModel::showMonth) }
     item {

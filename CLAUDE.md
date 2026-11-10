@@ -61,6 +61,8 @@ Offline-first Android app for planning workouts (training blocks, workouts, exer
 - Accessibility: everything you can tap needs a label TalkBack reads (its text, or a content description);
   `a11y/AccessibilityTest` walks every screen with data and fails otherwise. A row with a checkbox is
   `toggleable` as a whole (the `Checkbox` gets `onCheckedChange = null`).
+- Menus (Workout tab, Settings, shortcuts atop list screens) use `core/ui/Menu.kt` (`MenuSection`, `MenuRow`,
+  `ShortcutCard`) and the outlined `ic_menu_*` icons (one stroked path each, 2-unit strokes on a 24 grid, tinted where used).
 - Design docs (product spec, data model, import/export format, delivery plan) are the source of truth for behaviour; update them when a decision changes.
 
 ## Commands

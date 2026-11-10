@@ -1,14 +1,10 @@
 package com.openweight.app.workout
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.ListItem
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -21,6 +17,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
 import com.openweight.app.R
+import com.openweight.app.core.ui.MenuAccent
+import com.openweight.app.core.ui.MenuDivider
+import com.openweight.app.core.ui.MenuRow
+import com.openweight.app.core.ui.MenuSection
 import com.openweight.app.core.ui.ScreenScaffold
 import com.openweight.app.workout.blocks.TrainingBlockRepository
 import com.openweight.app.workout.data.WorkoutRepository
@@ -31,17 +31,18 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 
-data class WorkoutHomeCounts(val blocks: Int = 0, val workouts: Int = 0, val exercises: Int = 0)
+/** Null until loaded, so the menu never flashes "0 workouts". */
+data class WorkoutHomeCounts(val blocks: Int, val workouts: Int, val exercises: Int)
 
 @HiltViewModel
 class WorkoutHomeViewModel
 @Inject
 constructor(workouts: WorkoutRepository, blocks: TrainingBlockRepository) : ViewModel() {
-  val counts: StateFlow<WorkoutHomeCounts> =
+  val counts: StateFlow<WorkoutHomeCounts?> =
     combine(blocks.blocks(), workouts.workouts(), workouts.exercises()) { b, w, e ->
         WorkoutHomeCounts(b.size, w.size, e.size)
       }
-      .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), WorkoutHomeCounts())
+      .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
 }
 
 /** Workout tab: where blocks, workouts and exercises are managed. What's planned lives on Home. */
@@ -58,44 +59,60 @@ fun WorkoutHomeScreen(
 ) {
   val counts by viewModel.counts.collectAsStateWithLifecycle()
   ScreenScaffold(title = stringResource(R.string.tab_workout), modifier = modifier) { padding ->
-    Column(Modifier.fillMaxSize().padding(padding).verticalScroll(rememberScrollState()).padding(vertical = 8.dp)) {
-      ListItem(
-        modifier = Modifier.clickable(onClick = onOpenBlocks).testTag("open_blocks"),
-        headlineContent = { Text(stringResource(R.string.workout_blocks)) },
-        supportingContent = { Text(pluralStringResource(R.plurals.block_count, counts.blocks, counts.blocks)) },
-      )
-      HorizontalDivider()
-      ListItem(
-        modifier = Modifier.clickable(onClick = onOpenWorkouts).testTag("open_workouts"),
-        headlineContent = { Text(stringResource(R.string.workout_workouts)) },
-        supportingContent = { Text(pluralStringResource(R.plurals.workout_count, counts.workouts, counts.workouts)) },
-      )
-      HorizontalDivider()
-      ListItem(
-        modifier = Modifier.clickable(onClick = onOpenExercises).testTag("open_exercises"),
-        headlineContent = { Text(stringResource(R.string.workout_exercises)) },
-        supportingContent = {
-          Text(pluralStringResource(R.plurals.exercise_count, counts.exercises, counts.exercises))
-        },
-      )
-      HorizontalDivider()
-      ListItem(
-        modifier = Modifier.clickable(onClick = onOpenHistory).testTag("open_history"),
-        headlineContent = { Text(stringResource(R.string.history_title)) },
-        supportingContent = { Text(stringResource(R.string.history_hint)) },
-      )
-      HorizontalDivider()
-      ListItem(
-        modifier = Modifier.clickable(onClick = onOpenWeight).testTag("open_weight"),
-        headlineContent = { Text(stringResource(R.string.weight_title)) },
-        supportingContent = { Text(stringResource(R.string.weight_hint)) },
-      )
-      HorizontalDivider()
-      ListItem(
-        modifier = Modifier.clickable(onClick = onOpenPowerLevel).testTag("open_power_level"),
-        headlineContent = { Text(stringResource(R.string.power_title)) },
-        supportingContent = { Text(stringResource(R.string.power_hint)) },
-      )
+    Column(Modifier.fillMaxSize().padding(padding).verticalScroll(rememberScrollState()).padding(bottom = 16.dp)) {
+      MenuSection(stringResource(R.string.workout_section_plan)) {
+        MenuRow(
+          R.drawable.ic_menu_blocks,
+          stringResource(R.string.workout_blocks),
+          Modifier.testTag("open_blocks"),
+          subtitle = counts?.let { pluralStringResource(R.plurals.block_count, it.blocks, it.blocks) },
+          onClick = onOpenBlocks,
+        )
+        MenuDivider()
+        MenuRow(
+          R.drawable.ic_menu_workouts,
+          stringResource(R.string.workout_workouts),
+          Modifier.testTag("open_workouts"),
+          subtitle = counts?.let { pluralStringResource(R.plurals.workout_count, it.workouts, it.workouts) },
+          onClick = onOpenWorkouts,
+        )
+        MenuDivider()
+        MenuRow(
+          R.drawable.ic_menu_exercises,
+          stringResource(R.string.workout_exercises),
+          Modifier.testTag("open_exercises"),
+          subtitle = counts?.let { pluralStringResource(R.plurals.exercise_count, it.exercises, it.exercises) },
+          onClick = onOpenExercises,
+        )
+      }
+      MenuSection(stringResource(R.string.workout_section_progress)) {
+        MenuRow(
+          R.drawable.ic_menu_history,
+          stringResource(R.string.history_title),
+          Modifier.testTag("open_history"),
+          subtitle = stringResource(R.string.history_hint),
+          accent = MenuAccent.TERTIARY,
+          onClick = onOpenHistory,
+        )
+        MenuDivider()
+        MenuRow(
+          R.drawable.ic_menu_weight,
+          stringResource(R.string.weight_title),
+          Modifier.testTag("open_weight"),
+          subtitle = stringResource(R.string.weight_hint),
+          accent = MenuAccent.TERTIARY,
+          onClick = onOpenWeight,
+        )
+        MenuDivider()
+        MenuRow(
+          R.drawable.ic_menu_power,
+          stringResource(R.string.power_title),
+          Modifier.testTag("open_power_level"),
+          subtitle = stringResource(R.string.power_hint),
+          accent = MenuAccent.TERTIARY,
+          onClick = onOpenPowerLevel,
+        )
+      }
     }
   }
 }

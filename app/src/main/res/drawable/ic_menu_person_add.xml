@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Outlined menu icon (2-unit strokes on a 24 grid), drawn for Open Weight; tinted where used. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+  <path
+      android:pathData="M10,4a4,4 0 1,0 0.01,0z M2.5,21c0,-4 3.5,-6.5 7.5,-6.5c1.5,0 2.8,0.3 4,0.9 M19,14v6 M16,17h6"
+      android:strokeColor="#FF000000"
+      android:strokeWidth="2"
+      android:strokeLineCap="round"
+      android:strokeLineJoin="round" />
+</vector>

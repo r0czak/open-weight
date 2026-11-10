@@ -685,6 +685,11 @@
     <string name="muscle_hamstrings">Hamstrings</string>
     <string name="muscle_calves">Calves</string>
     <string name="strength_standard">Strength standards</string>
+    <string name="strength_standard_hint">What your power level is measured against</string>
+    <string name="settings_general">General</string>
+    <string name="settings_household">Household</string>
+    <string name="workout_section_plan">Plan</string>
+    <string name="workout_section_progress">Progress</string>
     <string name="strength_standard_men">men\'s standards</string>
     <string name="strength_standard_women">women\'s standards</string>
     <string name="strength_standard_men_option">Men</string>

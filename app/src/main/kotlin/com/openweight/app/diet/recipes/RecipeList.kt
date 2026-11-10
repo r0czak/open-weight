@@ -22,6 +22,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
 import com.openweight.app.R
+import com.openweight.app.core.ui.ShortcutCard
 import com.openweight.app.core.ui.EmptyState
 import com.openweight.app.diet.data.DietRepository
 import com.openweight.app.diet.data.RecipeSummary
@@ -74,12 +75,13 @@ fun RecipesPanel(
 ) {
   val state by viewModel.state.collectAsStateWithLifecycle()
   Column(Modifier.fillMaxSize()) {
-    ListItem(
-      modifier = Modifier.clickable(onClick = onOpenIngredients).testTag("open_ingredients"),
-      headlineContent = { Text(stringResource(R.string.diet_ingredients)) },
-      supportingContent = { Text(pluralStringResource(R.plurals.ingredient_count, state.ingredientCount, state.ingredientCount)) },
+    ShortcutCard(
+      R.drawable.ic_menu_ingredients,
+      stringResource(R.string.diet_ingredients),
+      pluralStringResource(R.plurals.ingredient_count, state.ingredientCount, state.ingredientCount),
+      onClick = onOpenIngredients,
+      tag = "open_ingredients",
     )
-    HorizontalDivider()
     SearchField(state.query, viewModel::onQueryChange, placeholder = stringResource(R.string.recipe_search))
     when {
       state.loading -> Unit

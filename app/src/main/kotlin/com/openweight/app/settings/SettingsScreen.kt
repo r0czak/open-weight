@@ -45,6 +45,10 @@ import com.openweight.app.R
 import com.openweight.app.core.model.ThemeMode
 import com.openweight.app.core.model.WeightUnit
 import com.openweight.app.progress.strength.StrengthStandard
+import com.openweight.app.core.ui.MenuAccent
+import com.openweight.app.core.ui.MenuDivider
+import com.openweight.app.core.ui.MenuRow
+import com.openweight.app.core.ui.MenuSection
 import com.openweight.app.core.ui.ScreenScaffold
 import com.openweight.app.diet.household.HouseholdMember
 import com.openweight.app.diet.household.MemberDialog
@@ -153,147 +157,153 @@ fun SettingsScreen(
   val context = LocalContext.current
   val version = remember(context) { context.versionName() }
   ScreenScaffold(title = stringResource(R.string.tab_settings), modifier = modifier) { padding ->
-    Column(
-      modifier = Modifier.fillMaxSize().padding(padding).verticalScroll(rememberScrollState()),
-      verticalArrangement = Arrangement.spacedBy(8.dp),
-    ) {
-      SectionTitle(stringResource(R.string.settings_units))
-      ChoiceRow(
-        options = WeightUnit.entries,
-        selected = settings.weightUnit,
-        label = {
-          when (it) {
-            WeightUnit.KG -> stringResource(R.string.settings_unit_kg)
-            WeightUnit.LB -> stringResource(R.string.settings_unit_lb)
-          }
-        },
-        onSelect = onWeightUnitChange,
-      )
+    Column(Modifier.fillMaxSize().padding(padding).verticalScroll(rememberScrollState()).padding(bottom = 16.dp)) {
+      MenuSection(stringResource(R.string.settings_general)) {
+        MenuRow(R.drawable.ic_menu_units, stringResource(R.string.settings_units), accent = MenuAccent.NEUTRAL)
+        ChoiceRow(
+          options = WeightUnit.entries,
+          selected = settings.weightUnit,
+          label = {
+            when (it) {
+              WeightUnit.KG -> stringResource(R.string.settings_unit_kg)
+              WeightUnit.LB -> stringResource(R.string.settings_unit_lb)
+            }
+          },
+          onSelect = onWeightUnitChange,
+        )
+        MenuDivider()
+        MenuRow(R.drawable.ic_menu_theme, stringResource(R.string.settings_theme), accent = MenuAccent.NEUTRAL)
+        ChoiceRow(
+          options = ThemeMode.entries,
+          selected = settings.themeMode,
+          label = {
+            when (it) {
+              ThemeMode.SYSTEM -> stringResource(R.string.settings_theme_system)
+              ThemeMode.LIGHT -> stringResource(R.string.settings_theme_light)
+              ThemeMode.DARK -> stringResource(R.string.settings_theme_dark)
+            }
+          },
+          onSelect = onThemeModeChange,
+        )
+      }
 
-      SectionTitle(stringResource(R.string.settings_theme))
-      ChoiceRow(
-        options = ThemeMode.entries,
-        selected = settings.themeMode,
-        label = {
-          when (it) {
-            ThemeMode.SYSTEM -> stringResource(R.string.settings_theme_system)
-            ThemeMode.LIGHT -> stringResource(R.string.settings_theme_light)
-            ThemeMode.DARK -> stringResource(R.string.settings_theme_dark)
-          }
-        },
-        onSelect = onThemeModeChange,
-      )
-
-      SectionTitle(stringResource(R.string.settings_training))
-      ListItem(
-        modifier =
+      MenuSection(stringResource(R.string.settings_training)) {
+        MenuRow(
+          R.drawable.ic_menu_alarm,
+          stringResource(R.string.settings_rest_alerts),
           Modifier.toggleable(value = settings.restAlerts, role = Role.Switch, onValueChange = onRestAlertsChange).testTag("rest_alerts"),
-        headlineContent = { Text(stringResource(R.string.settings_rest_alerts)) },
-        supportingContent = { Text(stringResource(R.string.settings_rest_alerts_hint)) },
-        trailingContent = { Switch(checked = settings.restAlerts, onCheckedChange = null) },
-      )
-      Text(
-        stringResource(R.string.strength_standard),
-        style = MaterialTheme.typography.bodyLarge,
-        modifier = Modifier.padding(horizontal = 16.dp),
-      )
-      ChoiceRow(
-        options = StrengthStandard.entries,
-        selected = settings.strengthStandard,
-        label = {
-          when (it) {
-            StrengthStandard.MEN -> stringResource(R.string.strength_standard_men_option)
-            StrengthStandard.WOMEN -> stringResource(R.string.strength_standard_women_option)
-          }
-        },
-        onSelect = onStrengthStandardChange,
-      )
+          subtitle = stringResource(R.string.settings_rest_alerts_hint),
+          trailing = { Switch(checked = settings.restAlerts, onCheckedChange = null) },
+        )
+        MenuDivider()
+        MenuRow(R.drawable.ic_menu_power, stringResource(R.string.strength_standard), subtitle = stringResource(R.string.strength_standard_hint))
+        ChoiceRow(
+          options = StrengthStandard.entries,
+          selected = settings.strengthStandard,
+          label = {
+            when (it) {
+              StrengthStandard.MEN -> stringResource(R.string.strength_standard_men_option)
+              StrengthStandard.WOMEN -> stringResource(R.string.strength_standard_women_option)
+            }
+          },
+          onSelect = onStrengthStandardChange,
+        )
+      }
 
-      SectionTitle(stringResource(R.string.settings_diet))
-      ListItem(
-        modifier = Modifier.clickable(onClick = onEditTargets).testTag("targets"),
-        headlineContent = { Text(stringResource(R.string.settings_targets)) },
-        supportingContent = {
-          Text(
+      MenuSection(stringResource(R.string.settings_diet)) {
+        MenuRow(
+          R.drawable.ic_menu_target,
+          stringResource(R.string.settings_targets),
+          Modifier.testTag("targets"),
+          subtitle =
             when {
               settings.kcalTarget != null && settings.proteinTarget != null ->
                 stringResource(R.string.settings_targets_value, formatKcal(settings.kcalTarget.toDouble()), formatGrams(settings.proteinTarget.toDouble()))
               settings.kcalTarget != null -> stringResource(R.string.settings_targets_kcal_only, formatKcal(settings.kcalTarget.toDouble()))
               settings.proteinTarget != null -> formatGrams(settings.proteinTarget.toDouble())
               else -> stringResource(R.string.settings_targets_none)
-            }
-          )
-        },
-      )
+            },
+          accent = MenuAccent.TERTIARY,
+          onClick = onEditTargets,
+        )
+      }
 
-      Text(
-        stringResource(R.string.household_hint),
-        style = MaterialTheme.typography.bodySmall,
-        color = MaterialTheme.colorScheme.onSurfaceVariant,
-        modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
-      )
-      members.forEach { m ->
-        ListItem(
-          modifier = Modifier.clickable { onEditMember(m) }.testTag("member_${m.name}"),
-          headlineContent = { Text(m.name) },
-          supportingContent = {
-            Text(
+      MenuSection(stringResource(R.string.settings_household)) {
+        Text(
+          stringResource(R.string.household_hint),
+          style = MaterialTheme.typography.bodySmall,
+          color = MaterialTheme.colorScheme.onSurfaceVariant,
+          modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 4.dp),
+        )
+        members.forEach { m ->
+          MenuRow(
+            R.drawable.ic_menu_person,
+            m.name,
+            Modifier.testTag("member_${m.name}"),
+            subtitle =
               stringResource(R.string.household_member_line, formatPortion(m.portion)) +
-                if (m.eatsByDefault) "" else " · " + stringResource(R.string.household_not_by_default)
-            )
-          },
-        )
-      }
-      ListItem(
-        modifier = Modifier.clickable(onClick = onAddMember).testTag("add_member"),
-        headlineContent = { Text(stringResource(R.string.household_add)) },
-      )
-
-      HorizontalDivider(Modifier.padding(top = 8.dp))
-      SectionTitle(stringResource(R.string.settings_data))
-      ListItem(
-        modifier = Modifier.clickable(onClick = onBackup).testTag("backup"),
-        headlineContent = { Text(stringResource(R.string.settings_backup)) },
-        supportingContent = { Text(stringResource(R.string.settings_backup_hint)) },
-      )
-      ListItem(
-        modifier = Modifier.clickable(onClick = onExport).testTag("export"),
-        headlineContent = { Text(stringResource(R.string.settings_export)) },
-        supportingContent = { Text(stringResource(R.string.settings_export_hint)) },
-      )
-      ListItem(
-        modifier = Modifier.clickable(onClick = onImport).testTag("import_file"),
-        headlineContent = { Text(stringResource(R.string.settings_import)) },
-        supportingContent = { Text(stringResource(R.string.settings_import_hint)) },
-      )
-      if (lastAutoBackup != null) {
-        ListItem(
-          modifier = Modifier.clickable(onClick = onUndoRestore).testTag("undo_restore"),
-          headlineContent = { Text(stringResource(R.string.settings_undo_restore)) },
-          supportingContent = {
-            Text(stringResource(R.string.settings_undo_restore_hint, lastAutoBackup.atZone(ZoneId.systemDefault()).toLocalDate().formatMedium()))
-          },
+                if (m.eatsByDefault) "" else " · " + stringResource(R.string.household_not_by_default),
+            accent = MenuAccent.TERTIARY,
+            onClick = { onEditMember(m) },
+          )
+          MenuDivider()
+        }
+        MenuRow(
+          R.drawable.ic_menu_person_add,
+          stringResource(R.string.household_add),
+          Modifier.testTag("add_member"),
+          accent = MenuAccent.TERTIARY,
+          titleColor = MaterialTheme.colorScheme.primary,
+          onClick = onAddMember,
+          trailing = null,
         )
       }
 
-      HorizontalDivider()
-      SectionTitle(stringResource(R.string.settings_about))
-      ListItem(
-        headlineContent = { Text(stringResource(R.string.settings_version, version)) },
-        supportingContent = { Text(stringResource(R.string.settings_offline)) },
-      )
+      MenuSection(stringResource(R.string.settings_data)) {
+        MenuRow(
+          R.drawable.ic_menu_backup,
+          stringResource(R.string.settings_backup),
+          Modifier.testTag("backup"),
+          subtitle = stringResource(R.string.settings_backup_hint),
+          accent = MenuAccent.PRIMARY,
+          onClick = onBackup,
+        )
+        MenuDivider()
+        MenuRow(
+          R.drawable.ic_menu_export,
+          stringResource(R.string.settings_export),
+          Modifier.testTag("export"),
+          subtitle = stringResource(R.string.settings_export_hint),
+          accent = MenuAccent.PRIMARY,
+          onClick = onExport,
+        )
+        MenuDivider()
+        MenuRow(
+          R.drawable.ic_menu_import,
+          stringResource(R.string.settings_import),
+          Modifier.testTag("import_file"),
+          subtitle = stringResource(R.string.settings_import_hint),
+          accent = MenuAccent.PRIMARY,
+          onClick = onImport,
+        )
+        if (lastAutoBackup != null) {
+          MenuDivider()
+          MenuRow(
+            R.drawable.ic_menu_undo,
+            stringResource(R.string.settings_undo_restore),
+            Modifier.testTag("undo_restore"),
+            subtitle = stringResource(R.string.settings_undo_restore_hint, lastAutoBackup.atZone(ZoneId.systemDefault()).toLocalDate().formatMedium()),
+            accent = MenuAccent.PRIMARY,
+            onClick = onUndoRestore,
+          )
+        }
+      }
+
+      MenuSection(stringResource(R.string.settings_about)) {
+        MenuRow(R.drawable.ic_menu_info, stringResource(R.string.settings_version, version), subtitle = stringResource(R.string.settings_offline), accent = MenuAccent.NEUTRAL)
+      }
     }
   }
-}
-
-@Composable
-private fun SectionTitle(text: String) {
-  Text(
-    text = text,
-    style = MaterialTheme.typography.titleSmall,
-    color = MaterialTheme.colorScheme.primary,
-    modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp),
-  )
 }
 
 @Composable
@@ -303,7 +313,7 @@ private fun <T> ChoiceRow(
   label: @Composable (T) -> String,
   onSelect: (T) -> Unit,
 ) {
-  SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
+  SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth().padding(start = 72.dp, end = 16.dp, bottom = 14.dp)) {
     options.forEachIndexed { index, option ->
       SegmentedButton(
         selected = option == selected,
