@@ -35,6 +35,8 @@ Offline-first Android app for planning workouts (training blocks, workouts, exer
   links follow their records, one transaction, "Replace everything"); `ImportSession` (the file being imported, shared by Settings,
   files shared from other apps and the preview screen; saves the automatic copy before Replace everything); `ui/` (export dialog and
   screen, import preview)
+  Backups also carry finished sessions (an open one stays on the phone), weigh-ins (matched by date; never two a day), the household
+  (matched by name), eaten marks and who eats each meal; `TransferDao.clearAll` must clear every table
 - `app/schemas/` — exported Room schemas, committed; a version bump needs a migration + test (`MigrationTest`)
 - `plans/` — import files for real training plans (+ the script that generates the Winter Arc one)
 
@@ -64,6 +66,8 @@ Offline-first Android app for planning workouts (training blocks, workouts, exer
 ./gradlew lintDebug                             # Android lint
 ```
 CI (`.github/workflows/android.yml`) runs all three on every push and uploads the APK.
+Releases: push a tag matching `versionName` (`git tag v1.6.0 && git push origin v1.6.0`); `release.yml` checks the match, builds,
+tests and publishes a GitHub Release with the APK.
 
 ## Signing
 `app/debug.keystore` is a shared debug key committed on purpose, so every build installs over the

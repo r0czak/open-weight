@@ -184,6 +184,7 @@ fun ExportDialog(request: ExportRequest, onDismiss: () -> Unit, viewModel: Expor
 enum class ExportChoice {
   WORKOUT,
   DIET,
+  PROGRESS,
   RANGE,
   ITEMS,
 }
@@ -245,6 +246,7 @@ constructor(
       return when (choice) {
         ExportChoice.WORKOUT -> ExportRequest.WorkoutData
         ExportChoice.DIET -> ExportRequest.DietData
+        ExportChoice.PROGRESS -> ExportRequest.Progress
         ExportChoice.RANGE -> ExportRequest.Range(from, to)
         ExportChoice.ITEMS -> ExportRequest.Items(ids(BLOCK), ids(WORKOUT), ids(RECIPE), ids(PLAN)).takeUnless { it.isEmpty }
       }
@@ -279,6 +281,7 @@ fun ExportRoute(onBack: () -> Unit, viewModel: ExportPickerViewModel = hiltViewM
       LazyColumn(Modifier.weight(1f).testTag("export_list"), contentPadding = PaddingValues(bottom = 16.dp)) {
         item { Choice(ExportChoice.WORKOUT, choice, R.string.export_workout, R.string.export_workout_hint, viewModel::choose) }
         item { Choice(ExportChoice.DIET, choice, R.string.export_diet, R.string.export_diet_hint, viewModel::choose) }
+        item { Choice(ExportChoice.PROGRESS, choice, R.string.export_progress, R.string.export_progress_hint, viewModel::choose) }
         item { Choice(ExportChoice.RANGE, choice, R.string.export_range, R.string.export_range_hint, viewModel::choose) }
         if (choice == ExportChoice.RANGE) {
           item {

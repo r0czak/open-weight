@@ -5,6 +5,11 @@ import com.openweight.app.core.TimeAndIds
 import com.openweight.app.core.database.OpenWeightDatabase
 import com.openweight.app.core.database.entity.BlockScheduleDayEntity
 import com.openweight.app.core.database.entity.BlockWorkoutEntity
+import com.openweight.app.core.database.entity.BodyWeightEntity
+import com.openweight.app.core.database.entity.HouseholdMemberEntity
+import com.openweight.app.core.database.entity.MealMemberEntity
+import com.openweight.app.core.database.entity.SessionSetEntity
+import com.openweight.app.core.database.entity.WorkoutSessionEntity
 import com.openweight.app.core.database.entity.DietPlanEntity
 import com.openweight.app.core.database.entity.DietPlanMealEntity
 import com.openweight.app.core.database.entity.ExerciseEntity
@@ -40,8 +45,11 @@ sealed interface ExportRequest {
       get() = blockIds.isEmpty() && workoutIds.isEmpty() && recipeIds.isEmpty() && dietPlanIds.isEmpty()
   }
 
-  /** Calendar meals from [from] to [to], with their recipes and ingredients. */
+  /** Calendar meals from [from] to [to], with their recipes, ingredients and who eats them. */
   data class Range(val from: LocalDate, val to: LocalDate) : ExportRequest
+
+  /** Finished training sessions and body weight. */
+  data object Progress : ExportRequest
 }
 
 class ExportedFile(val fileName: String, val file: OpenWeightFile) {
@@ -63,14 +71,27 @@ constructor(private val db: OpenWeightDatabase, private val clock: TimeAndIds, p
     val (scope, data, name) =
       when (request) {
         ExportRequest.Everything ->
-          Triple(TransferScope(ScopeKind.FULL.id, "Full backup"), all.workoutPart() + all.dietPart() + TransferData(settings = settings), "backup-$today")
+          Triple(
+            TransferScope(ScopeKind.FULL.id, "Full backup"),
+            all.workoutPart() + all.dietPart() + TransferData(bodyWeights = all.weights.map(all::weight), settings = settings),
+            "backup-$today",
+          )
         ExportRequest.WorkoutData -> Triple(TransferScope(ScopeKind.WORKOUT.id, "All workout data"), all.workoutPart(), "workout-$today")
+        ExportRequest.Progress ->
+          Triple(
+            TransferScope(ScopeKind.PROGRESS.id, "Training history and body weight"),
+            TransferData(workoutSessions = all.sessions.map(all::session), bodyWeights = all.weights.map(all::weight)),
+            "progress-$today",
+          )
         ExportRequest.DietData -> Triple(TransferScope(ScopeKind.DIET.id, "All diet data"), all.dietPart(), "diet-$today")
         is ExportRequest.Items -> items(all, request, today)
         is ExportRequest.Range -> {
           require(!request.to.isBefore(request.from)) { "The range must end on or after its start" }
           val meals = all.meals.filter { !it.date.isBefore(request.from) && !it.date.isAfter(request.to) }
-          val data = all.recipesWithIngredients(meals.map { it.recipeId }.toSet()).copy(mealEntries = meals.map(all::meal))
+          val memberIds = meals.flatMap { all.memberIdsOf(it.id) }.toSet()
+          val data =
+            all.recipesWithIngredients(meals.map { it.recipeId }.toSet())
+              .copy(mealEntries = meals.map(all::meal), householdMembers = all.members.filter { it.id in memberIds }.map(all::member))
           Triple(TransferScope(ScopeKind.RANGE.id, "Meals ${request.from} – ${request.to}"), data, "meals-${request.from}-to-${request.to}")
         }
       }
@@ -130,6 +151,9 @@ private operator fun TransferData.plus(o: TransferData) =
     dietPlans = dietPlans + o.dietPlans,
     mealEntries = mealEntries + o.mealEntries,
     shoppingLists = shoppingLists + o.shoppingLists,
+    workoutSessions = workoutSessions + o.workoutSessions,
+    bodyWeights = bodyWeights + o.bodyWeights,
+    householdMembers = householdMembers + o.householdMembers,
     settings = settings ?: o.settings,
   )
 
@@ -150,12 +174,22 @@ private class Snapshot(
   val meals: List<MealEntryEntity>,
   val lists: List<ShoppingListEntity>,
   val listItems: List<ShoppingItemEntity>,
+  val sessions: List<WorkoutSessionEntity>,
+  val sessionSets: List<SessionSetEntity>,
+  val weights: List<BodyWeightEntity>,
+  val members: List<HouseholdMemberEntity>,
+  val mealMembers: List<MealMemberEntity>,
 ) {
+  private val setsBySession = sessionSets.groupBy { it.sessionId }
+  private val membersByMeal = mealMembers.groupBy({ it.mealId }, { it.memberId })
+
+  fun memberIdsOf(mealId: String): List<String> = membersByMeal[mealId].orEmpty()
   private val entriesByWorkout = workoutExercises.groupBy { it.workoutId }
   private val setsByEntry = setPlans.groupBy { it.workoutExerciseId }
   private val linesByRecipe = recipeLines.groupBy { it.recipeId }
 
-  fun workoutPart() = TransferData(exercises = exercises.map(::exercise), workouts = workouts.map(::workout), trainingBlocks = blocks.map(::block))
+  fun workoutPart() =
+    TransferData(exercises = exercises.map(::exercise), workouts = workouts.map(::workout), trainingBlocks = blocks.map(::block), workoutSessions = sessions.map(::session))
 
   fun dietPart() =
     TransferData(
@@ -164,6 +198,7 @@ private class Snapshot(
       dietPlans = plans.map(::plan),
       mealEntries = meals.map(::meal),
       shoppingLists = lists.map(::list),
+      householdMembers = members.map(::member),
     )
 
   fun workoutsWithExercises(ids: Set<String>): TransferData {
@@ -243,7 +278,28 @@ private class Snapshot(
     )
 
   fun meal(m: MealEntryEntity) =
-    MealEntryDto(m.id, m.date.toString(), m.slot.name, m.recipeId, m.servings, m.dietPlanId, m.createdAt.toString(), m.updatedAt.toString())
+    MealEntryDto(m.id, m.date.toString(), m.slot.name, m.recipeId, m.servings, m.dietPlanId, m.createdAt.toString(), m.updatedAt.toString(), m.eatenAt?.toString(), memberIdsOf(m.id))
+
+  fun session(s: WorkoutSessionEntity) =
+    WorkoutSessionDto(
+      id = s.id,
+      workoutId = s.workoutId,
+      workoutName = s.workoutName,
+      plannedDate = s.plannedDate.toString(),
+      startedAt = s.startedAt.toString(),
+      finishedAt = s.finishedAt!!.toString(),
+      notes = s.notes,
+      sets =
+        setsBySession[s.id].orEmpty().map {
+          SessionSetDto(it.exerciseId, it.exerciseName, it.exercisePosition, it.setPosition, it.targetRepsMin, it.targetRepsMax, it.restSeconds, it.weightKg, it.reps, it.done, it.completedAt?.toString())
+        },
+      createdAt = s.createdAt.toString(),
+      updatedAt = s.updatedAt.toString(),
+    )
+
+  fun weight(w: BodyWeightEntity) = BodyWeightDto(w.id, w.date.toString(), w.weightKg, w.createdAt.toString(), w.updatedAt.toString())
+
+  fun member(m: HouseholdMemberEntity) = HouseholdMemberDto(m.id, m.name, m.portion, m.eatsByDefault, m.createdAt.toString(), m.updatedAt.toString())
 
   fun list(l: ShoppingListEntity) =
     ShoppingListDto(
@@ -266,6 +322,8 @@ private class Snapshot(
       return Snapshot(
         d.exercises(), d.workouts(), d.workoutExercises(), d.setPlans(), d.blocks(), d.blockWorkouts(), d.scheduleDays(),
         d.ingredients(), d.recipes(), d.recipeLines(), d.dietPlans(), d.planMeals(), d.mealEntries(), d.shoppingLists(), d.shoppingItems(),
+        // Only finished sessions travel: an open one stays on the phone.
+        d.finishedSessions(), d.sessionSets(), d.bodyWeights(), d.householdMembers(), d.mealMembers(),
       )
     }
   }

@@ -5,6 +5,13 @@ import com.openweight.app.core.TimeAndIds
 import com.openweight.app.core.database.OpenWeightDatabase
 import com.openweight.app.core.database.entity.BlockScheduleDayEntity
 import com.openweight.app.core.database.entity.BlockWorkoutEntity
+import com.openweight.app.core.database.entity.BodyWeightEntity
+import com.openweight.app.core.database.entity.HouseholdMemberEntity
+import com.openweight.app.core.database.entity.MealMemberEntity
+import com.openweight.app.core.database.entity.SessionSetEntity
+import com.openweight.app.core.database.entity.WorkoutSessionEntity
+import com.openweight.app.diet.household.HouseholdRepository
+import com.openweight.app.progress.WeightRules
 import com.openweight.app.core.database.entity.DietPlanEntity
 import com.openweight.app.core.database.entity.DietPlanMealEntity
 import com.openweight.app.core.database.entity.ExerciseEntity
@@ -45,9 +52,12 @@ enum class RecordKind {
   TRAINING_BLOCK,
   WORKOUT,
   EXERCISE,
+  SESSION,
+  BODY_WEIGHT,
   DIET_PLAN,
   RECIPE,
   INGREDIENT,
+  HOUSEHOLD_MEMBER,
   MEAL,
   SHOPPING_LIST,
 }
@@ -60,7 +70,10 @@ enum class ConflictChoice {
   REPLACE,
   /** Whichever was changed last is kept. */
   NEWER_WINS,
-  /** The file's record is added as a copy, with a new id and " (imported)" after its name. */
+  /**
+   * The file's record is added as a copy, with a new id and " (imported)" after its name. A
+   * weigh-in can't have a copy (one per day): it is skipped. A session copy keeps its name.
+   */
   KEEP_BOTH,
 }
 
@@ -182,7 +195,10 @@ constructor(private val db: OpenWeightDatabase, private val clock: TimeAndIds) {
           match(RecordKind.RECIPE, d.recipes, { it.id }, { it.name }, { it.updatedAt }) +
           match(RecordKind.INGREDIENT, d.ingredients, { it.id }, { it.name }, { it.updatedAt }) +
           match(RecordKind.MEAL, d.mealEntries, { it.id }, { recipeNames[it.recipeId].orEmpty() }, { it.updatedAt }, { LocalDate.parse(it.date) }) +
-          match(RecordKind.SHOPPING_LIST, d.shoppingLists, { it.id }, { it.name }, { it.updatedAt })
+          match(RecordKind.SHOPPING_LIST, d.shoppingLists, { it.id }, { it.name }, { it.updatedAt }) +
+          match(RecordKind.SESSION, d.workoutSessions, { it.id }, { it.workoutName }, { it.updatedAt }, { LocalDate.parse(it.plannedDate) }) +
+          match(RecordKind.BODY_WEIGHT, d.bodyWeights, { it.id }, { it.date }, { it.updatedAt }, { LocalDate.parse(it.date) }) +
+          match(RecordKind.HOUSEHOLD_MEMBER, d.householdMembers, { it.id }, { it.name }, { it.updatedAt })
       val sizes =
         mapOf(
           RecordKind.TRAINING_BLOCK to d.trainingBlocks.size,
@@ -193,12 +209,15 @@ constructor(private val db: OpenWeightDatabase, private val clock: TimeAndIds) {
           RecordKind.INGREDIENT to d.ingredients.size,
           RecordKind.MEAL to d.mealEntries.size,
           RecordKind.SHOPPING_LIST to d.shoppingLists.size,
+          RecordKind.SESSION to d.workoutSessions.size,
+          RecordKind.BODY_WEIGHT to d.bodyWeights.size,
+          RecordKind.HOUSEHOLD_MEMBER to d.householdMembers.size,
         )
       ImportPreview(
         scope = ScopeKind.entries.firstOrNull { it.id == file.scope?.kind },
         description = file.scope?.description,
         exportedAt = file.exportedAt?.let(::parseInstant),
-        counts = sizes.filterValues { it > 0 }.mapValues { (kind, n) -> KindCount(n, matches.count { it.kind == kind }) },
+        counts = sizes.filterValues { it > 0 }.toSortedMap(compareBy { it.ordinal }).mapValues { (kind, n) -> KindCount(n, matches.count { it.kind == kind }) },
         matches = matches,
         hasSettings = d.settings != null,
       )
@@ -228,7 +247,11 @@ constructor(private val db: OpenWeightDatabase, private val clock: TimeAndIds) {
     private val outcomes = mutableMapOf<String, Outcome>()
     private val results = mutableMapOf<RecordKind, KindResult>()
     private val takenNames =
-      mapOf(RecordKind.EXERCISE to existing.exerciseNames.keys.toMutableSet(), RecordKind.INGREDIENT to existing.ingredientNames.keys.toMutableSet())
+      mapOf(
+        RecordKind.EXERCISE to existing.exerciseNames.keys.toMutableSet(),
+        RecordKind.INGREDIENT to existing.ingredientNames.keys.toMutableSet(),
+        RecordKind.HOUSEHOLD_MEMBER to existing.memberNames.keys.toMutableSet(),
+      )
 
     /** Where a link to [id] of [kind] now points: the record's new id, or the id itself. */
     private fun ref(kind: RecordKind, id: String) = ids.getValue(kind)[id] ?: id
@@ -252,7 +275,12 @@ constructor(private val db: OpenWeightDatabase, private val clock: TimeAndIds) {
             ConflictChoice.REPLACE -> Outcome.Replace(rec)
             ConflictChoice.NEWER_WINS ->
               if (fileUpdated?.let(::parseInstant)?.let { it > rec.updatedAt } == true) Outcome.Replace(rec) else Outcome.Skip(rec)
-            ConflictChoice.KEEP_BOTH -> Outcome.Copy(clock.newId(), copyName(kind, name))
+            ConflictChoice.KEEP_BOTH ->
+              when (kind) {
+                RecordKind.BODY_WEIGHT -> Outcome.Skip(rec) // one weigh-in per day: no copy
+                RecordKind.SESSION -> Outcome.Copy(clock.newId(), name) // the workout's name, as trained
+                else -> Outcome.Copy(clock.newId(), copyName(kind, name))
+              }
           }
         }
       ids.getValue(kind)[fileId] = outcome.targetId
@@ -328,6 +356,17 @@ constructor(private val db: OpenWeightDatabase, private val clock: TimeAndIds) {
       d.dietPlans.forEach { decide(RecordKind.DIET_PLAN, it.id, it.name, it.updatedAt) }
       d.mealEntries.forEach { decide(RecordKind.MEAL, it.id, "", it.updatedAt) }
       d.shoppingLists.forEach { decide(RecordKind.SHOPPING_LIST, it.id, it.name, it.updatedAt) }
+      d.householdMembers.forEach { decide(RecordKind.HOUSEHOLD_MEMBER, it.id, it.name, it.updatedAt) }
+      d.workoutSessions.forEach { decide(RecordKind.SESSION, it.id, it.workoutName, it.updatedAt) }
+      d.bodyWeights.forEach { decide(RecordKind.BODY_WEIGHT, it.id, it.date, it.updatedAt) }
+
+      for (h in d.householdMembers) {
+        write(
+          RecordKind.HOUSEHOLD_MEMBER, h.id, h.name, h.createdAt, h.updatedAt,
+          { id, name, c, u -> HouseholdMemberEntity(id, name, h.portion, h.eatsByDefault, c, u) },
+          dao::insert, dao::update,
+        )
+      }
 
       for (e in d.exercises) {
         write(RecordKind.EXERCISE, e.id, e.name, e.createdAt, e.updatedAt, { id, name, c, u -> ExerciseEntity(id, name, e.muscleGroup, e.equipment, e.notes, c, u) }, dao::insert, dao::update)
@@ -413,8 +452,42 @@ constructor(private val db: OpenWeightDatabase, private val clock: TimeAndIds) {
         write(
           RecordKind.MEAL, m.id, "", m.createdAt, m.updatedAt,
           { id, _, c, u ->
-            MealEntryEntity(id, LocalDate.parse(m.date), MealSlot.valueOf(m.slot), ref(RecordKind.RECIPE, m.recipeId), m.servings, softRef(RecordKind.DIET_PLAN, m.dietPlanId), c, u)
+            MealEntryEntity(
+              id, LocalDate.parse(m.date), MealSlot.valueOf(m.slot), ref(RecordKind.RECIPE, m.recipeId), m.servings,
+              softRef(RecordKind.DIET_PLAN, m.dietPlanId), c, u, m.eatenAt?.let(::parseInstant),
+            )
           },
+          dao::insert, dao::update,
+          clearChildren = dao::deleteMealMembers,
+          children = { mealId ->
+            dao.insertMealMembers(m.memberIds.mapNotNull { softRef(RecordKind.HOUSEHOLD_MEMBER, it) }.distinct().map { MealMemberEntity(mealId, it, now) })
+          },
+        )
+      }
+      for (x in d.workoutSessions) {
+        write(
+          RecordKind.SESSION, x.id, x.workoutName, x.createdAt, x.updatedAt,
+          { id, name, c, u ->
+            WorkoutSessionEntity(id, softRef(RecordKind.WORKOUT, x.workoutId), name, LocalDate.parse(x.plannedDate), instant(x.startedAt), instant(x.finishedAt), x.notes, c, u)
+          },
+          dao::insert, dao::update,
+          clearChildren = dao::deleteSessionSets,
+          children = { sessionId ->
+            dao.insertSessionSets(
+              x.sets.map {
+                SessionSetEntity(
+                  clock.newId(), sessionId, softRef(RecordKind.EXERCISE, it.exerciseId), it.exerciseName, it.exercisePosition, it.setPosition,
+                  it.targetRepsMin, it.targetRepsMax, it.restSeconds, it.weightKg, it.reps, it.done, it.completedAt?.let(::parseInstant), now, now,
+                )
+              }
+            )
+          },
+        )
+      }
+      for (w in d.bodyWeights) {
+        write(
+          RecordKind.BODY_WEIGHT, w.id, w.date, w.createdAt, w.updatedAt,
+          { id, _, c, u -> BodyWeightEntity(id, LocalDate.parse(w.date), w.weightKg, c, u) },
           dao::insert, dao::update,
         )
       }
@@ -539,6 +612,32 @@ constructor(private val db: OpenWeightDatabase, private val clock: TimeAndIds) {
       date(m.date, "A meal")
       meal("The meal on ${m.date}", m.slot, m.recipeId, m.servings)
     }
+    unique(data.workoutSessions, "training session", { it.id })
+    unique(data.bodyWeights, "weigh-in", { it.id })
+    unique(data.bodyWeights, "weigh-in date", { it.date })
+    unique(data.householdMembers, "person", { it.id })
+    unique(data.householdMembers, "person", { it.name.trim().lowercase() })
+    data.householdMembers.forEach { h ->
+      if (h.name.isBlank()) fail("A person in the household has no name.")
+      if (!(h.portion.isFinite() && h.portion in HouseholdRepository.MIN_PORTION..HouseholdRepository.MAX_PORTION)) fail("\"${h.name}\" has a portion out of range.")
+    }
+    data.bodyWeights.forEach { w ->
+      date(w.date, "A weigh-in")
+      if (!(w.weightKg.isFinite() && w.weightKg in WeightRules.MIN_KG..WeightRules.MAX_KG)) fail("The weigh-in on ${w.date} is out of range.")
+    }
+    data.workoutSessions.forEach { x ->
+      val owner = "The session of \"${x.workoutName}\" on ${x.plannedDate}"
+      if (x.workoutName.isBlank()) fail("A training session has no workout name.")
+      date(x.plannedDate, owner)
+      if (parseInstant(x.startedAt) == null || parseInstant(x.finishedAt) == null) fail("$owner has an invalid time.")
+      x.sets.forEach {
+        if (it.exerciseName.isBlank()) fail("$owner has a set without an exercise.")
+        if (it.reps !in 0..SetValues.MAX_REPS || it.targetRepsMin !in 1..SetValues.MAX_REPS) fail("$owner has reps out of range.")
+        if (it.weightKg != null && !(it.weightKg.isFinite() && it.weightKg in 0.0..SetValues.MAX_WEIGHT_KG)) fail("$owner has a weight out of range.")
+        if (it.restSeconds !in 0..SetValues.MAX_REST_SECONDS || it.exercisePosition < 0 || it.setPosition < 0) fail("$owner has an invalid set.")
+      }
+    }
+    data.mealEntries.forEach { m -> m.eatenAt?.let { if (parseInstant(it) == null) fail("The meal on ${m.date} has an invalid time.") } }
     data.shoppingLists.forEach { l ->
       val from = date(l.fromDate, "A shopping list")
       val to = date(l.toDate, "A shopping list")
@@ -584,7 +683,14 @@ private inline fun <reified T : Enum<T>> enumOrNull(name: String): T? = enumValu
 private fun parseInstant(value: String): Instant? = runCatching { Instant.parse(value) }.getOrNull()
 
 /** The app's records as the importer needs them: ids, names and dates, read in the import's transaction. */
-private class Existing(private val byKind: Map<RecordKind, Map<String, Rec>>, val exerciseNames: Map<String, Rec>, val ingredientNames: Map<String, Rec>) {
+private class Existing(
+  private val byKind: Map<RecordKind, Map<String, Rec>>,
+  val exerciseNames: Map<String, Rec>,
+  val ingredientNames: Map<String, Rec>,
+  val memberNames: Map<String, Rec> = emptyMap(),
+  /** Weigh-ins by date: one per day, so a weigh-in on the same date is the same one. */
+  val weightDates: Map<String, Rec> = emptyMap(),
+) {
   class Rec(val id: String, val name: String, val createdAt: Instant, val updatedAt: Instant)
 
   val recipeNames: Map<String, String>
@@ -592,13 +698,15 @@ private class Existing(private val byKind: Map<RecordKind, Map<String, Rec>>, va
 
   fun has(kind: RecordKind, id: String) = byKind[kind]?.containsKey(id) == true
 
-  /** Same id; for exercises and ingredients also the same name, ignoring case. */
+  /** Same id; for exercises, ingredients and people also the same name (ignoring case); weigh-ins the same date. */
   fun match(kind: RecordKind, id: String, name: String): Pair<Rec, Boolean>? {
     byKind[kind]?.get(id)?.let { return it to false }
     val byName =
       when (kind) {
         RecordKind.EXERCISE -> exerciseNames
         RecordKind.INGREDIENT -> ingredientNames
+        RecordKind.HOUSEHOLD_MEMBER -> memberNames
+        RecordKind.BODY_WEIGHT -> return weightDates[name]?.let { it to true }
         else -> return null
       }
     return byName[name.trim().lowercase()]?.let { it to true }
@@ -621,12 +729,17 @@ private class Existing(private val byKind: Map<RecordKind, Map<String, Rec>>, va
           RecordKind.DIET_PLAN to d.dietPlans().map { Rec(it.id, it.name, it.createdAt, it.updatedAt) },
           RecordKind.MEAL to d.mealEntries().map { Rec(it.id, recipeNames[it.recipeId].orEmpty(), it.createdAt, it.updatedAt) },
           RecordKind.SHOPPING_LIST to d.shoppingLists().map { Rec(it.id, it.name, it.createdAt, it.updatedAt) },
+          RecordKind.SESSION to d.allSessions().map { Rec(it.id, it.workoutName, it.createdAt, it.updatedAt) },
+          RecordKind.BODY_WEIGHT to d.bodyWeights().map { Rec(it.id, it.date.toString(), it.createdAt, it.updatedAt) },
+          RecordKind.HOUSEHOLD_MEMBER to d.householdMembers().map { Rec(it.id, it.name, it.createdAt, it.updatedAt) },
         )
       val byKind = map.mapValues { (_, recs) -> recs.associateBy { it.id } }
       return Existing(
         byKind,
         exerciseNames = map.getValue(RecordKind.EXERCISE).associateBy { it.name.trim().lowercase() },
         ingredientNames = map.getValue(RecordKind.INGREDIENT).associateBy { it.name.trim().lowercase() },
+        memberNames = map.getValue(RecordKind.HOUSEHOLD_MEMBER).associateBy { it.name.trim().lowercase() },
+        weightDates = map.getValue(RecordKind.BODY_WEIGHT).associateBy { it.name },
       )
     }
   }

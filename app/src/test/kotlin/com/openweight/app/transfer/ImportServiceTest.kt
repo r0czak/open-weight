@@ -181,7 +181,7 @@ class ImportServiceTest {
   fun unknownFields_areIgnored() = runTest {
     val json =
       """{"format":"open-weight","formatVersion":1,"futureField":true,
-         "data":{"bodyWeights":[{"date":"2026-11-08"}],"exercises":[{"id":"e","name":"Curl","colour":"red"}]}}"""
+         "data":{"photos":[{"file":"bench.jpg"}],"exercises":[{"id":"e","name":"Curl","colour":"red"}]}}"""
 
     assertEquals(1, importer.import(json.toByteArray())[RecordKind.EXERCISE].added)
   }

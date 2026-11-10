@@ -34,7 +34,9 @@ enum class ScopeKind {
   WORKOUT,
   DIET,
   ITEMS,
-  RANGE;
+  RANGE,
+  /** Finished training sessions and body weight. */
+  PROGRESS;
 
   val id: String
     get() = name.lowercase()
@@ -50,6 +52,10 @@ data class TransferData(
   val dietPlans: List<DietPlanDto> = emptyList(),
   val mealEntries: List<MealEntryDto> = emptyList(),
   val shoppingLists: List<ShoppingListDto> = emptyList(),
+  /** Finished training sessions only (an open one stays on the phone). */
+  val workoutSessions: List<WorkoutSessionDto> = emptyList(),
+  val bodyWeights: List<BodyWeightDto> = emptyList(),
+  val householdMembers: List<HouseholdMemberDto> = emptyList(),
   /** Full backups only. */
   val settings: SettingsDto? = null,
 )
@@ -165,6 +171,10 @@ data class MealEntryDto(
   val dietPlanId: String? = null,
   val createdAt: String? = null,
   val updatedAt: String? = null,
+  /** When it was ticked as eaten; absent while only planned. */
+  val eatenAt: String? = null,
+  /** Household members who also eat it. A member in neither the file nor the app is dropped. */
+  val memberIds: List<String> = emptyList(),
 )
 
 @Serializable
@@ -192,8 +202,63 @@ data class ShoppingItemDto(
   val isQuantityEdited: Boolean = false,
 )
 
-/** [weightUnit] is KG or LB; [themeMode] is SYSTEM, LIGHT or DARK. */
-@Serializable data class SettingsDto(val weightUnit: String? = null, val themeMode: String? = null)
+/** [weightUnit] is KG or LB; [themeMode] is SYSTEM, LIGHT or DARK; targets per day. */
+@Serializable
+data class SettingsDto(
+  val weightUnit: String? = null,
+  val themeMode: String? = null,
+  val restAlerts: Boolean? = null,
+  val kcalTarget: Int? = null,
+  val proteinTarget: Int? = null,
+)
+
+/**
+ * A finished training session. Names are kept as text; [workoutId] and a set's exerciseId are
+ * dropped when that record is in neither the file nor the app.
+ */
+@Serializable
+data class WorkoutSessionDto(
+  val id: String,
+  val workoutId: String? = null,
+  val workoutName: String,
+  val plannedDate: String,
+  val startedAt: String,
+  val finishedAt: String,
+  val notes: String = "",
+  val sets: List<SessionSetDto> = emptyList(),
+  val createdAt: String? = null,
+  val updatedAt: String? = null,
+)
+
+@Serializable
+data class SessionSetDto(
+  val exerciseId: String? = null,
+  val exerciseName: String,
+  val exercisePosition: Int,
+  val setPosition: Int,
+  val targetRepsMin: Int,
+  val targetRepsMax: Int? = null,
+  val restSeconds: Int = 90,
+  val weightKg: Double? = null,
+  val reps: Int,
+  val done: Boolean = false,
+  val completedAt: String? = null,
+)
+
+/** One weigh-in; one per date. */
+@Serializable
+data class BodyWeightDto(val id: String, val date: String, val weightKg: Double, val createdAt: String? = null, val updatedAt: String? = null)
+
+/** Someone you cook for; [portion] of yours. */
+@Serializable
+data class HouseholdMemberDto(
+  val id: String,
+  val name: String,
+  val portion: Double,
+  val eatsByDefault: Boolean = true,
+  val createdAt: String? = null,
+  val updatedAt: String? = null,
+)
 
 internal val TransferJson = Json {
   ignoreUnknownKeys = true
