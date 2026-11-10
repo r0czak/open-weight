@@ -520,6 +520,13 @@
     </plurals>
     <string name="session_done_sets">Sets done: %1$d/%2$d</string>
     <string name="session_done_volume">Total lifted: %s</string>
+    <string name="rest_channel">Rest timer</string>
+    <string name="rest_channel_description">Tells you when the rest between sets is over.</string>
+    <string name="rest_next">Next: %s</string>
+    <string name="rest_next_set">%1$s, set %2$d</string>
+    <string name="settings_training">Training</string>
+    <string name="settings_rest_alerts">Alert when rest is over</string>
+    <string name="settings_rest_alerts_hint">A notification with sound or vibration, also when the phone is locked</string>
     <string name="home_session_open">In progress: %s</string>
     <string name="home_session_resume">Resume</string>
     <string name="home_workout_done">Done</string>

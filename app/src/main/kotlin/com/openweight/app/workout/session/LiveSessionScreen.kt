@@ -1,5 +1,9 @@
 package com.openweight.app.workout.session
 
+import android.Manifest
+import android.os.Build
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -77,6 +81,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.Duration
 import java.time.Instant
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.Dispatchers
@@ -106,11 +111,41 @@ constructor(
   private val sessions: SessionRepository,
   settings: SettingsRepository,
   private val clock: TimeAndIds,
+  private val alerts: RestAlerts,
   @Assisted private val sessionId: String,
 ) : ViewModel() {
   @AssistedFactory
   interface Factory {
     fun create(sessionId: String): LiveSessionViewModel
+  }
+
+  /** The end time (epoch ms) of a rest the user skipped. */
+  private val skippedRest = MutableStateFlow<Long?>(null)
+  val skipped: StateFlow<Long?> = skippedRest
+
+  /** The setting is on but Android won't show notifications yet: ask for the permission. */
+  val wantsNotifications: StateFlow<Boolean> =
+    settings.settings.map { it.restAlerts && !alerts.canNotify() }.stateIn(viewModelScope, SharingStarted.Eagerly, false)
+
+  init {
+    // Keeps the "rest is over" alarm in step with the session: set after each confirmed set,
+    // gone when the rest is skipped, the set undone, or the session closed.
+    viewModelScope.launch {
+      combine(sessions.session(sessionId), skippedRest, settings.settings.map { it.restAlerts }) { s, skipped, on -> Triple(s, skipped, on) }
+        .map { (s, skipped, on) ->
+          val endsAt = s?.restEndsAt?.takeIf { on && it.toEpochMilli() != skipped && it.isAfter(clock.now()) }
+          endsAt to s?.let(::nextLabel)
+        }
+        .distinctUntilChanged()
+        .collect { (endsAt, next) -> if (endsAt != null) alerts.schedule(endsAt, next) else alerts.cancel() }
+    }
+  }
+
+  private fun nextLabel(s: Session): NextSet? =
+    s.exercises.firstNotNullOfOrNull { e -> e.sets.indexOfFirst { it.id == s.nextSetId }.takeIf { it >= 0 }?.let { NextSet(e.name, it + 1) } }
+
+  fun skipRest(endsAt: Instant) {
+    skippedRest.value = endsAt.toEpochMilli()
   }
 
   val state: StateFlow<LiveSessionState> =
@@ -180,6 +215,16 @@ fun LiveSessionRoute(
   var confirmDiscard by remember { mutableStateOf(false) }
   var editing by remember { mutableStateOf<Pair<SessionExercise, SessionSet>?>(null) }
   val open = session != null && session.finishedAt == null
+  val wantsNotifications by viewModel.wantsNotifications.collectAsStateWithLifecycle()
+  val askNotifications = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {}
+  var askedNotifications by rememberSaveable { mutableStateOf(false) }
+  LaunchedEffect(wantsNotifications, open) {
+    // Android 13+: the rest alert needs the notification permission; ask once per session screen.
+    if (wantsNotifications && open && !askedNotifications && Build.VERSION.SDK_INT >= 33) {
+      askedNotifications = true
+      askNotifications.launch(Manifest.permission.POST_NOTIFICATIONS)
+    }
+  }
 
   ScreenScaffold(
     title = session?.workoutName.orEmpty(),
@@ -239,7 +284,8 @@ fun LiveSessionRoute(
         }
       }
       val restLeft by viewModel.restLeft.collectAsStateWithLifecycle()
-      RestBar(session.restEndsAt, restLeft)
+      val skippedRest by viewModel.skipped.collectAsStateWithLifecycle()
+      RestBar(session.restEndsAt, restLeft, skippedRest, onSkip = { session.restEndsAt?.let(viewModel::skipRest) })
     }
   }
 
@@ -377,9 +423,8 @@ private fun SetRow(
 
 /** The rest countdown after a set, with a nudge when it ends. */
 @Composable
-private fun RestBar(endsAt: Instant?, left: Long?) {
+private fun RestBar(endsAt: Instant?, left: Long?, skipped: Long?, onSkip: () -> Unit) {
   if (endsAt == null || left == null) return
-  var skipped by rememberSaveable { mutableStateOf<Long?>(null) }
   var wasRunning by remember(endsAt) { mutableStateOf(false) }
   val haptics = LocalHapticFeedback.current
   LaunchedEffect(left) {
@@ -394,7 +439,7 @@ private fun RestBar(endsAt: Instant?, left: Long?) {
         color = if (left > 0) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.primary,
         modifier = Modifier.weight(1f).testTag("rest_text"),
       )
-      TextButton(onClick = { skipped = endsAt.toEpochMilli() }, modifier = Modifier.testTag("rest_skip")) {
+      TextButton(onClick = onSkip, modifier = Modifier.testTag("rest_skip")) {
         Text(stringResource(if (left > 0) R.string.session_rest_skip else R.string.action_ok))
       }
     }
