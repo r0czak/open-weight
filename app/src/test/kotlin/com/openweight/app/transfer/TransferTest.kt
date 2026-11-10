@@ -46,6 +46,9 @@ class TransferTest {
     val diet = DietRepository(db, clock)
     val meals = MealPlanRepository(db, diet, clock)
     val shopping = ShoppingRepository(db, clock)
+    val sessions = com.openweight.app.workout.session.SessionRepository(db, clock)
+    val weights = com.openweight.app.progress.BodyWeightRepository(db, clock)
+    val household = com.openweight.app.diet.household.HouseholdRepository(db, clock)
     val exporter = ExportService(db, clock) { "0.7.0" }
     val importer = ImportService(db, clock)
 
@@ -68,6 +71,8 @@ class TransferTest {
   private lateinit var porridge: String
   private lateinit var omelette: String
   private lateinit var plan: String
+  private lateinit var anna: String
+  private lateinit var session: String
 
   @Before
   fun setUp() {
@@ -104,6 +109,17 @@ class TransferTest {
         meals.addMeal(monday.plusDays(10), MealSlot.BREAKFAST, omelette, 1.0)
         shopping.generate(monday, monday.plusDays(6))
         shopping.addManual("Coffee", null, null, "Drinks")
+        // Progress: Anna eats the Tuesday dinner, breakfast is eaten, one finished session, weigh-ins.
+        anna = household.save(null, "Anna", 0.75, eatsByDefault = false)
+        val day = meals.days(monday, monday.plusDays(1)).first()
+        household.setMealMembers(day[1].meals.single().id, setOf(anna))
+        meals.setEaten(day[0].meals.single().id, true)
+        session = sessions.start(pushA, monday)
+        sessions.open().first()!!.exercises[0].sets.forEach { sessions.confirmSet(it.id, 62.5, 9) }
+        sessions.finish(session)
+        sessions.start(pullA, monday.plusDays(1)) // still open: stays on the phone
+        weights.log(LocalDate.of(2026, 11, 2), 81.0)
+        weights.log(LocalDate.of(2026, 11, 8), 80.2)
       }
     }
   }
@@ -125,8 +141,15 @@ class TransferTest {
     assertEquals(3, result[RecordKind.EXERCISE].added)
     assertEquals(4, result[RecordKind.INGREDIENT].added)
     assertEquals(3, result[RecordKind.MEAL].added)
+    assertEquals(KindResult(added = 1), result[RecordKind.SESSION]) // the open one stayed on phone A
+    assertEquals(KindResult(added = 2), result[RecordKind.BODY_WEIGHT])
+    assertEquals(KindResult(added = 1), result[RecordKind.HOUSEHOLD_MEMBER])
     // Exporting the copy gives the same data back: nothing was lost or changed on the way.
     assertEquals(backup.file.data, b.export(ExportRequest.Everything).file.data)
+    val bDays = b.meals.days(monday, monday.plusDays(1)).first()
+    assertEquals(listOf(true, false), bDays.map { it.meals.single().eaten })
+    assertEquals(listOf("Anna"), bDays[1].meals.single().members.map { it.name })
+    assertEquals(listOf(62.5, 62.5, 62.5), b.sessions.exerciseHistory(bench).first().single().sets.map { it.weightKg })
     val coffee = b.shopping.current().first()!!.items.single { it.name == "Coffee" }
     assertTrue(coffee.isManual)
   }
@@ -278,6 +301,66 @@ class TransferTest {
       assertTrue("\"${e.message}\" should mention \"$expected\"", e.message!!.contains(expected))
     }
     assertTrue(b.diet.recipes().first().isEmpty())
+  }
+
+  @Test
+  fun progressScope_andRangeBringsItsEaters() = runTest {
+    val progress = a.export(ExportRequest.Progress).file
+    assertEquals(ScopeKind.PROGRESS.id, progress.scope?.kind)
+    assertEquals(1 to 2, progress.data.workoutSessions.size to progress.data.bodyWeights.size)
+    assertTrue(progress.data.workouts.isEmpty() && progress.data.recipes.isEmpty())
+
+    // On a phone without the workouts, the session keeps its names; its links are dropped.
+    b.import(a.export(ExportRequest.Progress))
+    val h = b.sessions.history().first().single()
+    assertEquals("Push A" to 3, h.workoutName to h.doneCount)
+
+    val range = a.export(ExportRequest.Range(monday, monday.plusDays(1))).file
+    assertEquals(listOf("Anna"), range.data.householdMembers.map { it.name })
+  }
+
+  @Test
+  fun weighIns_matchByDate_andNeverDouble() = runTest {
+    b.weights.log(LocalDate.of(2026, 11, 8), 79.0) // same day, another id
+    val file = a.export(ExportRequest.Progress)
+
+    val both = b.import(file, ImportOptions(choice = ConflictChoice.KEEP_BOTH))
+    assertEquals(KindResult(added = 1, skipped = 1), both[RecordKind.BODY_WEIGHT])
+    b.import(file, ImportOptions(choice = ConflictChoice.REPLACE))
+    assertEquals(listOf(81.0, 80.2), b.weights.entries().first().map { it.weightKg })
+  }
+
+  @Test
+  fun replaceEverything_leavesNoOldProgressBehind() = runTest {
+    b.weights.log(LocalDate.of(2026, 11, 1), 90.0)
+    b.household.save(null, "Old flatmate", 1.0, true)
+    val bWorkout = b.workouts.createWorkout("B only", "").also { w -> b.workouts.addExercise(w, b.workouts.saveExercise(null, "Squat", "", "", ""), 1, SetValues(5)) }
+    val s = b.sessions.start(bWorkout, monday).also { b.sessions.confirmSet(b.sessions.open().first()!!.exercises[0].sets[0].id, 100.0, 5) }
+    b.sessions.finish(s)
+
+    b.import(a.export(ExportRequest.Everything), ImportOptions(replaceEverything = true))
+
+    assertEquals(listOf("Push A"), b.sessions.history().first().map { it.workoutName })
+    assertEquals(listOf(81.0, 80.2), b.weights.entries().first().map { it.weightKg })
+    assertEquals(listOf("Anna"), b.household.members().first().map { it.name })
+  }
+
+  @Test
+  fun badProgressRecords_areRefused() = runTest {
+    fun file(data: String) = """{"format":"open-weight","formatVersion":1,"data":$data}""".toByteArray()
+    val cases =
+      mapOf(
+        """{"bodyWeights":[{"id":"w","date":"2026-11-02","weightKg":5}]}""" to "out of range",
+        """{"bodyWeights":[{"id":"w","date":"2026-11-02","weightKg":80},{"id":"v","date":"2026-11-02","weightKg":81}]}""" to "twice",
+        """{"householdMembers":[{"id":"h","name":"Anna","portion":9}]}""" to "portion out of range",
+        """{"workoutSessions":[{"id":"s","workoutName":"Push","plannedDate":"2026-11-02","startedAt":"x","finishedAt":"2026-11-02T10:00:00Z"}]}""" to "invalid time",
+        """{"workoutSessions":[{"id":"s","workoutName":"Push","plannedDate":"2026-11-02","startedAt":"2026-11-02T09:00:00Z","finishedAt":"2026-11-02T10:00:00Z",
+           "sets":[{"exerciseName":"Bench","exercisePosition":0,"setPosition":0,"targetRepsMin":8,"reps":8,"weightKg":-1}]}]}""" to "weight out of range",
+      )
+    for ((json, expected) in cases) {
+      val e = assertThrows(ImportException::class.java) { runBlocking { b.importer.import(file(json)) } }
+      assertTrue("\"${e.message}\" should mention \"$expected\"", e.message!!.contains(expected))
+    }
   }
 
   @Test

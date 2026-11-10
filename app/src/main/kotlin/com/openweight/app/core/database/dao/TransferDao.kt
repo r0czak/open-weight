@@ -2,10 +2,16 @@ package com.openweight.app.core.database.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.openweight.app.core.database.entity.BlockScheduleDayEntity
 import com.openweight.app.core.database.entity.BlockWorkoutEntity
+import com.openweight.app.core.database.entity.BodyWeightEntity
+import com.openweight.app.core.database.entity.HouseholdMemberEntity
+import com.openweight.app.core.database.entity.MealMemberEntity
+import com.openweight.app.core.database.entity.SessionSetEntity
+import com.openweight.app.core.database.entity.WorkoutSessionEntity
 import com.openweight.app.core.database.entity.DietPlanEntity
 import com.openweight.app.core.database.entity.DietPlanMealEntity
 import com.openweight.app.core.database.entity.ExerciseEntity
@@ -42,6 +48,12 @@ interface TransferDao {
   @Query("SELECT * FROM meal_entry ORDER BY date") suspend fun mealEntries(): List<MealEntryEntity>
   @Query("SELECT * FROM shopping_list") suspend fun shoppingLists(): List<ShoppingListEntity>
   @Query("SELECT * FROM shopping_item ORDER BY name COLLATE NOCASE") suspend fun shoppingItems(): List<ShoppingItemEntity>
+  @Query("SELECT * FROM workout_session WHERE finishedAt IS NOT NULL ORDER BY finishedAt") suspend fun finishedSessions(): List<WorkoutSessionEntity>
+  @Query("SELECT * FROM workout_session") suspend fun allSessions(): List<WorkoutSessionEntity>
+  @Query("SELECT * FROM session_set ORDER BY exercisePosition, setPosition") suspend fun sessionSets(): List<SessionSetEntity>
+  @Query("SELECT * FROM body_weight ORDER BY date") suspend fun bodyWeights(): List<BodyWeightEntity>
+  @Query("SELECT * FROM household_member ORDER BY createdAt") suspend fun householdMembers(): List<HouseholdMemberEntity>
+  @Query("SELECT * FROM meal_member") suspend fun mealMembers(): List<MealMemberEntity>
 
   // Top-level records: insert, or overwrite in place (an update keeps links pointing at the row).
   @Insert suspend fun insert(row: ExerciseEntity)
@@ -60,6 +72,12 @@ interface TransferDao {
   @Update suspend fun update(row: MealEntryEntity)
   @Insert suspend fun insert(row: ShoppingListEntity)
   @Update suspend fun update(row: ShoppingListEntity)
+  @Insert suspend fun insert(row: WorkoutSessionEntity)
+  @Update suspend fun update(row: WorkoutSessionEntity)
+  @Insert suspend fun insert(row: BodyWeightEntity)
+  @Update suspend fun update(row: BodyWeightEntity)
+  @Insert suspend fun insert(row: HouseholdMemberEntity)
+  @Update suspend fun update(row: HouseholdMemberEntity)
 
   // Children are always written fresh.
   @Insert suspend fun insertWorkoutExercises(rows: List<WorkoutExerciseEntity>)
@@ -69,6 +87,8 @@ interface TransferDao {
   @Insert suspend fun insertRecipeLines(rows: List<RecipeIngredientEntity>)
   @Insert suspend fun insertPlanMeals(rows: List<DietPlanMealEntity>)
   @Insert suspend fun insertShoppingItems(rows: List<ShoppingItemEntity>)
+  @Insert suspend fun insertSessionSets(rows: List<SessionSetEntity>)
+  @Insert(onConflict = OnConflictStrategy.IGNORE) suspend fun insertMealMembers(rows: List<MealMemberEntity>)
 
   // Before an overwrite, a record's children go (sets go with their workout entry).
   @Query("DELETE FROM workout_exercise WHERE workoutId = :id") suspend fun deleteWorkoutChildren(id: String)
@@ -77,8 +97,15 @@ interface TransferDao {
   @Query("DELETE FROM recipe_ingredient WHERE recipeId = :id") suspend fun deleteRecipeLines(id: String)
   @Query("DELETE FROM diet_plan_meal WHERE dietPlanId = :id") suspend fun deletePlanMeals(id: String)
   @Query("DELETE FROM shopping_item WHERE listId = :id") suspend fun deleteShoppingItems(id: String)
+  @Query("DELETE FROM session_set WHERE sessionId = :id") suspend fun deleteSessionSets(id: String)
+  @Query("DELETE FROM meal_member WHERE mealId = :id") suspend fun deleteMealMembers(id: String)
 
   // "Replace everything": children before parents, so no foreign key blocks a delete.
+  @Query("DELETE FROM session_set") suspend fun clearSessionSets()
+  @Query("DELETE FROM workout_session") suspend fun clearSessions()
+  @Query("DELETE FROM body_weight") suspend fun clearBodyWeights()
+  @Query("DELETE FROM meal_member") suspend fun clearMealMembers()
+  @Query("DELETE FROM household_member") suspend fun clearHouseholdMembers()
   @Query("DELETE FROM shopping_item") suspend fun clearShoppingItems()
   @Query("DELETE FROM shopping_list") suspend fun clearShoppingLists()
   @Query("DELETE FROM meal_entry") suspend fun clearMealEntries()
@@ -95,7 +122,12 @@ interface TransferDao {
   @Query("DELETE FROM workout") suspend fun clearWorkouts()
   @Query("DELETE FROM exercise") suspend fun clearExercises()
 
+  /** Every table, so "Replace everything" leaves nothing of the old data behind. */
   suspend fun clearAll() {
+    clearSessionSets()
+    clearSessions()
+    clearBodyWeights()
+    clearMealMembers()
     clearShoppingItems()
     clearShoppingLists()
     clearMealEntries()
@@ -111,5 +143,6 @@ interface TransferDao {
     clearWorkoutExercises()
     clearWorkouts()
     clearExercises()
+    clearHouseholdMembers()
   }
 }

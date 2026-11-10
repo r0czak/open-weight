@@ -111,10 +111,16 @@ constructor(
     _step.value = null
   }
 
-  suspend fun currentSettings(): SettingsDto = settings.settings.first().let { SettingsDto(it.weightUnit.name, it.themeMode.name) }
+  suspend fun currentSettings(): SettingsDto =
+    settings.settings.first().let { SettingsDto(it.weightUnit.name, it.themeMode.name, it.restAlerts, it.kcalTarget, it.proteinTarget) }
 
   private suspend fun apply(s: SettingsDto) {
     WeightUnit.entries.firstOrNull { it.name == s.weightUnit }?.let { settings.setWeightUnit(it) }
     ThemeMode.entries.firstOrNull { it.name == s.themeMode }?.let { settings.setThemeMode(it) }
+    s.restAlerts?.let { settings.setRestAlerts(it) }
+    // Targets restore as they were, set or not; values out of range are left out.
+    val kcal = s.kcalTarget?.takeIf { it in SettingsRepository.KCAL_RANGE }
+    val protein = s.proteinTarget?.takeIf { it in SettingsRepository.PROTEIN_RANGE }
+    settings.setTargets(kcal, protein)
   }
 }

@@ -373,7 +373,7 @@
     <!-- Import and export -->
     <string name="action_done">Done</string>
     <string name="action_continue">Continue</string>
-    <string name="settings_backup_hint">All workout and diet data and settings, in one file. Save it somewhere safe or send it to yourself.</string>
+    <string name="settings_backup_hint">All workout and diet data, your training history, body weight and settings, in one file. Save it somewhere safe or send it to yourself.</string>
     <string name="settings_export">Export…</string>
     <string name="settings_export_hint">All workout data, all diet data, calendar dates, or items you pick</string>
     <string name="settings_undo_restore">Undo last restore</string>
@@ -389,9 +389,9 @@
     <string name="export_failed">Couldn\'t save the file. Nothing was changed in the app.</string>
     <string name="export_screen_title">Export</string>
     <string name="export_workout">All workout data</string>
-    <string name="export_workout_hint">Exercises, workouts and training blocks</string>
+    <string name="export_workout_hint">Exercises, workouts, training blocks and finished sessions</string>
     <string name="export_diet">All diet data</string>
-    <string name="export_diet_hint">Ingredients, recipes, diet plans, the calendar and the shopping list</string>
+    <string name="export_diet_hint">Ingredients, recipes, diet plans, the calendar with eaten marks, the shopping list and your household</string>
     <string name="export_range">Calendar dates</string>
     <string name="export_range_hint">The meals in a date range, with their recipes and ingredients</string>
     <string name="export_items">Pick items</string>
@@ -618,4 +618,12 @@
     <string name="household_chip">%1$s (%2$s)</string>
     <string name="household_with">with %s</string>
     <string name="household_cook_for">Cook for the household (×%s)</string>
+
+    <!-- Progress in backups -->
+    <string name="export_progress">Training history and body weight</string>
+    <string name="export_progress_hint">Finished sessions and weigh-ins</string>
+    <string name="import_scope_progress">Training history and body weight</string>
+    <string name="kind_sessions">Training sessions</string>
+    <string name="kind_weights">Weigh-ins</string>
+    <string name="kind_household">Household</string>
 </resources>

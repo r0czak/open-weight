@@ -237,6 +237,7 @@ private fun FileHeader(preview: ImportPreview, isUndo: Boolean) {
               ScopeKind.WORKOUT -> R.string.import_scope_workout
               ScopeKind.DIET -> R.string.import_scope_diet
               ScopeKind.RANGE -> R.string.import_scope_range
+              ScopeKind.PROGRESS -> R.string.import_scope_progress
               ScopeKind.ITEMS, null -> R.string.import_scope_items
             }
         }
@@ -244,7 +245,7 @@ private fun FileHeader(preview: ImportPreview, isUndo: Boolean) {
       style = MaterialTheme.typography.titleLarge,
       modifier = Modifier.testTag("import_scope"),
     )
-    if (!isUndo && preview.scope in setOf(ScopeKind.ITEMS, ScopeKind.RANGE, null)) {
+    if (!isUndo && preview.scope in setOf(ScopeKind.ITEMS, ScopeKind.RANGE, ScopeKind.PROGRESS, null)) {
       preview.description?.let { Text(it, style = MaterialTheme.typography.bodyMedium) }
     }
     preview.exportedAt?.let {
@@ -352,6 +353,9 @@ fun kindLabel(kind: RecordKind): String =
       RecordKind.INGREDIENT -> R.string.kind_ingredients
       RecordKind.MEAL -> R.string.kind_meals
       RecordKind.SHOPPING_LIST -> R.string.kind_shopping_lists
+      RecordKind.SESSION -> R.string.kind_sessions
+      RecordKind.BODY_WEIGHT -> R.string.kind_weights
+      RecordKind.HOUSEHOLD_MEMBER -> R.string.kind_household
     }
   )
 
