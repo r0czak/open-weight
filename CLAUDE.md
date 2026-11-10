@@ -20,6 +20,8 @@ Offline-first Android app for planning workouts (training blocks, workouts, exer
   suggestions come from last time; rest ends at the last done set's time + its rest) and the live screen. Sessions keep names as text, so history survives deletes
   `Progress.kt` holds the progress rules (best set; step up 2.5 kg / 5 lb when every planned set reached the top of its range);
   `HistoryScreens.kt` the history, session and per-exercise screens; `RestAlerts` the rest-over alarm and notification
+- `progress/` — body weight: `BodyWeightRepository` (one weigh-in per day, 20–400 kg, not in the future) and `WeightRules.trend` (weekly
+  averages Mon–Sun; change = latest week vs two weeks before)
 - `diet/` — ingredients and recipes; `data/Nutrition.kt` holds the calories/macros rule (per 100 g or ml, pieces via grams per piece, uncountable lines listed, never silently dropped)
 - `diet/shopping/` — shopping list panel; rules in `diet/data/ShoppingListBuilder.kt` (sum per ingredient and unit kind, scaled to servings, rounded up for the shop) and `ShoppingRepository.kt` (update keeps manual items, ticks and hand-edited amounts)
 - `diet/calendar/`, `diet/plans/` — meal calendar and diet plans; rules in `diet/data/MealPlanRepository.kt` (copy day/week, apply a plan: skip or replace busy days)

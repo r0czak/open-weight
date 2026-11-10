@@ -52,6 +52,7 @@ import com.openweight.app.workout.session.LiveSessionRoute
 import com.openweight.app.workout.session.SessionDetailRoute
 import com.openweight.app.workout.workouts.WorkoutOverviewRoute
 import java.time.LocalDate
+import com.openweight.app.progress.BodyWeightRoute
 import com.openweight.app.settings.SettingsRoute
 import com.openweight.app.transfer.ui.ExportRoute
 import com.openweight.app.transfer.ui.ImportRoute
@@ -117,6 +118,8 @@ data class MealPicker(
 @Serializable data class WorkoutOverview(val workoutId: String, val epochDay: Long? = null) : NavKey
 
 @Serializable data object History : NavKey
+
+@Serializable data object BodyWeight : NavKey
 
 @Serializable data class SessionDetail(val sessionId: String) : NavKey
 
@@ -225,8 +228,10 @@ fun OpenWeightAppUi(modifier: Modifier = Modifier, importOpens: StateFlow<Int>? 
               onOpenWorkout = { id, date -> backStack.add(WorkoutOverview(id, date.toEpochDay())) },
               onOpenRecipe = { backStack.add(RecipeView(it)) },
               onOpenSession = { backStack.add(LiveSession(it)) },
+              onOpenWeight = { backStack.add(BodyWeight) },
             )
           }
+          entry<BodyWeight> { BodyWeightRoute(onBack = back) }
           entry<LiveSession> { key -> LiveSessionRoute(sessionId = key.sessionId, onBack = back) }
           entry<WorkoutOverview> { key ->
             WorkoutOverviewRoute(
@@ -243,6 +248,7 @@ fun OpenWeightAppUi(modifier: Modifier = Modifier, importOpens: StateFlow<Int>? 
               onOpenWorkouts = { backStack.add(WorkoutList) },
               onOpenExercises = { backStack.add(ExerciseList) },
               onOpenHistory = { backStack.add(History) },
+              onOpenWeight = { backStack.add(BodyWeight) },
             )
           }
           entry<History> { HistoryRoute(onBack = back, onOpen = { backStack.add(SessionDetail(it)) }) }

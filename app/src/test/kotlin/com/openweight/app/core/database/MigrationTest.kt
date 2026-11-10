@@ -76,7 +76,23 @@ class MigrationTest {
     }
   }
 
+  @Test
+  fun v4ToV5_keepsSessions_andAddsBodyWeight() {
+    helper.createDatabase(DB5, 4).use { db ->
+      db.execSQL("INSERT INTO workout_session (id, workoutId, workoutName, plannedDate, startedAt, finishedAt, notes, createdAt, updatedAt) VALUES ('s1', NULL, 'Push A', '2026-11-10', 0, 1, '', 0, 0)")
+    }
+
+    helper.runMigrationsAndValidate(DB5, 5, true).use { db ->
+      db.query("SELECT workoutName FROM workout_session WHERE id = 's1'").use {
+        assertTrue(it.moveToFirst())
+        assertEquals("Push A", it.getString(0))
+      }
+      db.execSQL("INSERT INTO body_weight VALUES ('w1', '2026-11-10', 80.5, 0, 0)")
+    }
+  }
+
   private companion object {
+    const val DB5 = "migration-test-5.db"
     const val DB4 = "migration-test-4.db"
     const val DB3 = "migration-test-3.db"
     const val DB = "migration-test.db"

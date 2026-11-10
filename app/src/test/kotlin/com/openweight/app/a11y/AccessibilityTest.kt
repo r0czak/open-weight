@@ -119,6 +119,8 @@ class AccessibilityTest {
     tap("finish_session"); tap("confirm_finish"); check("Session summary", ready = "session_summary")
     back(); back(); back(); back()
     tap("open_history"); check("History", ready = "history_list")
+    tap("tab_WORKOUT"); tap("tab_WORKOUT")
+    tap("open_weight"); check("Body weight", ready = "weight_input")
     tap("tab_WORKOUT"); tap("tab_WORKOUT") // back to the tab's first screen
 
     tap("open_exercises"); check("Exercises", ready = "Ab wheel")

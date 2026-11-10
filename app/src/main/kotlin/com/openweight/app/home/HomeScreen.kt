@@ -63,6 +63,7 @@ fun HomeRoute(
   onOpenWorkout: (workoutId: String, date: LocalDate) -> Unit,
   onOpenRecipe: (recipeId: String) -> Unit,
   onOpenSession: (sessionId: String) -> Unit,
+  onOpenWeight: () -> Unit = {},
   viewModel: HomeViewModel = hiltViewModel(),
 ) {
   val state by viewModel.state.collectAsStateWithLifecycle()
@@ -80,6 +81,9 @@ fun HomeRoute(
         TextButton(onClick = viewModel::thisWeek, modifier = Modifier.testTag("this_week")) {
           Text(stringResource(R.string.home_today))
         }
+      }
+      IconButton(onClick = onOpenWeight, modifier = Modifier.testTag("home_weight")) {
+        Icon(painterResource(R.drawable.ic_progress), stringResource(R.string.weight_title))
       }
       IconButton(onClick = viewModel::previousWeek, modifier = Modifier.testTag("previous_week")) {
         Icon(Icons.AutoMirrored.Filled.KeyboardArrowLeft, stringResource(R.string.home_previous_week))
