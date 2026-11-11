@@ -9,6 +9,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performScrollToNode
 import androidx.compose.ui.test.performTextReplacement
 import com.openweight.app.MainActivity
@@ -58,7 +59,7 @@ class BlockFlowTest {
     }
 
     compose.onNodeWithTag("tab_WORKOUT").performClick()
-    compose.onNodeWithTag("open_blocks").performClick()
+    compose.onNodeWithTag("open_blocks").performScrollTo().performClick()
     waitForTag("add_block")
     compose.onNodeWithTag("add_block").performClick()
     compose.onNodeWithTag("block_name").performTextReplacement("Intro")

@@ -1,5 +1,8 @@
 package com.openweight.app.diet.calendar
 
+import com.openweight.app.diet.PanelHeader
+import com.openweight.app.diet.panelHeader
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -172,6 +175,7 @@ fun CalendarPanel(
   onOpenRecipe: (String) -> Unit,
   onOpenPlans: () -> Unit,
   onSwapMeal: (mealId: String, date: LocalDate, slot: MealSlot) -> Unit = { _, _, _ -> },
+  header: PanelHeader? = null,
   viewModel: CalendarViewModel = hiltViewModel(),
 ) {
   val state by viewModel.state.collectAsStateWithLifecycle()
@@ -187,6 +191,7 @@ fun CalendarPanel(
   val day = state.selectedDay
 
   LazyColumn(Modifier.fillMaxSize().testTag("calendar"), contentPadding = PaddingValues(bottom = 24.dp)) {
+    panelHeader(header)
     item {
       ShortcutCard(
         R.drawable.ic_menu_plans,

@@ -1,5 +1,8 @@
 package com.openweight.app.diet.recipes
 
+import com.openweight.app.diet.PanelHeader
+import com.openweight.app.diet.panelHeader
+
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -73,49 +76,51 @@ class RecipeListViewModel @Inject constructor(repository: DietRepository) : View
 fun RecipesPanel(
   onOpenRecipe: (String) -> Unit,
   onOpenIngredients: () -> Unit,
+  header: PanelHeader? = null,
   viewModel: RecipeListViewModel = hiltViewModel(),
 ) {
   val state by viewModel.state.collectAsStateWithLifecycle()
-  Column(Modifier.fillMaxSize()) {
-    ShortcutCard(
-      R.drawable.ic_menu_ingredients,
-      stringResource(R.string.diet_ingredients),
-      pluralStringResource(R.plurals.ingredient_count, state.ingredientCount, state.ingredientCount),
-      onClick = onOpenIngredients,
-      tag = "open_ingredients",
-      accent = MenuAccent.GREEN,
-    )
-    SearchField(state.query, viewModel::onQueryChange, placeholder = stringResource(R.string.recipe_search))
+  LazyColumn(Modifier.fillMaxSize().testTag("recipe_list"), contentPadding = PaddingValues(bottom = 88.dp)) {
+    panelHeader(header)
+    item(key = "ingredients") {
+      ShortcutCard(
+        R.drawable.ic_menu_ingredients,
+        stringResource(R.string.diet_ingredients),
+        pluralStringResource(R.plurals.ingredient_count, state.ingredientCount, state.ingredientCount),
+        onClick = onOpenIngredients,
+        tag = "open_ingredients",
+        accent = MenuAccent.GREEN,
+      )
+    }
+    item(key = "search") { SearchField(state.query, viewModel::onQueryChange, placeholder = stringResource(R.string.recipe_search)) }
     when {
       state.loading -> Unit
-      state.total == 0 -> EmptyState(stringResource(R.string.recipe_empty), hint = stringResource(R.string.recipe_empty_hint))
-      state.items.isEmpty() -> EmptyState(stringResource(R.string.search_no_results, state.query))
+      state.total == 0 -> item(key = "empty") { EmptyState(stringResource(R.string.recipe_empty), hint = stringResource(R.string.recipe_empty_hint)) }
+      state.items.isEmpty() -> item(key = "none") { EmptyState(stringResource(R.string.search_no_results, state.query)) }
       else ->
-        LazyColumn(contentPadding = PaddingValues(bottom = 88.dp)) {
-          items(state.items, key = { it.id }) { r ->
-            CardListItem(state.items.indexOf(r), state.items.size) {
-              ListItem(
-                modifier = Modifier.clickable { onOpenRecipe(r.id) },
-                headlineContent = { Text(r.name) },
-                supportingContent = {
-                  val parts = buildList {
-                    add(pluralStringResource(R.plurals.serving_count, r.servings, r.servings))
-                    r.prepMinutes?.let { add(stringResource(R.string.recipe_minutes, it)) }
-                    if (r.tags.isNotBlank()) add(r.tags)
-                  }
-                  Text(parts.joinToString(" · "))
-                },
-                trailingContent = {
-                  if (r.ingredientCount > 0) {
-                    Text(
-                      stringResource(R.string.recipe_kcal_per_serving, formatKcal(r.nutrition.perServing.kcal)) +
-                        if (r.nutrition.complete) "" else "*",
-                      style = MaterialTheme.typography.labelLarge,
-                    )
-                  }
-                },
-              )
-            }
+        items(state.items, key = { it.id }) { r ->
+          CardListItem(state.items.indexOf(r), state.items.size) {
+            ListItem(
+              modifier = Modifier.clickable { onOpenRecipe(r.id) },
+              headlineContent = { Text(r.name) },
+              supportingContent = {
+                val parts = buildList {
+                  add(pluralStringResource(R.plurals.serving_count, r.servings, r.servings))
+                  r.prepMinutes?.let { add(stringResource(R.string.recipe_minutes, it)) }
+                  if (r.tags.isNotBlank()) add(r.tags)
+                }
+                Text(parts.joinToString(" · "))
+              },
+              trailingContent = {
+                if (r.ingredientCount > 0) {
+                  Text(
+                    stringResource(R.string.recipe_kcal_per_serving, formatKcal(r.nutrition.perServing.kcal)) +
+                      if (r.nutrition.complete) "" else "*",
+                    style = MaterialTheme.typography.labelLarge,
+                  )
+                }
+              },
+            )
           }
         }
     }

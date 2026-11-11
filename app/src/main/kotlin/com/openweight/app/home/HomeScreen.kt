@@ -1,5 +1,19 @@
 package com.openweight.app.home
 
+import com.openweight.app.core.ui.HeroAction
+import com.openweight.app.core.ui.HeroActions
+import com.openweight.app.core.ui.HeroCaption
+import com.openweight.app.core.ui.HeroHeader
+import com.openweight.app.core.ui.HeroLabel
+import com.openweight.app.core.ui.HeroPill
+import com.openweight.app.core.ui.HeroProgress
+import com.openweight.app.core.ui.HeroTitle
+import com.openweight.app.core.ui.HeroValue
+import com.openweight.app.core.ui.PageHeading
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -66,83 +80,138 @@ fun HomeRoute(
   onOpenRecipe: (recipeId: String) -> Unit,
   onOpenSession: (sessionId: String) -> Unit,
   onOpenWeight: () -> Unit = {},
+  onOpenPowerLevel: () -> Unit = {},
+  onOpenHistory: () -> Unit = {},
   viewModel: HomeViewModel = hiltViewModel(),
 ) {
   val state by viewModel.state.collectAsStateWithLifecycle()
   val listState = rememberLazyListState()
-  // Keep the selected day's card in view when it changes (tap in the strip, or a new week).
+  // When the selected day changes (a tap in the strip, or another week), bring its card into view;
+  // not on opening, so the hero stays at the top.
+  var opened by remember { mutableStateOf(false) }
   LaunchedEffect(state.selected, state.loading) {
+    if (state.loading) return@LaunchedEffect
+    if (!opened) {
+      opened = true
+      return@LaunchedEffect
+    }
     val index = state.days.indexOfFirst { it.date == state.selected }
-    if (!state.loading && index >= 0) listState.animateScrollToItem(index)
+    if (index >= 0) listState.animateScrollToItem(index + HEADER_ITEMS)
   }
 
-  ScreenScaffold(
-    title = formatDateRange(state.monday, state.monday.plusDays(6)),
-    actions = {
-      if (!state.isCurrentWeek) {
-        TextButton(onClick = viewModel::thisWeek, modifier = Modifier.testTag("this_week")) {
-          Text(stringResource(R.string.home_today))
+  LazyColumn(
+    state = listState,
+    modifier = Modifier.fillMaxSize().testTag("week_agenda"),
+    contentPadding = PaddingValues(bottom = 24.dp),
+    verticalArrangement = Arrangement.spacedBy(12.dp),
+  ) {
+    item(key = "hero") { HomeHero(state, onOpenWorkout, onOpenSession, onOpenWeight, onOpenPowerLevel, onOpenHistory) }
+    item(key = "week") {
+      PageHeading(formatDateRange(state.monday, state.monday.plusDays(6))) {
+        if (!state.isCurrentWeek) {
+          TextButton(onClick = viewModel::thisWeek, modifier = Modifier.testTag("this_week")) { Text(stringResource(R.string.home_today)) }
+        }
+        IconButton(onClick = viewModel::previousWeek, modifier = Modifier.testTag("previous_week")) {
+          Icon(Icons.AutoMirrored.Filled.KeyboardArrowLeft, stringResource(R.string.home_previous_week))
+        }
+        IconButton(onClick = viewModel::nextWeek, modifier = Modifier.testTag("next_week")) {
+          Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, stringResource(R.string.home_next_week))
         }
       }
-      IconButton(onClick = onOpenWeight, modifier = Modifier.testTag("home_weight")) {
-        Icon(painterResource(R.drawable.ic_menu_weight), stringResource(R.string.weight_title))
+    }
+    item(key = "strip") {
+      Box(Modifier.padding(horizontal = 16.dp).clip(MaterialTheme.shapes.large).background(MaterialTheme.colorScheme.surfaceContainerLow)) {
+        DayStrip(state.days, state.selected, onSelect = viewModel::select)
       }
-      IconButton(onClick = viewModel::previousWeek, modifier = Modifier.testTag("previous_week")) {
-        Icon(Icons.AutoMirrored.Filled.KeyboardArrowLeft, stringResource(R.string.home_previous_week))
+    }
+    items(state.days, key = { it.date.toEpochDay() }) { day ->
+      Box(Modifier.padding(horizontal = 16.dp)) {
+        DayCard(
+          day = day,
+          selected = day.date == state.selected,
+          onSelect = { viewModel.select(day.date) },
+          onOpenWorkout = { onOpenWorkout(it, day.date) },
+          onOpenRecipe = onOpenRecipe,
+          onEaten = viewModel::setEaten,
+          kcalTarget = state.kcalTarget,
+          proteinTarget = state.proteinTarget,
+        )
       }
-      IconButton(onClick = viewModel::nextWeek, modifier = Modifier.testTag("next_week")) {
-        Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, stringResource(R.string.home_next_week))
+    }
+  }
+}
+
+/** Items above the day cards: the hero, the week heading and the day strip. */
+private const val HEADER_ITEMS = 3
+
+/** The selected day at a glance: its workout and status, calories, and quick actions. */
+@Composable
+private fun HomeHero(
+  state: HomeState,
+  onOpenWorkout: (String, LocalDate) -> Unit,
+  onOpenSession: (String) -> Unit,
+  onOpenWeight: () -> Unit,
+  onOpenPowerLevel: () -> Unit,
+  onOpenHistory: () -> Unit,
+) {
+  val locale = LocalConfiguration.current.locales[0]
+  val day = state.days.firstOrNull { it.date == state.selected }
+  HeroHeader {
+    HeroTitle(
+      if (state.selected == state.today) stringResource(R.string.home_today)
+      else state.selected.dayOfWeek.getDisplayName(TextStyle.FULL, locale)
+    )
+    val block = day?.block
+    HeroLabel(
+      listOfNotNull(
+          state.selected.formatDayShort(),
+          block?.let { stringResource(R.string.block_week_of, it.blockName, it.week, it.totalWeeks) },
+        )
+        .joinToString(" · ")
+    )
+    if (day != null) {
+      val workout = day.workout
+      HeroValue(workout?.name ?: stringResource(R.string.workout_rest_day), modifier = Modifier.padding(top = 2.dp))
+      Row(Modifier.padding(top = 10.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        when {
+          workout == null -> Unit
+          day.workoutDone -> HeroPill(stringResource(R.string.home_workout_done), icon = R.drawable.ic_menu_check)
+          day.workoutMissed -> HeroPill(stringResource(R.string.home_workout_missed))
+          else -> HeroPill(pluralStringResource(R.plurals.exercise_count, workout.exerciseCount, workout.exerciseCount))
+        }
+        val total = day.meals.total.kcal
+        if (day.meals.meals.isNotEmpty()) HeroPill(stringResource(R.string.home_hero_kcal, formatKcal(total)))
       }
-    },
-  ) { padding ->
-    Column(Modifier.fillMaxSize().padding(padding)) {
       state.openSession?.let { open ->
-        Row(
-          verticalAlignment = Alignment.CenterVertically,
-          modifier =
-            Modifier.fillMaxWidth()
-              .padding(horizontal = 16.dp, vertical = 4.dp)
-              .clip(RoundedCornerShape(12.dp))
-              .background(MaterialTheme.colorScheme.tertiaryContainer)
-              .padding(start = 16.dp, end = 4.dp)
-              .testTag("session_banner"),
-        ) {
-          Column(Modifier.weight(1f).padding(vertical = 8.dp)) {
-            Text(
-              stringResource(R.string.home_session_open, open.workoutName),
-              style = MaterialTheme.typography.titleSmall,
-              color = MaterialTheme.colorScheme.onTertiaryContainer,
-            )
-            Text(
-              stringResource(R.string.session_progress, open.doneCount, open.setCount),
-              style = MaterialTheme.typography.bodySmall,
-              color = MaterialTheme.colorScheme.onTertiaryContainer,
-            )
-          }
-          TextButton(onClick = { onOpenSession(open.id) }, modifier = Modifier.testTag("resume_session")) {
-            Text(stringResource(R.string.home_session_resume), color = MaterialTheme.colorScheme.onTertiaryContainer, fontWeight = FontWeight.Bold)
-          }
-        }
+        HeroPill(
+          stringResource(R.string.home_hero_in_progress, open.workoutName, open.doneCount, open.setCount),
+          Modifier.padding(top = 8.dp).testTag("session_banner"),
+          icon = R.drawable.ic_menu_play,
+        )
       }
-      DayStrip(state.days, state.selected, onSelect = viewModel::select)
-      LazyColumn(
-        state = listState,
-        modifier = Modifier.fillMaxSize().testTag("week_agenda"),
-        contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 24.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
-      ) {
-        items(state.days, key = { it.date.toEpochDay() }) { day ->
-          DayCard(
-            day = day,
-            selected = day.date == state.selected,
-            onSelect = { viewModel.select(day.date) },
-            onOpenWorkout = { onOpenWorkout(it, day.date) },
-            onOpenRecipe = onOpenRecipe,
-            onEaten = viewModel::setEaten,
-            kcalTarget = state.kcalTarget,
-            proteinTarget = state.proteinTarget,
-          )
-        }
+      val target = state.kcalTarget
+      if (day.meals.anyEaten || target != null) {
+        HeroCaption(
+          stringResource(R.string.home_hero_eaten, formatKcal(day.meals.eaten.kcal), target?.let { formatKcal(it.toDouble()) } ?: formatKcal(day.meals.total.kcal)),
+          Modifier.padding(top = 14.dp, bottom = 6.dp),
+        )
+        val goal = target?.toDouble() ?: day.meals.total.kcal
+        HeroProgress(if (goal > 0) (day.meals.eaten.kcal / goal).toFloat() else 0f)
+      }
+    }
+    HeroActions {
+      val open = state.openSession
+      val workout = day?.workout
+      when {
+        open != null -> HeroAction(R.drawable.ic_menu_play, stringResource(R.string.home_session_resume), { onOpenSession(open.id) }, Modifier.testTag("resume_session"))
+        workout != null && day.date >= state.today ->
+          HeroAction(R.drawable.ic_menu_play, stringResource(R.string.workout_hero_train), { onOpenWorkout(workout.id, day.date) }, Modifier.testTag("hero_train"))
+        else -> HeroAction(R.drawable.ic_menu_history, stringResource(R.string.history_title), onOpenHistory, Modifier.testTag("hero_history"))
+      }
+      HeroAction(R.drawable.ic_menu_weight, stringResource(R.string.workout_hero_weight), onOpenWeight, Modifier.testTag("home_weight"))
+      HeroAction(R.drawable.ic_menu_power, stringResource(R.string.workout_hero_power), onOpenPowerLevel, Modifier.testTag("hero_power"))
+      if (open != null || (workout != null && day.date >= state.today)) {
+        HeroAction(R.drawable.ic_menu_history, stringResource(R.string.history_title), onOpenHistory, Modifier.testTag("hero_history"))
       }
     }
   }

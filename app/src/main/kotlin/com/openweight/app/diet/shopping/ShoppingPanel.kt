@@ -1,5 +1,8 @@
 package com.openweight.app.diet.shopping
 
+import com.openweight.app.diet.PanelHeader
+import com.openweight.app.diet.panelHeader
+
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -126,6 +129,7 @@ fun ShoppingPanel(
   snackbar: SnackbarHostState,
   adding: Boolean,
   onAddingDone: () -> Unit,
+  header: PanelHeader? = null,
   viewModel: ShoppingViewModel = hiltViewModel(),
 ) {
   val state by viewModel.state.collectAsStateWithLifecycle()
@@ -144,18 +148,23 @@ fun ShoppingPanel(
   val list = state.list
 
   when {
-    !state.loaded -> Box(Modifier.fillMaxSize())
+    !state.loaded -> LazyColumn(Modifier.fillMaxSize()) { panelHeader(header) }
     list == null ->
-      Column(Modifier.fillMaxSize().testTag("shopping"), horizontalAlignment = Alignment.CenterHorizontally) {
-        EmptyState(message = stringResource(R.string.diet_shopping_empty), hint = stringResource(R.string.shopping_empty_hint))
-        Button(onClick = { generate(viewModel.today, viewModel.today.plusDays(6)) }, modifier = Modifier.testTag("shopping_next_week")) {
-          Text(stringResource(R.string.shopping_next_7_days))
-        }
-        OutlinedButton(onClick = { choosingDates = true }, modifier = Modifier.padding(top = 8.dp).testTag("shopping_choose_dates")) {
-          Text(stringResource(R.string.shopping_choose_dates))
+      LazyColumn(Modifier.fillMaxSize().testTag("shopping"), horizontalAlignment = Alignment.CenterHorizontally) {
+        panelHeader(header)
+        item(key = "empty") {
+          Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            EmptyState(message = stringResource(R.string.diet_shopping_empty), hint = stringResource(R.string.shopping_empty_hint))
+            Button(onClick = { generate(viewModel.today, viewModel.today.plusDays(6)) }, modifier = Modifier.testTag("shopping_next_week")) {
+              Text(stringResource(R.string.shopping_next_7_days))
+            }
+            OutlinedButton(onClick = { choosingDates = true }, modifier = Modifier.padding(top = 8.dp).testTag("shopping_choose_dates")) {
+              Text(stringResource(R.string.shopping_choose_dates))
+            }
+          }
         }
       }
-    else -> ShoppingList(list, viewModel, onUpdate = { generate(list.from, list.to) }, onChooseDates = { choosingDates = true }, onEdit = { editing = it })
+    else -> ShoppingList(list, viewModel, header, onUpdate = { generate(list.from, list.to) }, onChooseDates = { choosingDates = true }, onEdit = { editing = it })
   }
 
   if (choosingDates) {
@@ -204,6 +213,7 @@ fun ShoppingPanel(
 private fun ShoppingList(
   list: ShoppingListView,
   viewModel: ShoppingViewModel,
+  header: PanelHeader?,
   onUpdate: () -> Unit,
   onChooseDates: () -> Unit,
   onEdit: (ShoppingItem) -> Unit,
@@ -211,6 +221,7 @@ private fun ShoppingList(
   var menu by remember { mutableStateOf(false) }
   val groups = list.byCategory(stringResource(R.string.shopping_other))
   LazyColumn(Modifier.fillMaxSize().testTag("shopping"), contentPadding = PaddingValues(bottom = 88.dp)) {
+    panelHeader(header)
     item(key = "header") {
       Row(Modifier.fillMaxWidth().padding(start = 16.dp, end = 4.dp, top = 12.dp, bottom = 4.dp), verticalAlignment = Alignment.CenterVertically) {
         Column(Modifier.weight(1f)) {

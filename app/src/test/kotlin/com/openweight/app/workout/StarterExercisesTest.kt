@@ -4,9 +4,12 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextReplacement
+import com.openweight.app.testing.scrollToText
 import com.openweight.app.MainActivity
 import com.openweight.app.transfer.ImportService
 import com.openweight.app.transfer.KindResult
@@ -46,7 +49,7 @@ class StarterExercisesTest {
   private fun waitForTag(tag: String) = compose.waitUntil(5_000) { compose.onAllNodesWithTag(tag).fetchSemanticsNodes().isNotEmpty() }
 
   private fun waitUntilDisplayed(text: String) =
-    compose.waitUntil(5_000) { runCatching { compose.onNodeWithText(text, substring = true).assertIsDisplayed() }.isSuccess }
+    compose.waitUntil(5_000) { runCatching { compose.scrollToText(text, substring = true); runCatching { compose.onNodeWithText(text, substring = true).performScrollTo() }; compose.onNodeWithText(text, substring = true).assertIsDisplayed() }.isSuccess }
 
   @Test
   fun starterList_skipsWhatYouHave_andAddsNothingTwice() = runBlocking {
@@ -61,7 +64,7 @@ class StarterExercisesTest {
   fun emptyLibrary_offersTheCommonExercises() {
     compose.onNodeWithTag("tab_WORKOUT").performClick()
     waitForTag("open_exercises")
-    compose.onNodeWithTag("open_exercises").performClick()
+    compose.onNodeWithTag("open_exercises").performScrollTo().performClick()
     waitForTag("add_starter")
     compose.onNodeWithTag("add_starter").performClick()
 
@@ -78,7 +81,7 @@ class StarterExercisesTest {
     }
     compose.onNodeWithTag("tab_WORKOUT").performClick()
     waitForTag("open_workouts")
-    compose.onNodeWithTag("open_workouts").performClick()
+    compose.onNodeWithTag("open_workouts").performScrollTo().performClick()
     waitUntilDisplayed("Legs")
     compose.onNodeWithText("Legs").performClick()
     waitUntilDisplayed("Squat")
@@ -98,8 +101,9 @@ class StarterExercisesTest {
       workouts.createWorkout("Legs", "Lower")
     }
     compose.onNodeWithTag("tab_WORKOUT").performClick()
-    waitForTag("open_workouts")
-    compose.onNodeWithTag("open_workouts").performClick()
+    // Wait for the menu's counts: the tab has loaded and its rows stay put.
+    compose.waitUntil(5_000) { compose.onAllNodesWithText("3 workouts").fetchSemanticsNodes().isNotEmpty() }
+    compose.onNodeWithTag("open_workouts").performScrollTo().performClick()
     waitForTag("search")
 
     compose.onNodeWithTag("search").performTextReplacement("lower")

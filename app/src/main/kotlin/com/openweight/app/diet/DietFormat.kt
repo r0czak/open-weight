@@ -28,6 +28,9 @@ fun formatQuantity(quantity: Double, unit: QuantityUnit): String = "${formatNumb
 /** "303 kcal", "2,373 kcal" (thousands grouped the phone's way). */
 fun formatKcal(kcal: Double): String = String.format(Locale.getDefault(), "%,d kcal", kcal.roundToInt())
 
+/** The number alone ("1,240"), for a headline with its unit beside it. */
+fun formatKcalNumber(kcal: Double): String = String.format(Locale.getDefault(), "%,d", kcal.roundToInt())
+
 /** Grams of a macro, one decimal under 10 g, whole numbers above: "4.5 g", "38 g". */
 fun formatGrams(grams: Double): String =
   if (grams < 10) "${BigDecimal(grams).setScale(1, RoundingMode.HALF_UP).stripTrailingZeros().toPlainString()} g"

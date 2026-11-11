@@ -12,6 +12,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performScrollToNode
+import com.openweight.app.testing.scrollToText
 import com.openweight.app.MainActivity
 import com.openweight.app.core.model.QuantityUnit
 import com.openweight.app.diet.data.DietRepository
@@ -66,7 +67,7 @@ class TransferFlowTest {
   private fun waitForTag(tag: String) = compose.waitUntil(5_000) { compose.onAllNodesWithTag(tag).fetchSemanticsNodes().isNotEmpty() }
 
   private fun waitUntilDisplayed(text: String) =
-    compose.waitUntil(5_000) { runCatching { compose.onNodeWithText(text, substring = true).assertIsDisplayed() }.isSuccess }
+    compose.waitUntil(5_000) { runCatching { compose.scrollToText(text, substring = true); runCatching { compose.onNodeWithText(text, substring = true).performScrollTo() }; compose.onNodeWithText(text, substring = true).assertIsDisplayed() }.isSuccess }
 
   private fun scrollTo(list: String, tag: String) =
     compose.waitUntil(5_000) { runCatching { compose.onNodeWithTag(list).performScrollToNode(hasTestTag(tag)) }.isSuccess }
@@ -154,7 +155,7 @@ class TransferFlowTest {
   fun exportOneRecipe_fromItsScreen() {
     compose.onNodeWithTag("tab_DIET").performClick()
     waitUntilDisplayed("Porridge")
-    compose.onAllNodesWithText("Porridge")[0].performClick()
+    compose.onAllNodesWithText("Porridge")[0].performScrollTo().performClick()
     waitForTag("macros_card")
     compose.onNodeWithContentDescription("More options").performClick()
     compose.onNodeWithTag("export_item").performClick()

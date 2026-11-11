@@ -61,11 +61,17 @@ Offline-first Android app for planning workouts (training blocks, workouts, exer
 - Accessibility: everything you can tap needs a label TalkBack reads (its text, or a content description);
   `a11y/AccessibilityTest` walks every screen with data and fails otherwise. A row with a checkbox is
   `toggleable` as a whole (the `Checkbox` gets `onCheckedChange = null`).
-- Visual guide (inspired by banking apps like Revolut; our own colours and icons): grey page (black in dark) with white
-  (near-black) 24 dp cards, one vivid blue accent, bold tab titles, grey section headings, pills for buttons and tabs.
-  Menus use `core/ui/Menu.kt` (`MenuSection`, `MenuRow` with a coloured round icon, `ShortcutCard`, `PillTabs`);
-  lists join rows into one card with `CardListItem`. Icons are the outlined `ic_menu_*` set (one stroked path each,
-  2-unit strokes on a 24 grid, tinted where used).
+- Visual guide (inspired by banking apps like Revolut; our own colours, icons and drawing): each tab opens on a hero
+  (`core/ui/Hero.kt`: blue-to-violet gradient under the status bar, rounded bottom, big title, one headline number,
+  pills, round quick actions, all white), then cards on a grey page (black in dark). Type is Inter, bundled in five
+  static weights (`res/font`, licence in `assets/licenses`): heavy and tight for titles and numbers. Tiles (`StatTile`)
+  sit two to a row; menus use `core/ui/Menu.kt` (`MenuSection`, `MenuRow` with a coloured round icon, `ShortcutCard`,
+  `PillTabs`); lists join rows into one card with `CardListItem`. Diet panels take the hero and pill tabs into their
+  own list (`PanelHeader`): the hero scrolls away, the tabs stick. Nothing shows "0" or "empty" before data loads,
+  and a loading hero keeps its loaded height. Icons are the outlined `ic_menu_*` set (one stroked path each, 2-unit
+  strokes on a 24 grid, tinted where used).
+- Tests run on Robolectric's default small screen (a larger one makes dialogs with text fields never idle): content
+  under a hero may be below the fold, so scroll to it first (`testing/scrollIntoView`, `performScrollTo`).
 - Any UI change ships with screenshots: before and after of every screen it touches, in light and dark theme, sent to
   the user and attached to the PR (or described in it). Take them on Robolectric with `@GraphicsMode(NATIVE)` and
   `onRoot().captureToImage()` (see `PowerLevelFlowTest.screenshot`), at `qualifiers = "w411dp-h891dp-xxhdpi"`.

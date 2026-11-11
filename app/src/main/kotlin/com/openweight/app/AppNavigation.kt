@@ -247,6 +247,8 @@ fun OpenWeightAppUi(modifier: Modifier = Modifier, importOpens: StateFlow<Int>? 
               onOpenRecipe = { backStack.add(RecipeView(it)) },
               onOpenSession = { backStack.add(LiveSession(it)) },
               onOpenWeight = { backStack.add(BodyWeight) },
+              onOpenPowerLevel = { backStack.add(PowerLevel) },
+              onOpenHistory = { backStack.add(History) },
             )
           }
           entry<BodyWeight> { BodyWeightRoute(onBack = back) }
@@ -268,6 +270,8 @@ fun OpenWeightAppUi(modifier: Modifier = Modifier, importOpens: StateFlow<Int>? 
               onOpenHistory = { backStack.add(History) },
               onOpenWeight = { backStack.add(BodyWeight) },
               onOpenPowerLevel = { backStack.add(PowerLevel) },
+              onOpenWorkout = { id, date -> backStack.add(WorkoutOverview(id, date.toEpochDay())) },
+              onOpenSession = { backStack.add(LiveSession(it)) },
             )
           }
           entry<PowerLevel> {

@@ -32,8 +32,8 @@
     <string name="settings_data">Your data</string>
     <string name="settings_backup">Back up everything</string>
     <string name="settings_import">Import from a file</string>
-    <string name="settings_about">About</string>
     <string name="settings_version">Version %1$s</string>
+    <string name="settings_offline_pill">Offline</string>
     <string name="settings_offline">Works fully offline. Your data stays on this phone unless you export it.</string>
     <!-- Common actions -->
     <string name="action_back">Back</string>
@@ -527,8 +527,15 @@
     <string name="settings_training">Training</string>
     <string name="settings_rest_alerts">Alert when rest is over</string>
     <string name="settings_rest_alerts_hint">A notification with sound or vibration, also when the phone is locked</string>
-    <string name="home_session_open">In progress: %s</string>
     <string name="home_session_resume">Resume</string>
+    <string name="diet_hero_today">Today</string>
+    <string name="diet_hero_of">of %s</string>
+    <string name="diet_hero_planned">kcal planned</string>
+    <string name="diet_hero_protein_of">Protein %1$s of %2$s</string>
+    <string name="diet_hero_protein">Protein %s planned</string>
+    <string name="home_hero_kcal">%s planned</string>
+    <string name="home_hero_in_progress">%1$s in progress · sets %2$d/%3$d</string>
+    <string name="home_hero_eaten">%1$s eaten of %2$s</string>
     <string name="home_workout_done">Done</string>
     <string name="home_also_done">Also done: %s</string>
 
@@ -538,7 +545,6 @@
         <item quantity="other">%d reps</item>
     </plurals>
     <string name="history_title">History</string>
-    <string name="history_hint">Every workout you finished</string>
     <string name="history_empty">No finished workouts yet.</string>
     <string name="history_empty_hint">Start one from Home or a workout\'s overview. Finished sessions show up here.</string>
     <string name="history_delete">Delete from history</string>
@@ -563,7 +569,6 @@
 
     <!-- Body weight -->
     <string name="weight_title">Body weight</string>
-    <string name="weight_hint">Weigh-ins and the two-week trend</string>
     <string name="weight_today">Today\'s weight</string>
     <string name="weight_today_logged">Today\'s weight (logged; saving replaces it)</string>
     <string name="weight_error">Enter a weight between %1$s and %2$s.</string>
@@ -629,7 +634,6 @@
 
     <!-- Power level -->
     <string name="power_title">Power level</string>
-    <string name="power_hint">Your strength tier for every muscle, from your lifts</string>
     <string name="power_overall">Power level</string>
     <string name="power_no_level">No level yet</string>
     <string name="power_tier_of">Tier %1$d of %2$d · %3$s</string>
@@ -689,7 +693,26 @@
     <string name="settings_general">General</string>
     <string name="settings_household">Household</string>
     <string name="workout_section_plan">Plan</string>
-    <string name="workout_section_progress">Progress</string>
+    <string name="workout_hero_week">This week</string>
+    <string name="workout_hero_week_block">This week · %s</string>
+    <plurals name="workout_hero_unit">
+        <item quantity="one">workout</item>
+        <item quantity="other">workouts</item>
+    </plurals>
+    <plurals name="workout_hero_done_unit">
+        <item quantity="one">workout done</item>
+        <item quantity="other">workouts done</item>
+    </plurals>
+    <string name="workout_hero_no_plan">No training block covers this week.</string>
+    <string name="workout_hero_train">Train</string>
+    <string name="workout_hero_weight">Weight</string>
+    <string name="workout_hero_power">Power</string>
+    <string name="workout_tile_power_none">No level yet</string>
+    <string name="workout_tile_power_caption">Tier %1$d of %2$d</string>
+    <string name="workout_tile_power_hint">Log a weigh-in and finish a workout</string>
+    <string name="workout_tile_weight_hint">Log your first weigh-in</string>
+    <string name="weight_change_unknown_short">Trend after two weeks</string>
+    <string name="workout_tile_weight_change">%s in 2 weeks</string>
     <string name="strength_standard_men">men\'s standards</string>
     <string name="strength_standard_women">women\'s standards</string>
     <string name="strength_standard_men_option">Men</string>

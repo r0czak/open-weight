@@ -1,5 +1,20 @@
 package com.openweight.app.settings
 
+import com.openweight.app.core.ui.HeroCaption
+import com.openweight.app.core.ui.HeroHeader
+import com.openweight.app.core.ui.HeroPill
+import com.openweight.app.core.ui.HeroTitle
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.material3.Icon
+
 import android.content.Context
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -156,8 +171,23 @@ fun SettingsScreen(
 ) {
   val context = LocalContext.current
   val version = remember(context) { context.versionName() }
-  ScreenScaffold(title = stringResource(R.string.tab_settings), modifier = modifier) { padding ->
-    Column(Modifier.fillMaxSize().padding(padding).verticalScroll(rememberScrollState()).padding(bottom = 16.dp)) {
+  Column(modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(bottom = 16.dp)) {
+      HeroHeader {
+        HeroTitle(stringResource(R.string.tab_settings))
+        Row(Modifier.padding(top = 8.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(14.dp)) {
+          Box(Modifier.size(56.dp).clip(CircleShape).background(Color.White.copy(alpha = 0.2f)), contentAlignment = Alignment.Center) {
+            Icon(painterResource(R.drawable.ic_tab_workout), contentDescription = null, tint = Color.White, modifier = Modifier.size(28.dp))
+          }
+          Column(Modifier.weight(1f)) {
+            Text(stringResource(R.string.app_name), style = MaterialTheme.typography.titleLarge, color = Color.White)
+            HeroCaption(stringResource(R.string.settings_offline))
+          }
+        }
+        Row(Modifier.padding(top = 14.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+          HeroPill(stringResource(R.string.settings_version, version))
+          HeroPill(stringResource(R.string.settings_offline_pill), icon = R.drawable.ic_menu_check)
+        }
+      }
       MenuSection(stringResource(R.string.settings_general)) {
         MenuRow(R.drawable.ic_menu_units, stringResource(R.string.settings_units), accent = MenuAccent.TEAL)
         ChoiceRow(
@@ -300,10 +330,6 @@ fun SettingsScreen(
         }
       }
 
-      MenuSection(stringResource(R.string.settings_about)) {
-        MenuRow(R.drawable.ic_menu_info, stringResource(R.string.settings_version, version), subtitle = stringResource(R.string.settings_offline), accent = MenuAccent.GREY)
-      }
-    }
   }
 }
 

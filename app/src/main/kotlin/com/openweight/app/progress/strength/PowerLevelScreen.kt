@@ -1,5 +1,10 @@
 package com.openweight.app.progress.strength
 
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.lerp
+import com.openweight.app.core.ui.heroColors
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -155,35 +160,48 @@ private fun OverallCard(level: PowerLevel.Ready, unit: WeightUnit) {
   val report = level.report
   val overall = report.overall
   val tier = report.overallTier
-  Card(Modifier.fillMaxWidth().padding(16.dp).testTag("power_overall")) {
-    Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-      Text(stringResource(R.string.power_overall), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
+  // A gradient in the tier's own colour (the app's hero colours before there is a tier).
+  val colors = tier?.let { listOf(it.color, lerp(it.color, Color.Black, 0.45f)) } ?: heroColors()
+  Box(
+    Modifier.fillMaxWidth()
+      .padding(16.dp)
+      .clip(MaterialTheme.shapes.large)
+      .background(Brush.linearGradient(colors))
+      .testTag("power_overall")
+  ) {
+    Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+      Text(stringResource(R.string.power_overall), style = MaterialTheme.typography.labelLarge, color = Color.White.copy(alpha = 0.8f))
       if (overall == null || tier == null) {
-        Text(stringResource(R.string.power_no_level), style = MaterialTheme.typography.titleMedium)
+        Text(stringResource(R.string.power_no_level), style = MaterialTheme.typography.headlineMedium, color = Color.White)
       } else {
-        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-          TierBadge(tier, big = true)
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(14.dp)) {
+          Box(Modifier.size(56.dp).clip(CircleShape).background(Color.White.copy(alpha = 0.22f)), contentAlignment = Alignment.Center) {
+            Text("${tier.ordinal + 1}", style = MaterialTheme.typography.headlineMedium, color = Color.White)
+          }
           Column {
-            Text(tier.label(), style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold, modifier = Modifier.testTag("power_tier"))
+            Text(tier.label(), style = MaterialTheme.typography.displaySmall, color = Color.White, modifier = Modifier.testTag("power_tier"))
             Text(
               stringResource(R.string.power_tier_of, tier.ordinal + 1, Tier.entries.size, towardsNext(overall)),
               style = MaterialTheme.typography.bodyMedium,
-              color = MaterialTheme.colorScheme.onSurfaceVariant,
+              color = Color.White.copy(alpha = 0.85f),
             )
           }
         }
-        TierProgress(overall)
+        val within = if (tier == Tier.WORLD_CLASS) 1f else (overall - floor(overall)).toFloat().coerceIn(0f, 1f)
+        Box(Modifier.fillMaxWidth().padding(top = 4.dp).height(8.dp).clip(CircleShape).background(Color.White.copy(alpha = 0.25f))) {
+          Box(Modifier.fillMaxWidth(within).height(8.dp).clip(CircleShape).background(Color.White))
+        }
         val strongest = report.strongest
         val weakest = report.weakest
         if (strongest != null && weakest != null && strongest.muscle != weakest.muscle) {
-          Text(stringResource(R.string.power_strongest_weakest, strongest.muscle.label(), weakest.muscle.label()), style = MaterialTheme.typography.bodyMedium)
+          Text(stringResource(R.string.power_strongest_weakest, strongest.muscle.label(), weakest.muscle.label()), style = MaterialTheme.typography.titleSmall, color = Color.White)
         }
       }
       val standard = stringResource(if (level.standard == StrengthStandard.MEN) R.string.strength_standard_men else R.string.strength_standard_women)
       Text(
         stringResource(R.string.power_basis, unit.format(report.bodyWeightKg), standard),
         style = MaterialTheme.typography.bodySmall,
-        color = MaterialTheme.colorScheme.onSurfaceVariant,
+        color = Color.White.copy(alpha = 0.8f),
       )
     }
   }
@@ -208,7 +226,7 @@ private fun TierProgress(score: Double, modifier: Modifier = Modifier) {
 private fun TierBadge(tier: Tier, big: Boolean = false) {
   val size = if (big) 44.dp else 28.dp
   Box(Modifier.size(size).clip(CircleShape).background(tier.color), contentAlignment = Alignment.Center) {
-    Text("${tier.ordinal + 1}", style = if (big) MaterialTheme.typography.titleLarge else MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold, color = androidx.compose.ui.graphics.Color.Black)
+    Text("${tier.ordinal + 1}", style = if (big) MaterialTheme.typography.titleLarge else MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold, color = Color.Black)
   }
 }
 

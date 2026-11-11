@@ -7,6 +7,7 @@ import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
@@ -39,8 +40,8 @@ class AppNavigationTest {
     }
 
     composeRule.onNodeWithTag("tab_WORKOUT").performClick()
-    composeRule.onNodeWithText("Training blocks").assertIsDisplayed()
-    composeRule.onNodeWithText("Exercise library").assertIsDisplayed()
+    composeRule.onNodeWithText("Training blocks").performScrollTo().assertIsDisplayed()
+    composeRule.onNodeWithText("Exercise library").performScrollTo().assertIsDisplayed()
   }
 
   @Test
@@ -60,8 +61,8 @@ class AppNavigationTest {
   fun settingsTab_changesThemeAndUnit() {
     composeRule.onNodeWithTag("tab_SETTINGS").performClick()
 
-    composeRule.onNodeWithText("Dark").performClick()
-    composeRule.onNodeWithText("Pounds (lb)").performClick()
+    composeRule.onNodeWithText("Dark").performScrollTo().performClick()
+    composeRule.onNodeWithText("Pounds (lb)").performScrollTo().performClick()
 
     // Settings are saved asynchronously; the buttons reflect them once stored.
     composeRule.waitUntil(5_000) {

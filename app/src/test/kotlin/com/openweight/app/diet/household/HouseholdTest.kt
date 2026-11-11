@@ -11,6 +11,7 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performScrollToNode
 import androidx.compose.ui.test.performTextReplacement
+import com.openweight.app.testing.scrollToText
 import com.openweight.app.MainActivity
 import com.openweight.app.core.TimeAndIds
 import com.openweight.app.core.model.MealSlot
@@ -126,8 +127,8 @@ class HouseholdTest {
 
     // The recipe page scales its amounts for the household.
     compose.onNodeWithTag("panel_RECIPES").performClick()
-    compose.waitUntil(5_000) { compose.onAllNodesWithText("Porridge").fetchSemanticsNodes().isNotEmpty() }
-    compose.onAllNodesWithText("Porridge")[0].performClick()
+    compose.waitUntil(5_000) { compose.scrollToText("Porridge"); compose.onAllNodesWithText("Porridge").fetchSemanticsNodes().isNotEmpty() }
+    compose.onAllNodesWithText("Porridge")[0].performScrollTo().performClick()
     compose.waitUntil(5_000) { compose.onAllNodesWithTag("cook_for_household").fetchSemanticsNodes().isNotEmpty() }
     compose.onNodeWithTag("recipe_view").performScrollToNode(hasTestTag("qty_Oats"))
     compose.onNodeWithTag("qty_Oats", useUnmergedTree = true).assertTextEquals("80 g")

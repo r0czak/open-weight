@@ -9,8 +9,10 @@ import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performScrollToNode
 import androidx.compose.ui.test.performTextReplacement
+import com.openweight.app.testing.scrollToTag
 import com.openweight.app.MainActivity
 import com.openweight.app.core.TimeAndIds
 import com.openweight.app.workout.blocks.TrainingBlockRepository
@@ -99,8 +101,8 @@ class LiveSessionFlowTest {
 
     // Leave and come back: Home offers the open session.
     compose.onNodeWithTag("tab_HOME").performClick()
-    waitForTag("session_banner")
-    compose.onNodeWithText("In progress: Push A").assertIsDisplayed()
+    compose.waitUntil(5_000) { compose.scrollToTag("session_banner"); compose.onAllNodesWithTag("session_banner").fetchSemanticsNodes().isNotEmpty() }
+    compose.onNodeWithText("Push A in progress", substring = true).assertIsDisplayed()
     compose.onNodeWithTag("resume_session").performClick()
     waitForText("session_progress", "Sets done: 2/3")
 

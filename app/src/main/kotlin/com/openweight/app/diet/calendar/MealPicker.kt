@@ -90,6 +90,8 @@ data class MealPickerState(
   val slot: MealSlot = MealSlot.BREAKFAST,
   val items: List<RecipeSummary> = emptyList(),
   val total: Int = 0,
+  /** False until the recipes have loaded, so "No recipes yet" never flashes on opening. */
+  val loaded: Boolean = false,
   val chosen: RecipeSummary? = null,
   val done: Boolean = false,
 )
@@ -113,7 +115,7 @@ constructor(
   val state: StateFlow<MealPickerState> =
     combine(local, diet.recipes()) { l, all ->
         val q = l.query.trim()
-        l.copy(items = all.filter { q.isEmpty() || it.name.contains(q, true) || it.tags.contains(q, true) }, total = all.size)
+        l.copy(items = all.filter { q.isEmpty() || it.name.contains(q, true) || it.tags.contains(q, true) }, total = all.size, loaded = true)
       }
       .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), MealPickerState(slot = initialSlot))
 
@@ -164,7 +166,7 @@ fun MealPickerRoute(
         }
       }
       SearchField(state.query, viewModel::onQueryChange, placeholder = stringResource(R.string.recipe_search))
-      if (state.total == 0) {
+      if (state.loaded && state.total == 0) {
         EmptyState(stringResource(R.string.recipe_empty), hint = stringResource(R.string.meal_picker_no_recipes))
       }
       LazyColumn {

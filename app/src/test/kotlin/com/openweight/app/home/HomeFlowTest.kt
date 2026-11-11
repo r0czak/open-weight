@@ -60,17 +60,22 @@ class HomeFlowTest {
   private fun waitForTag(tag: String) =
     compose.waitUntil(5_000) { compose.onAllNodesWithTag(tag).fetchSemanticsNodes().isNotEmpty() }
 
+  /** Brings a node of the Home list into view (the hero sits above the week; days below compose lazily). */
+  private fun reveal(tag: String) =
+    compose.waitUntil(5_000) { runCatching { compose.onNodeWithTag("week_agenda").performScrollToNode(hasTestTag(tag)) }.isSuccess }
+
   private fun waitForText(text: String) =
     compose.waitUntil(5_000) { compose.onAllNodesWithText(text).fetchSemanticsNodes().isNotEmpty() }
 
   @Test
   fun todaysWorkout_opensItsOverview_thenTheEditor() {
     waitForTag("week_agenda")
-    // The week scrolls itself to today on open; wait for that to settle rather than racing it.
+    // Today's card sits under the hero and the week strip: scroll to it. Every day card of the
+    // block names its week, so any of them will do.
     compose.waitUntil(5_000) {
       runCatching {
           compose.onNodeWithTag("week_agenda").performScrollToNode(hasTestTag("day_workout_$today"))
-          compose.onNodeWithText("Winter Arc · week 2 of 5").assertIsDisplayed()
+          compose.onAllNodesWithText("Winter Arc · week 2 of 5")[0].assertIsDisplayed()
         }
         .isSuccess
     }
@@ -86,15 +91,17 @@ class HomeFlowTest {
 
   @Test
   fun weekArrows_moveAWeek_andTodayComesBack() {
-    waitForTag("strip_$today")
+    reveal("strip_$today")
     val nextMonday = WeekPlan.mondayOf(today).plusWeeks(1)
 
+    reveal("next_week")
     compose.onNodeWithTag("next_week").performClick()
-    waitForTag("strip_$nextMonday")
+    reveal("strip_$nextMonday")
     // The same weekday next week is planned too: the block runs 3 more weeks.
-    compose.onNodeWithTag("week_agenda").performScrollToNode(hasTestTag("day_workout_${today.plusWeeks(1)}"))
+    reveal("day_workout_${today.plusWeeks(1)}")
 
+    reveal("this_week")
     compose.onNodeWithTag("this_week").performClick()
-    waitForTag("strip_$today")
+    reveal("strip_$today")
   }
 }

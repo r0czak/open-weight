@@ -8,6 +8,7 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextReplacement
 import com.openweight.app.MainActivity
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -45,7 +46,7 @@ class WorkoutFlowTest {
   fun createExercise_thenBuildWorkout_thenEditASet() {
     // Exercise library: add one.
     compose.onNodeWithTag("tab_WORKOUT").performClick()
-    compose.onNodeWithTag("open_exercises").performClick()
+    compose.onNodeWithTag("open_exercises").performScrollTo().performClick()
     waitForText("No exercises yet.")
     compose.onNodeWithTag("add_exercise").performClick()
     compose.onNodeWithTag("exercise_name").performTextReplacement("Bench press")
@@ -59,7 +60,7 @@ class WorkoutFlowTest {
     waitForTag("open_workouts")
 
     // Workouts: create one, which opens the editor.
-    compose.onNodeWithTag("open_workouts").performClick()
+    compose.onNodeWithTag("open_workouts").performScrollTo().performClick()
     waitForTag("add_workout")
     compose.onNodeWithTag("add_workout").performClick()
     compose.onNodeWithTag("workout_name").performTextReplacement("Push A")

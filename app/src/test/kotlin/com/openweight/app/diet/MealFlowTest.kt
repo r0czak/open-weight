@@ -9,7 +9,9 @@ import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performScrollToNode
+import com.openweight.app.testing.scrollToText
 import com.openweight.app.MainActivity
 import com.openweight.app.core.TimeAndIds
 import com.openweight.app.core.model.MealSlot
@@ -62,7 +64,7 @@ class MealFlowTest {
     compose.waitUntil(5_000) { compose.onAllNodesWithTag(tag).fetchSemanticsNodes().isNotEmpty() }
 
   private fun waitUntilDisplayed(text: String) =
-    compose.waitUntil(5_000) { runCatching { compose.onNodeWithText(text, substring = true).assertIsDisplayed() }.isSuccess }
+    compose.waitUntil(5_000) { runCatching { compose.scrollToText(text, substring = true); runCatching { compose.onNodeWithText(text, substring = true).performScrollTo() }; compose.onNodeWithText(text, substring = true).assertIsDisplayed() }.isSuccess }
 
   private fun scrollTo(list: String, tag: String) =
     compose.waitUntil(5_000) { runCatching { compose.onNodeWithTag(list).performScrollToNode(hasTestTag(tag)) }.isSuccess }
@@ -105,7 +107,7 @@ class MealFlowTest {
     waitForTag("panel_CALENDAR")
     compose.onNodeWithTag("panel_CALENDAR").performClick()
     waitForTag("open_plans")
-    compose.onNodeWithTag("open_plans").performClick()
+    compose.onNodeWithTag("open_plans").performScrollTo().performClick()
     waitUntilDisplayed("Lean bulk")
     compose.onNodeWithText("Lean bulk").performClick()
 

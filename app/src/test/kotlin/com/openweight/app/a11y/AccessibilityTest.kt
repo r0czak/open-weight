@@ -9,6 +9,7 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
+import com.openweight.app.testing.scrollIntoView
 import com.openweight.app.MainActivity
 import com.openweight.app.core.TimeAndIds
 import com.openweight.app.core.model.MealSlot
@@ -90,7 +91,11 @@ class AccessibilityTest {
   /** Checks the screen once [ready] (a text or a test tag on it) shows, so its data has loaded. */
   private fun check(screen: String, ready: String? = null) {
     if (ready != null) {
-      compose.waitUntil(5_000) {
+      // Scroll only once the screen has had time to appear: scrolling while it slides in would
+      // scroll the incoming screen's list too.
+      val start = System.currentTimeMillis()
+      compose.waitUntil(8_000) {
+        if (System.currentTimeMillis() - start > 1_500) compose.scrollIntoView(hasTestTag(ready) or hasText(ready, substring = true))
         compose.onAllNodesWithText(ready, substring = true, useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty() ||
           compose.onAllNodesWithTag(ready, useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty()
       }
@@ -102,7 +107,11 @@ class AccessibilityTest {
   }
 
   private fun tap(tag: String) {
-    compose.waitUntil(5_000) { compose.onAllNodesWithTag(tag).fetchSemanticsNodes().isNotEmpty() }
+    val start = System.currentTimeMillis()
+    compose.waitUntil(8_000) {
+      if (System.currentTimeMillis() - start > 1_500) compose.scrollIntoView(hasTestTag(tag))
+      compose.onAllNodesWithTag(tag).fetchSemanticsNodes().isNotEmpty()
+    }
     compose.onNodeWithTag(tag).performScrollToIfNeeded().performClick()
   }
 

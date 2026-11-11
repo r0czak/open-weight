@@ -10,9 +10,11 @@ import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performScrollToNode
 import androidx.compose.ui.test.performSemanticsAction
 import androidx.compose.ui.test.performTextReplacement
+import com.openweight.app.testing.scrollToText
 import com.openweight.app.MainActivity
 import com.openweight.app.core.TimeAndIds
 import com.openweight.app.core.model.MealSlot
@@ -65,7 +67,7 @@ class ShoppingFlowTest {
     compose.waitUntil(5_000) { compose.onAllNodesWithTag(tag).fetchSemanticsNodes().isNotEmpty() }
 
   private fun waitUntilDisplayed(text: String) =
-    compose.waitUntil(5_000) { runCatching { compose.onNodeWithText(text, substring = true).assertIsDisplayed() }.isSuccess }
+    compose.waitUntil(5_000) { runCatching { compose.scrollToText(text, substring = true); runCatching { compose.onNodeWithText(text, substring = true).performScrollTo() }; compose.onNodeWithText(text, substring = true).assertIsDisplayed() }.isSuccess }
 
   private fun scrollTo(tag: String) =
     compose.waitUntil(5_000) { runCatching { compose.onNodeWithTag("shopping").performScrollToNode(hasTestTag(tag)) }.isSuccess }
@@ -87,7 +89,7 @@ class ShoppingFlowTest {
 
     // No list yet: make one for the next 7 days. 7 × 80 g oats, 7 × 200 ml milk.
     waitForTag("shopping_next_week")
-    compose.onNodeWithTag("shopping_next_week").performClick()
+    compose.onNodeWithTag("shopping_next_week").performScrollTo().performClick()
     waitUntilDisplayed("List updated (new: 2,")
     scrollTo("shop_Oats")
     assertQty("Oats", "560 g")

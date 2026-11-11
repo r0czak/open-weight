@@ -8,8 +8,10 @@ import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performScrollToNode
 import androidx.compose.ui.test.performTextReplacement
+import com.openweight.app.testing.scrollToText
 import com.openweight.app.MainActivity
 import com.openweight.app.core.model.QuantityUnit
 import com.openweight.app.diet.data.DietRepository
@@ -54,7 +56,7 @@ class RecipeFlowTest {
 
   /** Screens slide in: wait until the text is really on screen, not just composed. */
   private fun waitUntilDisplayed(text: String) =
-    compose.waitUntil(5_000) { runCatching { compose.onNodeWithText(text).assertIsDisplayed() }.isSuccess }
+    compose.waitUntil(5_000) { runCatching { compose.scrollToText(text); runCatching { compose.onNodeWithText(text).performScrollTo() }; compose.onNodeWithText(text).assertIsDisplayed() }.isSuccess }
 
   @Test
   fun createRecipe_addIngredient_seeCaloriesPerServing() {
