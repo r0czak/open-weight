@@ -6,6 +6,10 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.graphics.Color
+import androidx.compose.material3.NavigationBarItemDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
@@ -191,7 +195,8 @@ fun OpenWeightAppUi(modifier: Modifier = Modifier, importOpens: StateFlow<Int>? 
     modifier = modifier,
     contentWindowInsets = WindowInsets(0, 0, 0, 0),
     bottomBar = {
-      NavigationBar {
+      // A quiet bar: the selected tab is marked by colour alone, no pill behind it.
+      NavigationBar(containerColor = MaterialTheme.colorScheme.surfaceContainerLow, tonalElevation = 0.dp) {
         TopLevelDestination.entries.forEach { destination ->
           NavigationBarItem(
             modifier = Modifier.testTag("tab_${destination.name}"),
@@ -207,6 +212,14 @@ fun OpenWeightAppUi(modifier: Modifier = Modifier, importOpens: StateFlow<Int>? 
             },
             icon = { Icon(painterResource(destination.icon), contentDescription = null) },
             label = { Text(stringResource(destination.label)) },
+            colors =
+              NavigationBarItemDefaults.colors(
+                indicatorColor = Color.Transparent,
+                selectedIconColor = MaterialTheme.colorScheme.primary,
+                selectedTextColor = MaterialTheme.colorScheme.primary,
+                unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
+              ),
           )
         }
       }

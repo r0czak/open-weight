@@ -10,7 +10,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
@@ -32,6 +31,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
 import com.openweight.app.R
 import com.openweight.app.core.Today
+import com.openweight.app.core.ui.CardListItem
 import com.openweight.app.core.ui.EmptyState
 import com.openweight.app.core.ui.ScreenScaffold
 import com.openweight.app.core.ui.formatDateRange
@@ -131,8 +131,9 @@ fun BlockListRoute(
                 item(key = "header-${item.status}") { StatusHeader(item.status) }
               }
               item(key = item.block.id) {
-                BlockRow(item, onClick = { onOpen(item.block.id) })
-                HorizontalDivider()
+                // Each status group is its own card.
+                val group = state.items.filter { it.status == item.status }
+                CardListItem(group.indexOf(item), group.size) { BlockRow(item, onClick = { onOpen(item.block.id) }) }
               }
             }
           }
@@ -168,7 +169,7 @@ private fun StatusHeader(status: BlockStatus) {
       }
     ),
     style = MaterialTheme.typography.titleSmall,
-    color = MaterialTheme.colorScheme.primary,
+    color = MaterialTheme.colorScheme.onSurfaceVariant,
     modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 4.dp),
   )
 }

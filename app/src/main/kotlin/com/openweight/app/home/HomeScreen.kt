@@ -85,7 +85,7 @@ fun HomeRoute(
         }
       }
       IconButton(onClick = onOpenWeight, modifier = Modifier.testTag("home_weight")) {
-        Icon(painterResource(R.drawable.ic_progress), stringResource(R.string.weight_title))
+        Icon(painterResource(R.drawable.ic_menu_weight), stringResource(R.string.weight_title))
       }
       IconButton(onClick = viewModel::previousWeek, modifier = Modifier.testTag("previous_week")) {
         Icon(Icons.AutoMirrored.Filled.KeyboardArrowLeft, stringResource(R.string.home_previous_week))

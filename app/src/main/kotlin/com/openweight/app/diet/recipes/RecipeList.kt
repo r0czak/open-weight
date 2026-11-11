@@ -22,6 +22,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
 import com.openweight.app.R
+import com.openweight.app.core.ui.CardListItem
+import com.openweight.app.core.ui.MenuAccent
+import com.openweight.app.core.ui.ShortcutCard
 import com.openweight.app.core.ui.EmptyState
 import com.openweight.app.diet.data.DietRepository
 import com.openweight.app.diet.data.RecipeSummary
@@ -74,12 +77,14 @@ fun RecipesPanel(
 ) {
   val state by viewModel.state.collectAsStateWithLifecycle()
   Column(Modifier.fillMaxSize()) {
-    ListItem(
-      modifier = Modifier.clickable(onClick = onOpenIngredients).testTag("open_ingredients"),
-      headlineContent = { Text(stringResource(R.string.diet_ingredients)) },
-      supportingContent = { Text(pluralStringResource(R.plurals.ingredient_count, state.ingredientCount, state.ingredientCount)) },
+    ShortcutCard(
+      R.drawable.ic_menu_ingredients,
+      stringResource(R.string.diet_ingredients),
+      pluralStringResource(R.plurals.ingredient_count, state.ingredientCount, state.ingredientCount),
+      onClick = onOpenIngredients,
+      tag = "open_ingredients",
+      accent = MenuAccent.GREEN,
     )
-    HorizontalDivider()
     SearchField(state.query, viewModel::onQueryChange, placeholder = stringResource(R.string.recipe_search))
     when {
       state.loading -> Unit
@@ -88,28 +93,29 @@ fun RecipesPanel(
       else ->
         LazyColumn(contentPadding = PaddingValues(bottom = 88.dp)) {
           items(state.items, key = { it.id }) { r ->
-            ListItem(
-              modifier = Modifier.clickable { onOpenRecipe(r.id) },
-              headlineContent = { Text(r.name) },
-              supportingContent = {
-                val parts = buildList {
-                  add(pluralStringResource(R.plurals.serving_count, r.servings, r.servings))
-                  r.prepMinutes?.let { add(stringResource(R.string.recipe_minutes, it)) }
-                  if (r.tags.isNotBlank()) add(r.tags)
-                }
-                Text(parts.joinToString(" · "))
-              },
-              trailingContent = {
-                if (r.ingredientCount > 0) {
-                  Text(
-                    stringResource(R.string.recipe_kcal_per_serving, formatKcal(r.nutrition.perServing.kcal)) +
-                      if (r.nutrition.complete) "" else "*",
-                    style = MaterialTheme.typography.labelLarge,
-                  )
-                }
-              },
-            )
-            HorizontalDivider()
+            CardListItem(state.items.indexOf(r), state.items.size) {
+              ListItem(
+                modifier = Modifier.clickable { onOpenRecipe(r.id) },
+                headlineContent = { Text(r.name) },
+                supportingContent = {
+                  val parts = buildList {
+                    add(pluralStringResource(R.plurals.serving_count, r.servings, r.servings))
+                    r.prepMinutes?.let { add(stringResource(R.string.recipe_minutes, it)) }
+                    if (r.tags.isNotBlank()) add(r.tags)
+                  }
+                  Text(parts.joinToString(" · "))
+                },
+                trailingContent = {
+                  if (r.ingredientCount > 0) {
+                    Text(
+                      stringResource(R.string.recipe_kcal_per_serving, formatKcal(r.nutrition.perServing.kcal)) +
+                        if (r.nutrition.complete) "" else "*",
+                      style = MaterialTheme.typography.labelLarge,
+                    )
+                  }
+                },
+              )
+            }
           }
         }
     }

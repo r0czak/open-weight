@@ -42,6 +42,7 @@ import androidx.lifecycle.viewModelScope
 import com.openweight.app.R
 import com.openweight.app.core.model.WeightUnit
 import com.openweight.app.core.model.format
+import com.openweight.app.core.ui.CardListItem
 import com.openweight.app.core.ui.EmptyState
 import com.openweight.app.core.ui.LineChart
 import com.openweight.app.core.ui.ScreenScaffold
@@ -90,23 +91,24 @@ fun HistoryRoute(onBack: () -> Unit, onOpen: (sessionId: String) -> Unit, viewMo
         else ->
           LazyColumn(Modifier.fillMaxSize().testTag("history_list"), contentPadding = PaddingValues(bottom = 24.dp)) {
             items(state.sessions, key = { it.id }) { s ->
-              ListItem(
-                modifier = Modifier.clickable { onOpen(s.id) }.testTag("history_${s.id}"),
-                overlineContent = { Text(s.plannedDate.formatDayShort()) },
-                headlineContent = { Text(s.workoutName) },
-                supportingContent = {
-                  val minutes = s.duration.toMinutes().toInt()
-                  Text(
-                    listOf(
-                        pluralStringResource(R.plurals.session_done_minutes, minutes, minutes),
-                        stringResource(R.string.session_done_sets, s.doneCount, s.setCount),
-                        state.unit.format(s.volumeKg),
-                      )
-                      .joinToString(" · ")
-                  )
-                },
-              )
-              HorizontalDivider()
+              CardListItem(state.sessions.indexOf(s), state.sessions.size) {
+                ListItem(
+                  modifier = Modifier.clickable { onOpen(s.id) }.testTag("history_${s.id}"),
+                  overlineContent = { Text(s.plannedDate.formatDayShort()) },
+                  headlineContent = { Text(s.workoutName) },
+                  supportingContent = {
+                    val minutes = s.duration.toMinutes().toInt()
+                    Text(
+                      listOf(
+                          pluralStringResource(R.plurals.session_done_minutes, minutes, minutes),
+                          stringResource(R.string.session_done_sets, s.doneCount, s.setCount),
+                          state.unit.format(s.volumeKg),
+                        )
+                        .joinToString(" · ")
+                    )
+                  },
+                )
+              }
             }
           }
       }

@@ -61,6 +61,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
 import com.openweight.app.R
 import com.openweight.app.core.TimeAndIds
+import com.openweight.app.core.ui.CardListItem
 import com.openweight.app.core.ui.EmptyState
 import com.openweight.app.core.ui.ScreenScaffold
 import com.openweight.app.core.ui.formatMedium
@@ -127,17 +128,18 @@ fun DietPlanListRoute(onBack: () -> Unit, onOpen: (String) -> Unit, viewModel: D
     } else {
       LazyColumn(Modifier.fillMaxSize().padding(padding), contentPadding = PaddingValues(bottom = 88.dp)) {
         items(list, key = { it.id }) { p ->
-          ListItem(
-            modifier = Modifier.clickable { onOpen(p.id) },
-            headlineContent = { Text(p.name) },
-            supportingContent = {
-              Text(
-                pluralStringResource(R.plurals.plan_meals_per_week, p.mealCount, p.mealCount) + " · " +
-                  stringResource(R.string.plan_avg_per_day, formatKcal(p.averageKcalPerDay))
-              )
-            },
-          )
-          HorizontalDivider()
+          CardListItem(list.indexOf(p), list.size) {
+            ListItem(
+              modifier = Modifier.clickable { onOpen(p.id) },
+              headlineContent = { Text(p.name) },
+              supportingContent = {
+                Text(
+                  pluralStringResource(R.plurals.plan_meals_per_week, p.mealCount, p.mealCount) + " · " +
+                    stringResource(R.string.plan_avg_per_day, formatKcal(p.averageKcalPerDay))
+                )
+              },
+            )
+          }
         }
       }
     }

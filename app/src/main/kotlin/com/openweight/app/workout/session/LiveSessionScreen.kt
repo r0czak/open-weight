@@ -1,5 +1,13 @@
 package com.openweight.app.workout.session
 
+import androidx.annotation.DrawableRes
+import com.openweight.app.core.ui.MenuAccent
+import com.openweight.app.core.ui.MenuDivider
+import com.openweight.app.core.ui.MenuIcon
+import com.openweight.app.core.ui.MenuSection
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+
 import android.Manifest
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -594,11 +602,28 @@ private fun LogSetDialog(
 @Composable
 private fun Summary(session: Session, unit: WeightUnit, onDone: () -> Unit, modifier: Modifier = Modifier) {
   val minutes = session.duration(session.finishedAt ?: session.startedAt).toMinutes().toInt()
-  Column(modifier.fillMaxSize().padding(24.dp).testTag("session_summary"), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-    Text(stringResource(R.string.session_done_title), style = MaterialTheme.typography.headlineSmall)
-    Text(pluralStringResource(R.plurals.session_done_minutes, minutes, minutes))
-    Text(stringResource(R.string.session_done_sets, session.doneCount, session.setCount), modifier = Modifier.testTag("summary_sets"))
-    Text(stringResource(R.string.session_done_volume, unit.format(session.volumeKg)))
-    Button(onClick = onDone, modifier = Modifier.padding(top = 16.dp).testTag("summary_done")) { Text(stringResource(R.string.action_done)) }
+  Column(
+    modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(vertical = 16.dp).testTag("session_summary"),
+    verticalArrangement = Arrangement.spacedBy(8.dp),
+  ) {
+    Text(stringResource(R.string.session_done_title), style = MaterialTheme.typography.headlineSmall, modifier = Modifier.padding(horizontal = 20.dp))
+    MenuSection(title = null) {
+      SummaryRow(R.drawable.ic_menu_history, pluralStringResource(R.plurals.session_done_minutes, minutes, minutes), MenuAccent.ORANGE)
+      MenuDivider()
+      SummaryRow(R.drawable.ic_menu_workouts, stringResource(R.string.session_done_sets, session.doneCount, session.setCount), MenuAccent.VIOLET, Modifier.testTag("summary_sets"))
+      MenuDivider()
+      SummaryRow(R.drawable.ic_menu_exercises, stringResource(R.string.session_done_volume, unit.format(session.volumeKg)), MenuAccent.TEAL)
+    }
+    Button(onClick = onDone, modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp).testTag("summary_done")) {
+      Text(stringResource(R.string.action_done))
+    }
+  }
+}
+
+@Composable
+private fun SummaryRow(@DrawableRes icon: Int, text: String, accent: MenuAccent, modifier: Modifier = Modifier) {
+  Row(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+    MenuIcon(icon, accent = accent)
+    Text(text, style = MaterialTheme.typography.titleMedium, modifier = modifier)
   }
 }
