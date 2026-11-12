@@ -52,6 +52,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -87,6 +89,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
@@ -101,7 +104,12 @@ sealed interface LiveSessionState {
   /** Discarded, or never existed. */
   data object Gone : LiveSessionState
 
-  data class Loaded(val session: Session, val unit: WeightUnit) : LiveSessionState
+  data class Loaded(
+    val session: Session,
+    val unit: WeightUnit,
+    /** By exercise id: what was done the last time it was trained (before this session). */
+    val lastTime: Map<String, List<LoggedSet>> = emptyMap(),
+  ) : LiveSessionState
 }
 
 @HiltViewModel(assistedFactory = LiveSessionViewModel.Factory::class)
@@ -144,13 +152,26 @@ constructor(
   private fun nextLabel(s: Session): NextSet? =
     s.exercises.firstNotNullOfOrNull { e -> e.sets.indexOfFirst { it.id == s.nextSetId }.takeIf { it >= 0 }?.let { NextSet(e.name, it + 1) } }
 
+  init {
+    viewModelScope.launch {
+      val ids = sessions.session(sessionId).first()?.exercises?.mapNotNull { it.exerciseId }.orEmpty()
+      lastTime.value = sessions.lastTime(ids)
+    }
+  }
+
+  fun useWeight(exercisePosition: Int, weightKg: Double) =
+    viewModelScope.launch { sessions.setWeightForRemaining(sessionId, exercisePosition, weightKg) }
+
   fun skipRest(endsAt: Instant) {
     skippedRest.value = endsAt.toEpochMilli()
   }
 
+  /** Read once when the session opens: finishing this session must not turn it into "last time". */
+  private val lastTime = MutableStateFlow<Map<String, List<LoggedSet>>>(emptyMap())
+
   val state: StateFlow<LiveSessionState> =
-    combine(sessions.session(sessionId), settings.settings) { s, set ->
-        if (s == null) LiveSessionState.Gone else LiveSessionState.Loaded(s, set.weightUnit)
+    combine(sessions.session(sessionId), settings.settings, lastTime) { s, set, last ->
+        if (s == null) LiveSessionState.Gone else LiveSessionState.Loaded(s, set.weightUnit, last)
       }
       .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), LiveSessionState.Loading)
 
@@ -276,6 +297,8 @@ fun LiveSessionRoute(
           ExerciseCard(
             exercise = exercise,
             unit = loaded.unit,
+            lastTime = exercise.exerciseId?.let { loaded.lastTime[it] }?.let { Progress.lastTime(it, loaded.unit) },
+            onUseWeight = { viewModel.useWeight(exercise.position, it) },
             nextSetId = session.nextSetId,
             onToggle = { set -> if (set.done) viewModel.undo(set.id) else viewModel.confirm(set.id, set.weightKg, set.reps) },
             onEdit = { set -> editing = exercise to set },
@@ -340,6 +363,8 @@ fun LiveSessionRoute(
 private fun ExerciseCard(
   exercise: SessionExercise,
   unit: WeightUnit,
+  lastTime: LastTime?,
+  onUseWeight: (Double) -> Unit,
   nextSetId: String?,
   onToggle: (SessionSet) -> Unit,
   onEdit: (SessionSet) -> Unit,
@@ -351,6 +376,33 @@ private fun ExerciseCard(
   ) {
     Column(Modifier.padding(start = 16.dp, end = 8.dp, top = 12.dp, bottom = 4.dp)) {
       Text("${exercise.position + 1}. ${exercise.name}", style = MaterialTheme.typography.titleMedium)
+      if (lastTime != null) {
+        Text(
+          stringResource(R.string.session_last_time, lastTime.sets.map { setText(it, unit) }.joinToString(", ")),
+          style = MaterialTheme.typography.bodySmall,
+          color = MaterialTheme.colorScheme.onSurfaceVariant,
+          modifier = Modifier.testTag("last_time_${exercise.position}"),
+        )
+        val step = lastTime.stepUpKg
+        // Only while it helps: once a remaining set already carries that weight, the hint goes.
+        if (step != null && exercise.sets.any { !it.done && it.weightKg != null && it.weightKg < step - 0.001 }) {
+          Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(
+              stringResource(R.string.session_step_up, unit.format(step)),
+              style = MaterialTheme.typography.bodySmall,
+              color = MaterialTheme.colorScheme.primary,
+              modifier = Modifier.weight(1f).testTag("step_up_${exercise.position}"),
+            )
+            val label = stringResource(R.string.session_step_up_use_label, unit.format(step), exercise.name)
+            TextButton(
+              onClick = { onUseWeight(step) },
+              modifier = Modifier.semantics { contentDescription = label }.testTag("use_step_${exercise.position}"),
+            ) {
+              Text(stringResource(R.string.session_step_up_use))
+            }
+          }
+        }
+      }
       exercise.sets.forEachIndexed { i, set ->
         SetRow(
           exercise = exercise,

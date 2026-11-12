@@ -280,6 +280,14 @@ private fun DayCard(
               modifier = Modifier.padding(start = 4.dp, end = 4.dp).testTag("day_done_${day.date}"),
             )
           }
+          if (day.workoutMissed) {
+            Text(
+              stringResource(R.string.home_workout_missed),
+              style = MaterialTheme.typography.labelLarge,
+              color = MaterialTheme.colorScheme.onPrimaryContainer,
+              modifier = Modifier.padding(end = 4.dp).testTag("day_missed_${day.date}"),
+            )
+          }
           Icon(
             Icons.AutoMirrored.Filled.KeyboardArrowRight,
             contentDescription = null,

@@ -118,8 +118,12 @@ class AccessibilityTest {
     tap("session_check_0_1"); check("Live session, resting", ready = "rest_bar")
     tap("finish_session"); tap("confirm_finish"); check("Session summary", ready = "session_summary")
     back(); back(); back(); back()
+    tap("open_history"); check("History", ready = "history_list")
+    tap("tab_WORKOUT"); tap("tab_WORKOUT") // back to the tab's first screen
+
     tap("open_exercises"); check("Exercises", ready = "Ab wheel")
-    tapText("Ab wheel"); check("Exercise", ready = "exercise_name"); back(); back()
+    tapText("Ab wheel"); check("Exercise", ready = "exercise_name")
+    tap("exercise_progress"); check("Exercise progress", ready = "Ab wheel"); back(); back(); back()
 
     tap("tab_DIET"); check("Recipes", ready = "Porridge")
     tapText("Porridge"); check("Recipe", ready = "macros_card")
