@@ -560,4 +560,20 @@
     <string name="session_step_up_use">Use</string>
     <string name="session_step_up_use_label">Use %1$s for the remaining sets of %2$s</string>
     <string name="home_workout_missed">Missed</string>
+
+    <!-- Body weight -->
+    <string name="weight_title">Body weight</string>
+    <string name="weight_hint">Weigh-ins and the two-week trend</string>
+    <string name="weight_today">Today\'s weight</string>
+    <string name="weight_today_logged">Today\'s weight (logged; saving replaces it)</string>
+    <string name="weight_error">Enter a weight between %1$s and %2$s.</string>
+    <string name="weight_empty">No weigh-ins yet.</string>
+    <string name="weight_empty_hint">Weigh yourself in the morning, a few times a week. The weekly average is what counts.</string>
+    <string name="weight_all">All weigh-ins</string>
+    <string name="weight_week_average">Week of %1$s: average %2$s</string>
+    <string name="weight_change_unknown">The 2-week change shows once you have weighed in two weeks apart.</string>
+    <string name="weight_change_flat">Same as 2 weeks before.</string>
+    <string name="weight_change_up">Up %s over 2 weeks.</string>
+    <string name="weight_change_down">Down %s over 2 weeks.</string>
+    <string name="weight_chart_description">Weekly average weight, from %1$s to %2$s</string>
 </resources>
