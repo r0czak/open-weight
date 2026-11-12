@@ -58,7 +58,26 @@ class MigrationTest {
     }
   }
 
+  @Test
+  fun v3ToV4_keepsWorkouts_andAddsEmptySessionTables() {
+    helper.createDatabase(DB4, 3).use { db ->
+      db.execSQL("INSERT INTO workout VALUES ('w1', 'Push A', 'Push', '', 0, 0)")
+    }
+
+    helper.runMigrationsAndValidate(DB4, 4, true).use { db ->
+      db.query("SELECT name FROM workout WHERE id = 'w1'").use {
+        assertTrue(it.moveToFirst())
+        assertEquals("Push A", it.getString(0))
+      }
+      db.query("SELECT (SELECT COUNT(*) FROM workout_session) + (SELECT COUNT(*) FROM session_set)").use {
+        assertTrue(it.moveToFirst())
+        assertEquals(0, it.getInt(0))
+      }
+    }
+  }
+
   private companion object {
+    const val DB4 = "migration-test-4.db"
     const val DB3 = "migration-test-3.db"
     const val DB = "migration-test.db"
   }

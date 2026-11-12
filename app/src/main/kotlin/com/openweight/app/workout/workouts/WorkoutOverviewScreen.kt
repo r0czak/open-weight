@@ -40,6 +40,8 @@ import com.openweight.app.workout.blocks.ScheduleResolver
 import com.openweight.app.workout.blocks.TrainingBlockRepository
 import com.openweight.app.workout.data.WorkoutDetail
 import com.openweight.app.workout.data.WorkoutRepository
+import com.openweight.app.workout.session.Session
+import com.openweight.app.workout.session.SessionRepository
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -49,6 +51,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
 sealed interface WorkoutOverviewState {
   data object Loading : WorkoutOverviewState
@@ -61,6 +64,8 @@ sealed interface WorkoutOverviewState {
     val date: LocalDate?,
     /** The block and week on [date], when the workout is opened from a day. */
     val day: PlannedDay.InBlock?,
+    /** The session in progress, of this workout or another; only one can be open. */
+    val openSession: Session? = null,
   ) : WorkoutOverviewState
 }
 
@@ -71,6 +76,7 @@ constructor(
   workouts: WorkoutRepository,
   blocks: TrainingBlockRepository,
   settings: SettingsRepository,
+  private val sessions: SessionRepository,
   @Assisted private val workoutId: String,
   @Assisted private val date: LocalDate?,
 ) : ViewModel() {
@@ -80,20 +86,25 @@ constructor(
   }
 
   val state: StateFlow<WorkoutOverviewState> =
-    combine(workouts.workout(workoutId), settings.settings, blocks.scheduledBlocks()) { w, s, scheduled ->
+    combine(workouts.workout(workoutId), settings.settings, blocks.scheduledBlocks(), sessions.open()) { w, s, scheduled, open ->
         if (w == null) {
           WorkoutOverviewState.Gone
         } else {
           val day = date?.let { ScheduleResolver.plannedDay(scheduled, it) as? PlannedDay.InBlock }
-          WorkoutOverviewState.Loaded(w, s.weightUnit, date, day)
+          WorkoutOverviewState.Loaded(w, s.weightUnit, date, day, open)
         }
       }
       .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), WorkoutOverviewState.Loading)
+
+  /** Starts a session for this workout and day, or returns the one already open. */
+  fun start(started: (sessionId: String) -> Unit) {
+    viewModelScope.launch { started(sessions.start(workoutId, date)) }
+  }
 }
 
 /**
- * What a workout holds, read-only, as the step before training. "Start" becomes live training in
- * the next iteration; editing stays one tap away.
+ * What a workout holds, read-only, as the step before training: "Start" opens a live session
+ * (or resumes the open one); editing stays one tap away.
  */
 @Composable
 fun WorkoutOverviewRoute(
@@ -101,6 +112,7 @@ fun WorkoutOverviewRoute(
   date: LocalDate?,
   onBack: () -> Unit,
   onEdit: () -> Unit,
+  onOpenSession: (sessionId: String) -> Unit,
   viewModel: WorkoutOverviewViewModel =
     hiltViewModel<WorkoutOverviewViewModel, WorkoutOverviewViewModel.Factory>(
       key = "overview-$workoutId-$date"
@@ -148,16 +160,35 @@ fun WorkoutOverviewRoute(
         }
       }
       item {
-        Button(onClick = {}, enabled = false, modifier = Modifier.fillMaxWidth().testTag("start_workout")) {
+        val open = loaded.openSession
+        val other = open != null && open.workoutId != w.id
+        val hasSets = w.entries.any { it.sets.isNotEmpty() }
+        Button(
+          onClick = { if (open != null) onOpenSession(open.id) else viewModel.start(onOpenSession) },
+          enabled = open != null || hasSets,
+          modifier = Modifier.fillMaxWidth().testTag("start_workout"),
+        ) {
           Icon(Icons.Filled.PlayArrow, contentDescription = null)
-          Text(stringResource(R.string.workout_start), modifier = Modifier.padding(start = 8.dp))
+          Text(
+            stringResource(
+              when {
+                other -> R.string.workout_open_other_session
+                open != null -> R.string.workout_resume
+                else -> R.string.workout_start
+              }
+            ),
+            modifier = Modifier.padding(start = 8.dp),
+          )
         }
-        Text(
-          stringResource(R.string.workout_start_soon),
-          style = MaterialTheme.typography.bodySmall,
-          color = MaterialTheme.colorScheme.onSurfaceVariant,
-          modifier = Modifier.padding(top = 4.dp),
-        )
+        val note =
+          when {
+            other -> stringResource(R.string.workout_other_session, open!!.workoutName)
+            !hasSets -> stringResource(R.string.workout_start_empty)
+            else -> null
+          }
+        if (note != null) {
+          Text(note, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(top = 4.dp))
+        }
       }
       items(w.entries, key = { it.id }) { entry ->
         Card(

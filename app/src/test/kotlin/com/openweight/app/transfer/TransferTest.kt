@@ -265,7 +265,8 @@ class TransferTest {
     val cases =
       mapOf(
         """{"ingredients":[{"id":"i","name":"Oats","defaultUnit":"CUP"}]}""" to "unknown unit",
-        """{"ingredients":[{"id":"i","name":"Oats","kcalPer100":-1}]}""" to "can't be negative",
+        """{"ingredients":[{"id":"i","name":"Oats","kcalPer100":-1}]}""" to "must be between 0",
+        """{"shoppingLists":[{"id":"l","fromDate":"2026-01-01","toDate":"2026-12-31"}]}""" to "more than 62 days",
         """{"recipes":[{"id":"r","name":"R","ingredients":[{"ingredientId":"nope","quantity":1,"unit":"G"}]}]}""" to "isn't in the file",
         """{"recipes":[{"id":"r","name":"R","servings":0}]}""" to "Servings",
         """{"recipes":[{"id":"r","name":"R"}],"mealEntries":[{"id":"m","date":"2026-11-09","slot":"BRUNCH","recipeId":"r"}]}""" to "unknown meal",

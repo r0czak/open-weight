@@ -32,6 +32,7 @@ import com.openweight.app.core.model.formatNumber
 import com.openweight.app.core.model.formatRest
 import com.openweight.app.core.model.label
 import com.openweight.app.core.model.toKg
+import com.openweight.app.diet.parseNumber
 import com.openweight.app.workout.data.PlannedSet
 import com.openweight.app.workout.data.SetValues
 import com.openweight.app.workout.data.WorkoutRepository
@@ -50,14 +51,14 @@ class SetForm(initial: SetValues, private val unit: WeightUnit) {
     error = null
     val min = repsMin.trim().toIntOrNull()
     val max = repsMax.trim().takeIf { it.isNotEmpty() }?.let { it.toIntOrNull() ?: -1 }
-    val w = weight.trim().replace(',', '.').takeIf { it.isNotEmpty() }?.let { it.toDoubleOrNull() ?: -1.0 }
+    val w = weight.trim().takeIf { it.isNotEmpty() }?.let { parseNumber(it)?.let(unit::toKg) ?: -1.0 }
     val r = rest.trim().toIntOrNull()
     return when {
       min == null || min < 1 || min > SetValues.MAX_REPS -> null.also { error = FormError.REPS }
       max != null && (max < min || max > SetValues.MAX_REPS) -> null.also { error = FormError.REPS_MAX }
-      w != null && w < 0 -> null.also { error = FormError.WEIGHT }
+      w != null && w !in 0.0..SetValues.MAX_WEIGHT_KG -> null.also { error = FormError.WEIGHT }
       r == null || r < 0 || r > SetValues.MAX_REST_SECONDS -> null.also { error = FormError.REST }
-      else -> SetValues(min, max?.takeIf { it != min }, w?.let(unit::toKg), r)
+      else -> SetValues(min, max?.takeIf { it != min }, w, r)
     }
   }
 

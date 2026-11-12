@@ -129,7 +129,7 @@
     <string name="set_apply_all">Apply to all sets of this exercise</string>
     <string name="error_reps">Reps must be a whole number from 1 to 999.</string>
     <string name="error_reps_max">The top of the range must be at least the first number.</string>
-    <string name="error_weight">Weight must be a number, 0 or more.</string>
+    <string name="error_weight">Weight must be a number from 0 to 2000 kg.</string>
     <string name="error_rest">Rest must be between 0 and 3600 seconds.</string>
     <string name="error_sets">Sets must be between 1 and 20.</string>
 
@@ -198,7 +198,6 @@
     <string name="home_no_block">No training block</string>
     <string name="workout_edit">Edit workout</string>
     <string name="workout_start">Start workout</string>
-    <string name="workout_start_soon">Live training (timers, logging your sets) comes in the next update.</string>
     <!-- Ingredients -->
     <string name="diet_ingredients">Ingredients</string>
     <string name="ingredient_new">New ingredient</string>
@@ -216,7 +215,7 @@
     <string name="ingredient_grams_per_piece_hint">e.g. 60 for an egg, so recipes can use \"2 pcs\"</string>
     <string name="ingredient_create_hint">Add nutrition values later in Ingredients</string>
     <string name="error_ingredient_exists">An ingredient with this name already exists</string>
-    <string name="error_ingredient_numbers">Nutrition values must be numbers, 0 or more; grams per piece more than 0.</string>
+    <string name="error_ingredient_numbers">Nutrition values must be numbers from 0 to 10,000; grams per piece more than 0.</string>
     <string name="ingredient_delete_title">Delete ingredient?</string>
     <string name="ingredient_delete_text">\"%1$s\" will be removed from your ingredients.</string>
     <string name="ingredient_in_use_title">Ingredient in use</string>
@@ -359,6 +358,7 @@
     <string name="shopping_amount_optional">Amount (optional)</string>
     <string name="shopping_dates_title">Shop for meals on</string>
     <string name="dates_pick">Pick the first and last day</string>
+    <string name="error_dates_order">The end date must be on or after the start date.</string>
     <plurals name="dates_too_long">
         <item quantity="one">Choose up to %d day</item>
         <item quantity="other">Choose up to %d days</item>
@@ -483,4 +483,45 @@
     </plurals>
     <string name="entry_remove_confirm">Remove</string>
     <string name="starter_none_new">You already have all the common exercises.</string>
+
+    <!-- Live training -->
+    <string name="workout_start_empty">Add an exercise with sets before you start.</string>
+    <string name="workout_resume">Resume session</string>
+    <string name="workout_other_session">A session of %s is in progress. Finish or discard it before starting another.</string>
+    <string name="workout_open_other_session">Open that session</string>
+    <string name="workout_train">Train this workout</string>
+    <string name="session_progress">Sets done: %1$d/%2$d</string>
+    <string name="session_finish">Finish</string>
+    <string name="session_finish_title">Finish the workout?</string>
+    <plurals name="session_finish_text">
+        <item quantity="one">%d set is not done. It is saved as skipped.</item>
+        <item quantity="other">%d sets are not done. They are saved as skipped.</item>
+    </plurals>
+    <string name="session_keep_going">Keep going</string>
+    <string name="session_discard">Discard session</string>
+    <string name="session_discard_title">Discard this session?</string>
+    <string name="session_discard_text">Everything logged in it is deleted. Your workout plan stays as it is.</string>
+    <string name="session_set_value">%1$s × %2$d</string>
+    <string name="session_set_target">Target: %s reps</string>
+    <string name="session_confirm_set">Mark set %1$d of %2$s as done</string>
+    <string name="session_undo_set">Set %1$d of %2$s is done. Mark as not done</string>
+    <string name="session_change_set">Change weight and reps</string>
+    <string name="session_set_title">Set %1$d · %2$s</string>
+    <string name="session_weight">Weight (%s)</string>
+    <string name="session_weight_hint">Leave the weight empty for bodyweight.</string>
+    <string name="session_set_done">Done</string>
+    <string name="session_rest">Rest %s</string>
+    <string name="session_rest_over">Rest is over</string>
+    <string name="session_rest_skip">Skip</string>
+    <string name="session_done_title">Workout done</string>
+    <plurals name="session_done_minutes">
+        <item quantity="one">%d minute</item>
+        <item quantity="other">%d minutes</item>
+    </plurals>
+    <string name="session_done_sets">Sets done: %1$d/%2$d</string>
+    <string name="session_done_volume">Total lifted: %s</string>
+    <string name="home_session_open">In progress: %s</string>
+    <string name="home_session_resume">Resume</string>
+    <string name="home_workout_done">Done</string>
+    <string name="home_also_done">Also done: %s</string>
 </resources>

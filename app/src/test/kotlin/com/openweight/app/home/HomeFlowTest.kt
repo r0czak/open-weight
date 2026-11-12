@@ -1,7 +1,7 @@
 package com.openweight.app.home
 
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.assertIsNotEnabled
+import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithTag
@@ -78,7 +78,7 @@ class HomeFlowTest {
     compose.onNodeWithTag("day_workout_$today").performClick()
     waitForText("1. Bench press")
     compose.waitUntil(5_000) { compose.onAllNodesWithText("80 kg").fetchSemanticsNodes().size == 4 }
-    compose.onNodeWithTag("start_workout").assertIsNotEnabled()
+    compose.onNodeWithTag("start_workout").assertIsEnabled()
 
     compose.onNodeWithTag("edit_workout").performClick()
     waitForTag("add_exercise_to_workout") // the editor

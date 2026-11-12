@@ -91,8 +91,10 @@ data class ShoppingState(
 @HiltViewModel
 class ShoppingViewModel
 @Inject
-constructor(private val shopping: ShoppingRepository, diet: DietRepository, clock: TimeAndIds) : ViewModel() {
-  val today: LocalDate = clock.today()
+constructor(private val shopping: ShoppingRepository, diet: DietRepository, private val clock: TimeAndIds) : ViewModel() {
+  /** Read when used, not once: the app can stay open past midnight. */
+  val today: LocalDate
+    get() = clock.today()
 
   val state: StateFlow<ShoppingState> =
     combine(shopping.current(), diet.shopCategories()) { list, categories -> ShoppingState(true, list, categories) }

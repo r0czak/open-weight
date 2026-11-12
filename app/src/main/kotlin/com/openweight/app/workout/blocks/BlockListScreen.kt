@@ -31,7 +31,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
 import com.openweight.app.R
-import com.openweight.app.core.TimeAndIds
+import com.openweight.app.core.Today
 import com.openweight.app.core.ui.EmptyState
 import com.openweight.app.core.ui.ScreenScaffold
 import com.openweight.app.core.ui.formatDateRange
@@ -43,7 +43,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -57,13 +57,13 @@ data class BlockListState(val loading: Boolean = true, val items: List<BlockList
 @HiltViewModel
 class BlockListViewModel
 @Inject
-constructor(private val repository: TrainingBlockRepository, clock: TimeAndIds) : ViewModel() {
-  val today: LocalDate = clock.today()
+constructor(private val repository: TrainingBlockRepository, private val todayNow: Today) : ViewModel() {
+  private val today: LocalDate
+    get() = todayNow.date.value
 
   val state: StateFlow<BlockListState> =
-    repository
-      .blocks()
-      .map { blocks ->
+    // Follows the date: a block becomes active, or moves on a week, when a new day begins.
+    combine(repository.blocks(), todayNow.date) { blocks, today ->
         val items =
           blocks.map { b ->
             val scheduled = ScheduledBlock(b.id, b.name, b.startDate, b.endDate, emptyMap())

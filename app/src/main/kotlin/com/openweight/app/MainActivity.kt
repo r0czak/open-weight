@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.core.content.IntentCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.openweight.app.core.Today
 import com.openweight.app.core.model.ThemeMode
 import com.openweight.app.core.ui.theme.OpenWeightTheme
 import com.openweight.app.settings.SettingsViewModel
@@ -29,6 +30,8 @@ class MainActivity : ComponentActivity() {
   private val settingsViewModel: SettingsViewModel by viewModels()
 
   @Inject lateinit var importSession: ImportSession
+
+  @Inject lateinit var today: Today
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -50,6 +53,12 @@ class MainActivity : ComponentActivity() {
         }
       }
     }
+  }
+
+  override fun onStart() {
+    super.onStart()
+    // Back in front, possibly on a later day than when the app was last used.
+    today.refresh()
   }
 
   override fun onNewIntent(intent: Intent) {

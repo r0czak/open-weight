@@ -86,6 +86,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.format.TextStyle
+import java.time.temporal.ChronoUnit
 import java.time.temporal.TemporalAdjusters
 import javax.inject.Inject
 import kotlinx.coroutines.channels.Channel
@@ -190,13 +191,15 @@ private fun NameDialog(title: String, initialName: String, initialNotes: String?
 @HiltViewModel(assistedFactory = DietPlanEditViewModel.Factory::class)
 class DietPlanEditViewModel
 @AssistedInject
-constructor(private val meals: MealPlanRepository, clock: TimeAndIds, @Assisted private val planId: String) : ViewModel() {
+constructor(private val meals: MealPlanRepository, private val clock: TimeAndIds, @Assisted private val planId: String) : ViewModel() {
   @AssistedFactory
   interface Factory {
     fun create(planId: String): DietPlanEditViewModel
   }
 
-  val today: LocalDate = clock.today()
+  /** Read when used, not once: the app can stay open past midnight. */
+  val today: LocalDate
+    get() = clock.today()
 
   /** Null while loading; [GONE] after a delete. */
   val plan: StateFlow<DietPlanDetail?> = meals.plan(planId).stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
@@ -350,6 +353,7 @@ private fun ApplyPlanDialog(today: LocalDate, onDismiss: () -> Unit, onApply: (L
   var to by remember { mutableStateOf(nextMonday.plusWeeks(4).minusDays(1)) }
   var mode by remember { mutableStateOf(ApplyMode.SKIP_DAYS_WITH_MEALS) }
   var picking by remember { mutableStateOf<String?>(null) }
+  val tooLong = ChronoUnit.DAYS.between(from, to) >= MealPlanRepository.MAX_APPLY_DAYS
   AlertDialog(
     onDismissRequest = onDismiss,
     title = { Text(stringResource(R.string.plan_apply)) },
@@ -359,7 +363,14 @@ private fun ApplyPlanDialog(today: LocalDate, onDismiss: () -> Unit, onApply: (L
         OutlinedButton(onClick = { picking = "from" }, modifier = Modifier.fillMaxWidth()) { Text(from.formatMedium()) }
         Text(stringResource(R.string.block_ends), style = MaterialTheme.typography.labelLarge)
         OutlinedButton(onClick = { picking = "to" }, modifier = Modifier.fillMaxWidth()) { Text(to.formatMedium()) }
-        if (to.isBefore(from)) Text(stringResource(R.string.error_block_dates), color = MaterialTheme.colorScheme.error)
+        if (to.isBefore(from)) Text(stringResource(R.string.error_dates_order), color = MaterialTheme.colorScheme.error)
+        if (tooLong) {
+          Text(
+            pluralStringResource(R.plurals.dates_too_long, MealPlanRepository.MAX_APPLY_DAYS, MealPlanRepository.MAX_APPLY_DAYS),
+            color = MaterialTheme.colorScheme.error,
+            modifier = Modifier.testTag("apply_too_long"),
+          )
+        }
         Text(stringResource(R.string.plan_busy_days), style = MaterialTheme.typography.labelLarge)
         listOf(ApplyMode.SKIP_DAYS_WITH_MEALS to R.string.plan_mode_skip, ApplyMode.REPLACE to R.string.plan_mode_replace).forEach { (m, label) ->
           Row(
@@ -373,7 +384,7 @@ private fun ApplyPlanDialog(today: LocalDate, onDismiss: () -> Unit, onApply: (L
       }
     },
     confirmButton = {
-      TextButton(onClick = { onApply(from, to, mode) }, enabled = !to.isBefore(from), modifier = Modifier.testTag("confirm_apply")) {
+      TextButton(onClick = { onApply(from, to, mode) }, enabled = !to.isBefore(from) && !tooLong, modifier = Modifier.testTag("confirm_apply")) {
         Text(stringResource(R.string.plan_apply_button))
       }
     },

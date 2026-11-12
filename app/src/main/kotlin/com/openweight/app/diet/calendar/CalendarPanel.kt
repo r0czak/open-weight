@@ -58,7 +58,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
 import com.openweight.app.R
-import com.openweight.app.core.TimeAndIds
+import com.openweight.app.core.Today
 import com.openweight.app.core.model.MealSlot
 import com.openweight.app.core.ui.formatDayShort
 import com.openweight.app.core.ui.pickerMillisToDate
@@ -100,8 +100,10 @@ data class CalendarState(
 @HiltViewModel
 class CalendarViewModel
 @Inject
-constructor(private val meals: MealPlanRepository, clock: TimeAndIds, private val saved: SavedStateHandle) : ViewModel() {
-  val today: LocalDate = clock.today()
+constructor(private val meals: MealPlanRepository, private val todayNow: Today, private val saved: SavedStateHandle) : ViewModel() {
+  private val today: LocalDate
+    get() = todayNow.date.value
+
   private val selectedFlow = saved.getStateFlow(KEY_SELECTED, today.toEpochDay())
 
   val state: StateFlow<CalendarState> =
@@ -109,7 +111,8 @@ constructor(private val meals: MealPlanRepository, clock: TimeAndIds, private va
       .map { LocalDate.ofEpochDay(it) }
       .flatMapLatest { selected ->
         val month = YearMonth.from(selected)
-        meals.days(month.atDay(1), month.atEndOfMonth()).map { CalendarState(today, month, selected, it) }
+        // Follows the date, so the "today" mark moves when a new day begins.
+        combine(meals.days(month.atDay(1), month.atEndOfMonth()), todayNow.date) { days, today -> CalendarState(today, month, selected, days) }
       }
       .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), CalendarState(today, YearMonth.from(today), today))
 

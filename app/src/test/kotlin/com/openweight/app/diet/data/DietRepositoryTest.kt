@@ -51,6 +51,9 @@ class DietRepositoryTest {
   @Test
   fun ingredientValues_rejectNegativesAndZeroPieceWeight() {
     assertThrows(IllegalArgumentException::class.java) { IngredientValues("X", "", QuantityUnit.G, kcalPer100 = -1.0) }
+    assertThrows(IllegalArgumentException::class.java) { IngredientValues("X", "", QuantityUnit.G, kcalPer100 = Double.NaN) }
+    assertThrows(IllegalArgumentException::class.java) { IngredientValues("X", "", QuantityUnit.G, fatPer100 = Double.POSITIVE_INFINITY) }
+    assertThrows(IllegalArgumentException::class.java) { IngredientValues("X", "", QuantityUnit.PCS, gramsPerPiece = Double.POSITIVE_INFINITY) }
     assertThrows(IllegalArgumentException::class.java) { IngredientValues("Egg", "", QuantityUnit.PCS, gramsPerPiece = 0.0) }
   }
 

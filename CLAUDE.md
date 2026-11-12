@@ -16,6 +16,8 @@ Offline-first Android app for planning workouts (training blocks, workouts, exer
 - `workout/`, `diet/`, `settings/`, `transfer/` (later: `progress/`); `assets/starter-exercises.openweight.json` holds the
   40 common exercises (`StarterExercises`), imported like any file — one package per feature: screens, ViewModels, domain rules, repositories
 - `workout/blocks/` — training blocks; `Schedule.kt` holds the schedule rule (date → block → weekday's workout; overlapping blocks: the later start wins)
+- `workout/session/` — live training: `SessionRepository` (a session copies a workout's plan and is filled in set by set; one open at a time;
+  suggestions come from last time; rest ends at the last done set's time + its rest) and the live screen. Sessions keep names as text, so history survives deletes
 - `diet/` — ingredients and recipes; `data/Nutrition.kt` holds the calories/macros rule (per 100 g or ml, pieces via grams per piece, uncountable lines listed, never silently dropped)
 - `diet/shopping/` — shopping list panel; rules in `diet/data/ShoppingListBuilder.kt` (sum per ingredient and unit kind, scaled to servings, rounded up for the shop) and `ShoppingRepository.kt` (update keeps manual items, ticks and hand-edited amounts)
 - `diet/calendar/`, `diet/plans/` — meal calendar and diet plans; rules in `diet/data/MealPlanRepository.kt` (copy day/week, apply a plan: skip or replace busy days)
@@ -32,6 +34,11 @@ Offline-first Android app for planning workouts (training blocks, workouts, exer
 ## Rules
 - The app must stay fully offline: no `INTERNET` permission (`OfflineGuardTest` enforces it).
 - "Today" comes from `TimeAndIds.today()` (injectable), never `LocalDate.now()` directly.
+  Screens that mark or depend on today follow `core/Today` (a flow, refreshed whenever the app comes back to the
+  front), so they don't show yesterday after midnight; one-off defaults read `TimeAndIds.today()` when used.
+- Numbers typed by the user go through `parseNumber` (refuses `NaN`/`Infinity`); limits live in the model classes'
+  `init` checks (`SetValues`, `IngredientValues`, `RecipeInfo`), which the importer reuses.
+- A repository call a screen can reach must not throw for a state the screen allows: disable the control at the limit.
 - Every record has a UUID text `id` plus `createdAt`/`updatedAt` (import/export relies on them).
 - User-visible text goes in `res/values/strings.xml`.
 - Editing rules (limits, in-use checks, ordering) live in repositories, not in the UI; screens call them.

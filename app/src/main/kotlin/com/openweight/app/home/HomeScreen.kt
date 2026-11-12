@@ -22,6 +22,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.Card
@@ -61,6 +62,7 @@ import java.time.format.TextStyle
 fun HomeRoute(
   onOpenWorkout: (workoutId: String, date: LocalDate) -> Unit,
   onOpenRecipe: (recipeId: String) -> Unit,
+  onOpenSession: (sessionId: String) -> Unit,
   viewModel: HomeViewModel = hiltViewModel(),
 ) {
   val state by viewModel.state.collectAsStateWithLifecycle()
@@ -88,6 +90,34 @@ fun HomeRoute(
     },
   ) { padding ->
     Column(Modifier.fillMaxSize().padding(padding)) {
+      state.openSession?.let { open ->
+        Row(
+          verticalAlignment = Alignment.CenterVertically,
+          modifier =
+            Modifier.fillMaxWidth()
+              .padding(horizontal = 16.dp, vertical = 4.dp)
+              .clip(RoundedCornerShape(12.dp))
+              .background(MaterialTheme.colorScheme.tertiaryContainer)
+              .padding(start = 16.dp, end = 4.dp)
+              .testTag("session_banner"),
+        ) {
+          Column(Modifier.weight(1f).padding(vertical = 8.dp)) {
+            Text(
+              stringResource(R.string.home_session_open, open.workoutName),
+              style = MaterialTheme.typography.titleSmall,
+              color = MaterialTheme.colorScheme.onTertiaryContainer,
+            )
+            Text(
+              stringResource(R.string.session_progress, open.doneCount, open.setCount),
+              style = MaterialTheme.typography.bodySmall,
+              color = MaterialTheme.colorScheme.onTertiaryContainer,
+            )
+          }
+          TextButton(onClick = { onOpenSession(open.id) }, modifier = Modifier.testTag("resume_session")) {
+            Text(stringResource(R.string.home_session_resume), color = MaterialTheme.colorScheme.onTertiaryContainer, fontWeight = FontWeight.Bold)
+          }
+        }
+      }
       DayStrip(state.days, state.selected, onSelect = viewModel::select)
       LazyColumn(
         state = listState,
@@ -236,6 +266,20 @@ private fun DayCard(
               color = MaterialTheme.colorScheme.onPrimaryContainer,
             )
           }
+          if (day.workoutDone) {
+            Icon(
+              Icons.Filled.CheckCircle,
+              contentDescription = null,
+              tint = MaterialTheme.colorScheme.onPrimaryContainer,
+              modifier = Modifier.size(20.dp),
+            )
+            Text(
+              stringResource(R.string.home_workout_done),
+              style = MaterialTheme.typography.labelLarge,
+              color = MaterialTheme.colorScheme.onPrimaryContainer,
+              modifier = Modifier.padding(start = 4.dp, end = 4.dp).testTag("day_done_${day.date}"),
+            )
+          }
           Icon(
             Icons.AutoMirrored.Filled.KeyboardArrowRight,
             contentDescription = null,
@@ -246,6 +290,13 @@ private fun DayCard(
         Text(
           stringResource(if (day.block != null) R.string.workout_rest_day else R.string.home_no_block),
           style = MaterialTheme.typography.bodyMedium,
+          color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+      }
+      if (day.otherDone.isNotEmpty()) {
+        Text(
+          stringResource(R.string.home_also_done, day.otherDone.joinToString { it.workoutName }),
+          style = MaterialTheme.typography.bodySmall,
           color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
       }

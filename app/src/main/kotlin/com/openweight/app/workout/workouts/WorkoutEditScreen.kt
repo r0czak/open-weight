@@ -16,6 +16,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -61,6 +62,7 @@ import com.openweight.app.transfer.ui.ExportDialog
 import com.openweight.app.workout.data.PlannedSet
 import com.openweight.app.workout.data.WorkoutDetail
 import com.openweight.app.workout.data.WorkoutEntry
+import com.openweight.app.workout.data.WorkoutRepository
 
 @Composable
 fun WorkoutEditRoute(
@@ -68,6 +70,7 @@ fun WorkoutEditRoute(
   onBack: () -> Unit,
   onOpenWorkout: (String) -> Unit,
   onAddExercise: () -> Unit,
+  onTrain: () -> Unit = {},
   viewModel: WorkoutEditViewModel =
     hiltViewModel<WorkoutEditViewModel, WorkoutEditViewModel.Factory>(key = "workout-$workoutId") {
       it.create(workoutId)
@@ -103,6 +106,9 @@ fun WorkoutEditRoute(
     snackbarHostState = snackbar,
     actions = {
       if (loaded != null) {
+        IconButton(onClick = onTrain, modifier = Modifier.testTag("train_workout")) {
+          Icon(Icons.Filled.PlayArrow, stringResource(R.string.workout_train))
+        }
         Box {
           IconButton(onClick = { menu = true }, modifier = Modifier.testTag("workout_menu")) {
             Icon(Icons.Filled.MoreVert, stringResource(R.string.action_more))
@@ -355,7 +361,7 @@ private fun EntryCard(
         HorizontalDivider(Modifier.padding(end = 12.dp))
         SetRow(i + 1, set, unit, onClick = { onSetClick(set) })
       }
-      TextButton(onClick = onAddSet) {
+      TextButton(onClick = onAddSet, enabled = entry.sets.size < WorkoutRepository.MAX_SETS, modifier = Modifier.testTag("add_set")) {
         Icon(Icons.Filled.Add, contentDescription = null)
         Text(stringResource(R.string.set_add))
       }
