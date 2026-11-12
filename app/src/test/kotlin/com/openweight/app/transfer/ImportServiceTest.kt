@@ -2,10 +2,16 @@ package com.openweight.app.transfer
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.openweight.app.core.database.OpenWeightDatabase
+import com.openweight.app.core.model.QuantityUnit
+import com.openweight.app.diet.data.ApplyMode
+import com.openweight.app.diet.data.DietRepository
+import com.openweight.app.diet.data.MealPlanRepository
+import com.openweight.app.diet.data.ShoppingRepository
 import com.openweight.app.testing.FakeTimeAndIds
 import com.openweight.app.testing.inMemoryDatabase
 import com.openweight.app.workout.data.WorkoutRepository
 import java.io.File
+import java.time.LocalDate
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.After
@@ -177,4 +183,34 @@ class ImportServiceTest {
   private fun block(workoutIds: List<String>, schedule: String = "[]", end: String = "2026-11-30") =
     """[{"id":"b","name":"Block","startDate":"2026-11-03","endDate":"$end",
        "workoutIds":${workoutIds.joinToString(",", "[", "]") { "\"$it\"" }},"schedule":$schedule}]"""
+
+  @Test
+  fun winterArcMealPlan_importsCompletely_andShopsLikeTheDoc() = runTest {
+    val clock = FakeTimeAndIds()
+    val diet = DietRepository(db, clock)
+    val meals = MealPlanRepository(db, diet, clock)
+    val shopping = ShoppingRepository(db, clock)
+
+    val result = importer.import(File("../plans/winter-arc-meal-plan.openweight.json").readBytes())
+
+    assertEquals(KindResult(added = 44), result[RecordKind.INGREDIENT])
+    assertEquals(KindResult(added = 10), result[RecordKind.RECIPE])
+    assertEquals(KindResult(added = 2), result[RecordKind.DIET_PLAN])
+    val recipes = diet.recipes().first()
+    assertTrue(recipes.all { it.nutrition.complete })
+    // Within a few percent of the doc's 640 kcal and 40 g protein.
+    val oats = recipes.single { it.name == "Tiramisu overnight oats" }.nutrition.perServing
+    assertEquals(640.0, oats.kcal, 20.0)
+    assertEquals(40.0, oats.protein, 2.0)
+
+    // A week of the "for two" plan buys what the doc's shopping list says.
+    val forTwo = meals.plans().first().single { it.name == "Winter Arc – for two" }
+    val monday = LocalDate.of(2026, 11, 9)
+    meals.applyPlan(forTwo.id, monday, monday.plusDays(6), ApplyMode.REPLACE)
+    shopping.generate(monday, monday.plusDays(6))
+    val items = shopping.current().first()!!.items.associateBy { it.name }
+    assertEquals(700.0 to QuantityUnit.G, items.getValue("Oats").let { it.quantity to it.unit })
+    assertEquals(14.0 to QuantityUnit.PCS, items.getValue("Banana").let { it.quantity to it.unit })
+  }
 }
+
