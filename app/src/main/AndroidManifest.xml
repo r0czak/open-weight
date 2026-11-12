@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <!-- The "rest is over" alert during live training (asked on first use, Android 13+). -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <!-- So the rest alert fires on time. Android 12-13 grant it; on 14+ it is off unless the user
+         allows "Alarms & reminders", and the alert then comes when the system lets it. -->
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+
     <application
         android:name=".OpenWeightApp"
         android:allowBackup="true"
@@ -33,6 +39,10 @@
                 <data android:mimeType="application/json" />
             </intent-filter>
         </activity>
+
+        <receiver
+            android:name=".workout.session.RestAlarmReceiver"
+            android:exported="false" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

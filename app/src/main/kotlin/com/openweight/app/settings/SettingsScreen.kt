@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,6 +20,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -28,6 +30,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -58,6 +61,7 @@ fun SettingsRoute(onOpenExport: () -> Unit, modifier: Modifier = Modifier, viewM
     settings = settings ?: Settings(),
     onWeightUnitChange = viewModel::setWeightUnit,
     onThemeModeChange = viewModel::setThemeMode,
+    onRestAlertsChange = viewModel::setRestAlerts,
     // Any file: some apps label .json files oddly, and the importer checks the content anyway.
     onImport = { pickFile.launch(arrayOf("*/*")) },
     onBackup = { backingUp = true },
@@ -88,6 +92,7 @@ fun SettingsScreen(
   onWeightUnitChange: (WeightUnit) -> Unit,
   onThemeModeChange: (ThemeMode) -> Unit,
   modifier: Modifier = Modifier,
+  onRestAlertsChange: (Boolean) -> Unit = {},
   onImport: () -> Unit = {},
   onBackup: () -> Unit = {},
   onExport: () -> Unit = {},
@@ -126,6 +131,15 @@ fun SettingsScreen(
           }
         },
         onSelect = onThemeModeChange,
+      )
+
+      SectionTitle(stringResource(R.string.settings_training))
+      ListItem(
+        modifier =
+          Modifier.toggleable(value = settings.restAlerts, role = Role.Switch, onValueChange = onRestAlertsChange).testTag("rest_alerts"),
+        headlineContent = { Text(stringResource(R.string.settings_rest_alerts)) },
+        supportingContent = { Text(stringResource(R.string.settings_rest_alerts_hint)) },
+        trailingContent = { Switch(checked = settings.restAlerts, onCheckedChange = null) },
       )
 
       HorizontalDivider(Modifier.padding(top = 8.dp))

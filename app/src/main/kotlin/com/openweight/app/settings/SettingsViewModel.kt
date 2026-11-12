@@ -39,6 +39,10 @@ constructor(
     viewModelScope.launch { repository.setWeightUnit(unit) }
   }
 
+  fun setRestAlerts(on: Boolean) {
+    viewModelScope.launch { repository.setRestAlerts(on) }
+  }
+
   fun setThemeMode(mode: ThemeMode) {
     viewModelScope.launch { repository.setThemeMode(mode) }
   }
